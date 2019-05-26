@@ -18,13 +18,7 @@ import java.awt.geom.Rectangle2D;
 
 import javax.swing.Box;
 import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JToolBar;
+import javax.swing.*;
 
 import database.GUICSV;
 
@@ -64,16 +58,26 @@ public class Main extends JFrame implements ActionListener {
 	//public static DBInterface dbinterface;
 
 	//MenuBar Variables
-	JMenuBar 	menubar;
-	JMenu		datamenu;
-	JMenu		toolabout;
-	JMenuItem	csv;
-	JMenuItem   csvexport;
-	JMenuItem   db;
-	JMenuItem help;
+
+	JMenuBar	menubar		 = new JMenuBar();
+	JMenu		datamenu  = new JMenu("Data");
+	JMenu		objmenu	 = new JMenu("Objects");
+	JMenu		toolabout = new JMenu("About");
+	JMenu		help 		= new JMenu("Help");
+	
+	JMenuItem 	obj1 = new JMenuItem("drawingPoints");
+	JMenuItem	obj2 = new JMenuItem("drawingLines");
+	JMenuItem	obj3 = new JMenuItem("drawingTriangles");
+	JMenuItem 	obj4 = new JMenuItem("drawingRectangles");
+	JMenuItem	csv = new JMenuItem("Import CSV");
+	JMenuItem   db = new JMenuItem("Database Manager");
+	JMenuItem   csvexport = new JMenuItem("Export CSV"); ;
+	
+
+
 
 	//ToolBar Variables
-	JToolBar 	toolbar;
+	/*JToolBar 	toolbar;
 	JButton		drawingPoints;
 	JButton		drawingLines;
 	JButton		drawingTriangles;
@@ -81,7 +85,22 @@ public class Main extends JFrame implements ActionListener {
 	JButton		selectElements;
 	JButton		deleteElements;
 	JButton 	moveElements;
-	JButton		changeElements;
+	JButton		changeElements;*/
+	
+	//Set Buttons for modifiable features
+	/*JButton  drawingPoints 		= new JButton("Point");
+	JButton	 drawingLines		= new JButton("Line");
+	JButton	 drawingTriangles	= new JButton("Triangle");
+	JButton	 drawingRectangles	= new JButton("Rectangle");*/
+	
+	//ToolBar contain editor tools
+	JToolBar toolbar= new JToolBar();
+	
+	//Editor tools
+	JButton	 selectElements	= new JButton("Select");
+	JButton	 deleteElements = new JButton("Delete");
+	JButton	 moveElements 	= new JButton("Move");
+	JButton	 changeElements = new JButton("Change");
 
 	Box toolBox;
 
@@ -155,16 +174,49 @@ public class Main extends JFrame implements ActionListener {
 	 */
 	public Main() {
 
+        //Add items to main menu
+		datamenu.add(csv);
+		datamenu.add(db);
+		
+		objmenu.add(obj1);
+		objmenu.add(obj2);
+		objmenu.add(obj3);
+		objmenu.add(obj4);
+		
+		menubar.add(datamenu);
+		menubar.add(objmenu);
+		menubar.add(toolabout);
+		menubar.add(help);
+		this.setJMenuBar(menubar);
+		
+		//Add menuitems into 'Object' menu
+		/*objmenu.add(drawingPoints);
+		objmenu.add(drawingLines);
+		objmenu.add(drawingTriangles);
+		objmenu.add(drawingRectangles);*/
+		
+		//toolbar.setPreferredSize(new Dimension(200, 500));
+		//frame.add(toolbar, BorderLayout.EAST);
+		toolBox = Box.createVerticalBox();
+		toolBox.add(toolbar);
+		add(toolBox);
+		toolbar.add(selectElements);
+		toolbar.add(deleteElements);
+		toolbar.add(moveElements);
+		toolbar.add(changeElements);
+       
+		
+
+
 		//creates object of editor
 		editor = new EditorTools();
-                
+
 		//creates object of Tooldrawingpanel
 		drawingcanvas = new DrawingCanvas();
 		drawingcanvas.setBackground(Color.white);
-
 		drawingcanvas.addMouseListener(new MouseAdapter() {
 
-                        @Override
+			@Override
 			public void mouseClicked(MouseEvent e) {
 
 				point = new PointFeature();
@@ -1234,7 +1286,7 @@ public class Main extends JFrame implements ActionListener {
 			}
 		});
 	}
-	
+
 
 	/**
 	 * Creates a new object of GUI
@@ -1294,21 +1346,21 @@ public class Main extends JFrame implements ActionListener {
 				);
 
 		//Set MenuBar
-		menubar 	= new JMenuBar();
+		/*menubar 	= new JMenuBar();
 		datamenu 	= new JMenu("Data");
 		toolabout 	= new JMenu("About");
 		help 	= new JMenu("Help");
 		csv 		= new JMenuItem("Import CSV");
 		csvexport = new JMenuItem("Export as CSV");
-		db			= new JMenuItem("Database Manager");
+		db			= new JMenuItem("Database Manager");*/
 
-		
-		datamenu.add(csv);
+
+		/*datamenu.add(csv);
 		datamenu.add(csvexport);
 		datamenu.add(db);
 		menubar.add(datamenu);
 		menubar.add(toolabout);
-		setJMenuBar(menubar);
+		setJMenuBar(menubar);*/
 
 		//Coordinate Tracking
 		menubar.add(Box.createHorizontalGlue());
@@ -1320,14 +1372,16 @@ public class Main extends JFrame implements ActionListener {
 		trackedCoord.setHorizontalAlignment(JLabel.RIGHT);
 
 		//Set Buttons
-		drawingPoints 	= new JButton("Point");
+		/*drawingPoints 	= new JButton("Point");
 		drawingPoints.setBackground(Color.decode("#f8f8ff"));
 		drawingLines	= new JButton("Line");
 		drawingLines.setBackground(Color.decode("#f8f8ff"));
 		drawingTriangles	= new JButton("Triangle");
 		drawingTriangles.setBackground(Color.decode("#f8f8ff"));
 		drawingRectangles	= new JButton("Rectangle");
-		drawingRectangles.setBackground(Color.decode("#f8f8ff"));
+//		drawingRectangles.setBackground(Color.decode("#f8f8ff"));*/
+		
+		//Editing buttons
 		selectElements	= new JButton("Select");
 		selectElements.setBackground(Color.decode("#b3ccff"));
 		deleteElements 	= new JButton("Delete");
@@ -1338,21 +1392,26 @@ public class Main extends JFrame implements ActionListener {
 		changeElements.setBackground(Color.decode("#ffff80"));
 
 		//Buttons add ActionListeners
-		drawingPoints.addActionListener(this);
+		/*drawingPoints.addActionListener(this);
 		drawingLines.addActionListener(this);
 		drawingTriangles.addActionListener(this);
-		drawingRectangles.addActionListener(this);
+		drawingRectangles.addActionListener(this);*/
 		selectElements.addActionListener(this);
 		deleteElements.addActionListener(this);
 		moveElements.addActionListener(this);
 		changeElements.addActionListener(this);
+		// ActionListener for MenuItems
+		obj1.addActionListener(this);
+		obj2.addActionListener(this);
+		obj3.addActionListener(this);
+		obj4.addActionListener(this);
 
 		csv.addActionListener(this);
 		csvexport.addActionListener(this);
 		db.addActionListener(this);
 
 		//Set ToolBar
-		toolbar = new JToolBar();
+		/*toolbar = new JToolBar();
 		toolbar.add(drawingPoints);
 		toolbar.add(drawingLines);
 		toolbar.add(drawingTriangles);
@@ -1364,7 +1423,7 @@ public class Main extends JFrame implements ActionListener {
 
 		toolBox = Box.createHorizontalBox();
 		toolBox.add(toolbar);
-		add(toolBox);
+		add(toolBox);*/
 
 		// General Frame Settings
 		setTitle("CAD APP");
@@ -1382,7 +1441,7 @@ public class Main extends JFrame implements ActionListener {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		
+
 		frame = new Main();
 		frame.setLayout();
 	}
@@ -1392,7 +1451,7 @@ public class Main extends JFrame implements ActionListener {
 
 		Object eTarget = e.getSource();
 
-		if ( eTarget.equals(drawingPoints)) {
+		if ( eTarget.equals(obj1)) {
 			if ( !drawMode.equals("PointMode")) {
 				drawMode = "PointMode";
 				trackedMode.setText(drawMode+"    |    ");
@@ -1401,7 +1460,7 @@ public class Main extends JFrame implements ActionListener {
 				trackedMode.setText(drawMode+"    |    ");
 			}
 
-		} else if ( eTarget.equals(drawingLines)) {
+		} else if ( eTarget.equals(obj2)) {
 			if ( !drawMode.equals("LineMode")) {
 				drawMode = "LineMode";
 				trackedMode.setText(drawMode+"    |    ");
@@ -1410,7 +1469,7 @@ public class Main extends JFrame implements ActionListener {
 				trackedMode.setText(drawMode+"    |    ");
 			}
 
-		} else if ( eTarget.equals(drawingTriangles)) {
+		} else if ( eTarget.equals(obj3)) {
 			if ( !drawMode.equals("TriangleMode")) {
 				drawMode = "TriangleMode";
 				trackedMode.setText(drawMode+"    |    ");
@@ -1419,7 +1478,7 @@ public class Main extends JFrame implements ActionListener {
 				trackedMode.setText(drawMode+"    |    ");
 			}
 
-		} else if ( eTarget.equals(drawingRectangles)) {
+		} else if ( eTarget.equals(obj4)) {
 			if ( !drawMode.equals("RectangleMode")) {
 				drawMode = "RectangleMode";
 				trackedMode.setText(drawMode+"    |    ");
@@ -1471,7 +1530,7 @@ public class Main extends JFrame implements ActionListener {
 				e1.printStackTrace();
 			}
 			try {
-				GUICSV.displayObjectFromCSV();
+//				GUICSV.displayObjectFromCSV();
 				
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
