@@ -26,6 +26,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JToolBar;
 
+import database.GUICSV;
+
 /**
  * Creates the (Tool)Frame of the Software itself. The  is used as (GraphicalUser)Interface between the users actions
  * and the functionalities that are provided by this software.
@@ -53,9 +55,9 @@ public class Main extends JFrame implements ActionListener {
 	 */
 	public EditorTools editor;
 	/**
-	 * CSVInterface for importing and exporting data from/to CSV
+	 * GUICSV for importing and exporting data from/to CSV
 	 */
-	//public static CSVInterface csvinterface;
+	public static GUICSV csv_gui;
 	/**
 	 * DBInterface for importing and exporting data from/to a Database
 	 */
@@ -66,6 +68,7 @@ public class Main extends JFrame implements ActionListener {
 	JMenu		datamenu;
 	JMenu		toolabout;
 	JMenuItem	csv;
+	JMenuItem   csvexport;
 	JMenuItem   db;
 	JMenuItem help;
 
@@ -1234,20 +1237,22 @@ public class Main extends JFrame implements ActionListener {
 	
 
 	/**
-	 * Creates a new object of CSVInterface() which opens a new frame for
+	 * Creates a new object of GUI
+() which opens a new frame for
 	 * exporting objects as ".csv" or importing objects from a ".csv".
 	 * After that, some general methods for displaying a frame are applied.
 	 * @author 
 	 */
-	/*public void openCsvInterface() {
-		csvinterface = new CSVInterface();
-		csvinterface.setTitle("CSV Interface");
-		csvinterface.setLocationRelativeTo(null);
-		csvinterface.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		csvinterface.setVisible(true);
+	/*public void openCSVgui() {
+		csv_gui = new GUICSV();
+		csv_gui.setTitle("CSV Interface");
+		csv_gui.setLocationRelativeTo(null);
+		csv_gui.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		csv_gui.setVisible(true);
 
-	}
+	}*/
 
+	/*
 	/**
 	 * Creates a new object of DBInterface() which opens a new frame for
 	 * exporting objects to a connected database or importing objects from a connected database.
@@ -1293,11 +1298,13 @@ public class Main extends JFrame implements ActionListener {
 		datamenu 	= new JMenu("Data");
 		toolabout 	= new JMenu("About");
 		help 	= new JMenu("Help");
-		csv 		= new JMenuItem("Import/Export .csv");
+		csv 		= new JMenuItem("Import CSV");
+		csvexport = new JMenuItem("Export as CSV");
 		db			= new JMenuItem("Database Manager");
 
 		
 		datamenu.add(csv);
+		datamenu.add(csvexport);
 		datamenu.add(db);
 		menubar.add(datamenu);
 		menubar.add(toolabout);
@@ -1341,6 +1348,7 @@ public class Main extends JFrame implements ActionListener {
 		changeElements.addActionListener(this);
 
 		csv.addActionListener(this);
+		csvexport.addActionListener(this);
 		db.addActionListener(this);
 
 		//Set ToolBar
@@ -1455,8 +1463,24 @@ public class Main extends JFrame implements ActionListener {
 			}
 
 		} else if ( eTarget.equals(csv)) {
-			//openCsvInterface();
-		} else if ( eTarget.equals(db)) {
+			try {
+				GUICSV.openFileChooserDialog();
+				
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			try {
+				GUICSV.displayObjectFromCSV();
+				
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+		} else if ( eTarget.equals(csvexport)) {
+			//openDbInterface();
+		}else if ( eTarget.equals(db)) {
 			//openDbInterface();
 		}
 
