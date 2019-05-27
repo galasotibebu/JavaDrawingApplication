@@ -15,11 +15,6 @@ import javapackage.RectangleFeature;
 import javapackage.TriangleFeature;
 
 
-/**
- * Displaying CSV file
- * @author 
- *
- */
 
 public class DisplayCSV {
 	
@@ -29,23 +24,13 @@ public class DisplayCSV {
 	
 	int countIdentifier = 0;
 	
-	/**
-	 * Getting path from the file for Displaying 
-	 * @param filePath
-	 * @author 
-	 */
+
 	public DisplayCSV(String filePath) {
 		this.filePath = filePath;
 		DisplayCSV.editor = frame.editor;	
 	}
 	
-	/**
-	 * Displaying objects by reading them from CSV file 
-	 * @return
-	 * @throws FileNotFoundException
-	 * @throws IOException
-	 * @author
-	 */
+
 	public EditorTools displayObjects() throws FileNotFoundException, IOException {
 		EditorTools editor = new EditorTools();
 		

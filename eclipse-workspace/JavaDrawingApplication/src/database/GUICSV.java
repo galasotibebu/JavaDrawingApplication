@@ -20,10 +20,10 @@ public class GUICSV {
 	
 	public static EditorTools itemeditor;
 	
-	JButton save;
-	JButton open;
+//	JButton save;
+//	JButton open;
 	
-	EditorTools neweditor;
+	static EditorTools neweditor;
 	
 	static String filePath;
 	static String fileName;
@@ -84,12 +84,8 @@ public class GUICSV {
 		}
 	}
 	
-	/**
-	 * Defining saveFileChooserDialog for saving the CSV file 
-	 * @throws Exception
-	 * @author 
-	 */
-	public void saveFileChooserDialog() throws Exception {
+// For selecting directory for saving csv 
+	public static void saveFileChooserDialog() throws Exception {
 		JFileChooser jfilechooser = new JFileChooser();
 		int filechoose = jfilechooser.showSaveDialog(null);
 		while( filechoose == JFileChooser.APPROVE_OPTION && !jfilechooser.getSelectedFile().getName().endsWith(".csv")) {
@@ -103,36 +99,23 @@ public class GUICSV {
 			fileName = f.getName();
 		}
 	}
-	
-	/**
-	 * Saving objects to the CSV file with name and path 
-	 * @throws Exception
-	 * @author 
-	 */
-	public void saveObjectsToCSV() throws Exception {
+
+	public static void saveObjectsToCSV() throws Exception {
 		CreateCSV createFile = new CreateCSV();
 		createFile.openFile();
 		createFile.fillFile(filePath);
 		createFile.closeFile();
-		JOptionPane.showMessageDialog(null, "Saved as " + fileName + " in " + filePath);
+		
 	}
 	
-	/**
-	 * Displaying objects from CSV file 
-	 * @throws Exception
-	 * @author 
-	 */
-	public void displayObjectFromCSV() throws Exception {
+
+	public static void displayObjectFromCSV() throws Exception {
 		DisplayCSV  displayCSV = new DisplayCSV(filePath);
 		neweditor = displayCSV.displayObjects();
 		frame.overwriteObjects(neweditor);
 	}
 	
-	/**
-	 * Getting file path 
-	 * @return
-	 * @author 
-	 */
+
 	public static String getFilePath() {
 		return  filePath;
 	}

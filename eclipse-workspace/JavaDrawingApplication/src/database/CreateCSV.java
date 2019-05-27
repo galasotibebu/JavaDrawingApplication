@@ -16,11 +16,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Formatter;
 
-/**
- * Creating CSV file
- * @author 
- * 
- */
+
 
 public class CreateCSV {
 	
@@ -40,11 +36,7 @@ public class CreateCSV {
 	public CreateCSV() {
 		CreateCSV.editor = frame.editor;		
 	}
-	
-	/**
-	 * Opening CSV file with defining path and format 
-	 * @author 
-	 */
+
 	public void openFile() {		
 		try {
 			filePath =  GUICSV.getFilePath();
@@ -55,39 +47,16 @@ public class CreateCSV {
 		}
 	}
 	
-	/**
-	 * Close the CSV file 
-	 * @author 
-	 */
+
 	public void closeFile() {
 		fileFormatter.close();
 	}
 	
-	/**
-	 * Writing objects (point,line,triangle,rectangle) to the CSV file with the type and geometry information with ; delimiter and save it as a format of .csv
-	 * @param filePath
-	 * @return
-	 * @author 
-	 */
 	public boolean fillFile(String filePath) {
 		try {
 			csvWriter = new FileWriter(new File(filePath));
 			csvWriter.write("object_type;object_geometry" + "\n");	
-			
-			/*
-			if (editor.managedToolLines.size() >=2) {
-				editor.managedToolLines.remove(editor.managedToolLines.size()-1);
-			}
-			
-			if (editor.managedToolTriangles.size() >=2) {
-				editor.managedToolTriangles.remove(editor.managedToolTriangles.size()-1);
-			}
-			
-			if (editor.managedToolRectangles.size() >=2) {
-				editor.managedToolRectangles.remove(editor.managedToolRectangles.size()-1);
-			}	
-			*/		
-			
+				
 			editor.drawingPoints.forEach((PointFeature point) -> {
 				objectType = point.getObjectType();
 				objectGeometry = point.getGeometryAsText();
