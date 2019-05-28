@@ -1,6 +1,5 @@
 package database;
 
-
 import javapackage.EditorTools;
 import database.GUICSV;
 import javapackage.PointFeature;
@@ -16,47 +15,44 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Formatter;
 
-
-
 public class CreateCSV {
-	
-	public GUICSV csvInterface ;
+
+	public GUICSV csvInterface;
 	public static EditorTools editor;
-	
+
 	Formatter fileFormatter;
-	
+
 	FileWriter csvWriter;
-	
+
 	String objectType;
-	
+
 	String objectGeometry;
-	
+
 	String filePath;
-	
+
 	public CreateCSV() {
-		CreateCSV.editor = frame.editor;		
+		CreateCSV.editor = frame.editor;
 	}
 
-	public void openFile() {		
+	public void openFile() {
 		try {
-			filePath =  GUICSV.getFilePath();
+			filePath = GUICSV.getFilePath();
 			fileFormatter = new Formatter(filePath);
 		} catch (FileNotFoundException e) {
 
 			System.out.println("Error occured while saving");
 		}
 	}
-	
 
 	public void closeFile() {
 		fileFormatter.close();
 	}
-	
+
 	public boolean fillFile(String filePath) {
 		try {
 			csvWriter = new FileWriter(new File(filePath));
-			csvWriter.write("object_type;object_geometry" + "\n");	
-				
+			csvWriter.write("object_type;object_geometry" + "\n");
+
 			editor.drawingPoints.forEach((PointFeature point) -> {
 				objectType = point.getObjectType();
 				objectGeometry = point.getGeometryAsText();
@@ -66,7 +62,7 @@ public class CreateCSV {
 					e.printStackTrace();
 				}
 			});
-			
+
 			editor.drawingLines.forEach((LineFeature line) -> {
 				objectType = line.getObjectType();
 				objectGeometry = line.getGeometryAsText();
@@ -75,8 +71,8 @@ public class CreateCSV {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-			});	
-			
+			});
+
 			editor.drawingTriangles.forEach((TriangleFeature triangle) -> {
 				objectType = triangle.getObjectType();
 				objectGeometry = triangle.getGeometryAsText();
@@ -86,7 +82,7 @@ public class CreateCSV {
 					e.printStackTrace();
 				}
 			});
-			
+
 			editor.drawingRectangles.forEach((RectangleFeature rectangle) -> {
 				objectType = rectangle.getObjectType();
 				objectGeometry = rectangle.getGeometryAsText();
@@ -96,13 +92,13 @@ public class CreateCSV {
 					e.printStackTrace();
 				}
 			});
-			
-			csvWriter.close();						
-			
+
+			csvWriter.close();
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		return true;
 	}
 }
