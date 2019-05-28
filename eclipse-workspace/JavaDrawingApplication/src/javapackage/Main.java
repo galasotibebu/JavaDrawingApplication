@@ -20,6 +20,8 @@ import javax.swing.JButton;
 import javax.swing.*;
 
 import database.GUICSV;
+import database.DatabaseGUI;
+
 
 /**
  * Creates the (Tool)Frame of the Software itself. The is used as
@@ -56,7 +58,7 @@ public class Main extends JFrame implements ActionListener {
 	/**
 	 * DBInterface for importing and exporting data from/to a Database
 	 */
-	//public static DBInterface dbinterface;
+	public static DatabaseGUI databaseGUI;
 
 	//MenuBar Variables
 	
@@ -79,7 +81,7 @@ public class Main extends JFrame implements ActionListener {
 	/**
 	 * DBInterface for importing and exporting data from/to a Database
 	 */
-	// public static DBInterface dbinterface;
+	// public static DBInterface databaseGUI;
 
 	// MenuBar Variables
 	JMenuBar menubar;
@@ -94,7 +96,7 @@ public class Main extends JFrame implements ActionListener {
 	JMenuItem obj2;
 	JMenuItem obj3;
 	JMenuItem obj4;
-	JMenuItem csv;
+	JMenuItem csvimport;
 	JMenuItem db;
 	JMenuItem csvexport; 
 
@@ -202,7 +204,7 @@ public class Main extends JFrame implements ActionListener {
 		obj2 = new JMenuItem("Lines");
 		obj3 = new JMenuItem("Triangles");
 		obj4 = new JMenuItem("Rectangles");
-		csv = new JMenuItem("Import");
+		csvimport = new JMenuItem("Import");
 		csvexport = new JMenuItem("Export"); ;
 		db = new JMenuItem("Database Manager");
 
@@ -216,7 +218,7 @@ public class Main extends JFrame implements ActionListener {
 
 		// Add items to main menu
 		this.setJMenuBar(menubar);
-		datamenu.add(csv);
+		datamenu.add(csvimport);
 		datamenu.add(csvexport);
 		datamenu.add(db);
 
@@ -1339,63 +1341,15 @@ public class Main extends JFrame implements ActionListener {
 		});
 	}
 
-	/**
-<<<<<<< HEAD
-	 * Creates a new object of GUI
-() which opens a new frame for
-	 * exporting objects as ".csv" or importing objects from a ".csv".
-	 * After that, some general methods for displaying a frame are applied.
-	 * @author 
-	 */
-	/*public void openCSVgui() {
-		csv_gui = new GUICSV();
-		csv_gui.setTitle("CSV Interface");
-		csv_gui.setLocationRelativeTo(null);
-		csv_gui.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		csv_gui.setVisible(true);
 
-	}*/
+	 public void openDbInterface() 
+	 { databaseGUI = new DatabaseGUI();
+	  databaseGUI.setTitle("Database Connection");
+	  databaseGUI.setLocationRelativeTo(null);
+	  databaseGUI.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+	  databaseGUI.setVisible(true);
 
-	/*
-	/**
-	 * Creates a new object of DBInterface() which opens a new frame for
-	 * exporting objects to a connected database or importing objects from a connected database.
-	 * After that, some general methods for displaying a frame are applied.
-	 * @author 
-=======
-	 * Creates a new object of CSVInterface() which opens a new frame for exporting
-	 * objects as ".csv" or importing objects from a ".csv". After that, some
-	 * general methods for displaying a frame are applied.
-	 * 
-	 * @author
-	 */
-	/*
-	 * public void openCsvInterface() { csvinterface = new CSVInterface();
-	 * csvinterface.setTitle("CSV Interface");
-	 * csvinterface.setLocationRelativeTo(null);
-	 * csvinterface.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-	 * csvinterface.setVisible(true);
-	 * 
-	 * }
-	 * 
-	 * /** Creates a new object of DBInterface() which opens a new frame for
-	 * exporting objects to a connected database or importing objects from a
-	 * connected database. After that, some general methods for displaying a frame
-	 * are applied.
-	 * 
-	 * @author
-	 */
-	/*
-	 * public void openDbInterface() { dbinterface = new DBInterface();
-	 * dbinterface.setTitle("DB Interface");
-	 * dbinterface.setLocationRelativeTo(null);
-	 * dbinterface.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-	 * dbinterface.setVisible(true);
-	 * 
-	 * }
->>>>>>> 1322f7c7363fea59bc627b2944c35d22a7f4d0f8
-	 */
-
+	 }
 	/**
 	 * Replaces the @param editor with the contents of the @param neweditor
 	 * 
@@ -1427,7 +1381,7 @@ public class Main extends JFrame implements ActionListener {
 		datamenu 	= new JMenu("Data");
 		toolabout 	= new JMenu("About");
 		help 	= new JMenu("Help");
-		csv 		= new JMenuItem("Import CSV");
+		csvimport 		= new JMenuItem("Import CSV");
 		csvexport = new JMenuItem("Export as CSV");
 		db			= new JMenuItem("Database Manager");*/
 		// Set ContentPane
@@ -1436,12 +1390,12 @@ public class Main extends JFrame implements ActionListener {
 		// Set MenuBar
 		/*
 		 * menubar = new JMenuBar(); datamenu = new JMenu("Data"); toolabout = new
-		 * JMenu("About"); help = new JMenu("Help"); csv = new
-		 * JMenuItem("Import/Export .csv"); db = new JMenuItem("Database Manager");
+		 * JMenu("About"); help = new JMenu("Help"); csvimport = new
+		 * JMenuItem("Import/Export .csvimport"); db = new JMenuItem("Database Manager");
 		 */
 
 
-		/*datamenu.add(csv);
+		/*datamenu.add(csvimport);
 		datamenu.add(csvexport);
 		datamenu.add(db);
 		menubar.add(datamenu);
@@ -1449,7 +1403,7 @@ public class Main extends JFrame implements ActionListener {
 		setJMenuBar(menubar);*/
 
 		/*
-		 * datamenu.add(csv); datamenu.add(db); menubar.add(datamenu);
+		 * datamenu.add(csvimport); datamenu.add(db); menubar.add(datamenu);
 		 * menubar.add(toolabout); setJMenuBar(menubar);
 		 */
 
@@ -1500,7 +1454,7 @@ public class Main extends JFrame implements ActionListener {
 		obj3.addActionListener(this);
 		obj4.addActionListener(this);
 
-		csv.addActionListener(this);
+		csvimport.addActionListener(this);
 		csvexport.addActionListener(this);
 		db.addActionListener(this);
 
@@ -1618,7 +1572,7 @@ public class Main extends JFrame implements ActionListener {
 			}
 
 
-		} else if ( eTarget.equals(csv)) {
+		} else if ( eTarget.equals(csvimport)) {
 			try {
 				GUICSV.openFileChooserDialog();
 				GUICSV.displayObjectFromCSV();
@@ -1636,13 +1590,8 @@ public class Main extends JFrame implements ActionListener {
 				e1.printStackTrace();
 			}
 		}else if ( eTarget.equals(db)) {
-			//openDbInterface();
-		} else if (eTarget.equals(csv)) {
-			// openCsvInterface();
-		} else if (eTarget.equals(db)) {
-			// openDbInterface();
-		}
-
+			openDbInterface();
+		} 
 	}
 
 }
