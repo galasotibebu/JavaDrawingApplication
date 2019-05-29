@@ -2,60 +2,27 @@ package javapackage;
 
 import java.awt.geom.Rectangle2D;
 
-/**
- * Class for RectangleFeatures that stores rectangle coordinates and provides
- * methods for creating drawable rectangle geometries for the ToolDrawPanel, or
- * for importing/exporting the rectangle coordinates. Inherits from
- * ObjectFundamenals.
- * 
- * @author
- */
 public class RectangleFeature extends ShapesParent {
 
-	/**
-	 * Stores the first and the last PointFeature of a RectangleFeature object
-	 */
+	// Stores the first and the last PointFeature of a RectangleFeature object
+
 	public PointFeature[] rectangleElements = new PointFeature[2];
 
-	/**
-	 * The constructor defines the type of geometry (see: constructor of
-	 * ObjectFundamentals)
-	 * 
-	 * @author
-	 */
+	// The constructor defines the rectangle geometry
+	// inherits ShapesParent
 	public RectangleFeature() {
 		super("Rectangle");
 	}
 
-	/**
-	 * Adds the first corner of the Rectangle as the first entry of the List of
-	 * rectangle elements
-	 * 
-	 * @author
-	 * @param point
-	 */
 	public void addRetangleFirstCorner(PointFeature point) {
 		rectangleElements[0] = point;
 	}
 
-	/**
-	 * Adds the last croner of the Rectangle as the first entry of the List of
-	 * rectangle elements
-	 * 
-	 * @author
-	 * @param point
-	 */
 	public void addRectangleLastCorner(PointFeature point) {
 		rectangleElements[1] = point;
 	}
 
-	/**
-	 * Creates a drawable Rectangle2D object with the points of the RectangleFeature
-	 * object
-	 * 
-	 * @author
-	 * @return Drawable rectangle geometry
-	 */
+	// Creates a rectangle object with the points of the RectangleFeature object
 	public Rectangle2D createRectangleFeature() {
 		Rectangle2D Rectangle = new Rectangle2D.Double();
 
@@ -82,12 +49,7 @@ public class RectangleFeature extends ShapesParent {
 		return Rectangle;
 	}
 
-	/**
-	 * Returns the coordinates of the RectangleFeature object as a String
-	 * 
-	 * @author
-	 * @return String of coordinates
-	 */
+	// Returns the coordinates of the RectangleFeature object as a String
 	public String getGeometryAsText() {
 		String textGeometry = String.valueOf(this.rectangleElements[0].x) + " "
 				+ String.valueOf(this.rectangleElements[0].y) + " " + String.valueOf(this.rectangleElements[1].x) + " "
@@ -95,13 +57,7 @@ public class RectangleFeature extends ShapesParent {
 		return textGeometry;
 	}
 
-	/**
-	 * Sets the Rectangle from a String (provided by database of '.csv').
-	 * 
-	 * @author
-	 * @param csvGeometry String containing the rectangle coordinates
-	 * @return Whether the operation was successfully operated or not
-	 */
+	// Sets the Rectangle from a String (from csv file)
 	public boolean setGeometryFromCSV(String csvGeometry) {
 		try {
 			String[] coordinates = csvGeometry.split(" ");

@@ -4,101 +4,69 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Line2D;
-import java.awt.geom.Path2D;
-import java.awt.geom.Rectangle2D;
+import java.awt.geom.*;
 import java.util.ArrayList;
-
 import javax.swing.JPanel;
 
-/**
- * The ToolDrawPanel class requests ArrayLists with geometry objects from an
- * ObjectManager object and displays them.
- * 
- * @author
- *
- */
+// Drawing canvas class requests ArrayLists with geometry objects from an
+// EditorTools class and displays them.
 @SuppressWarnings("serial")
 public class DrawingCanvas extends JPanel {
 
 	// ----------NEW FEATURES-------------------------------------------
-	/**
-	 * ArrayList of PointFeature objects to be drawn
-	 */
+
+	// ArrayList of PointFeature objects to be drawn
 	private ArrayList<PointFeature> PointLists = new ArrayList<>();
-	/**
-	 * ArrayList of LineFeature objects to be drawn
-	 */
+
+	// ArrayList of LineFeature objects to be drawn
 	private ArrayList<LineFeature> LineLists = new ArrayList<>();
-	/**
-	 * ArrayList of TriangleFeature objects to be drawn
-	 */
+
+	// ArrayList of TriangleFeature objects to be drawn
 	private ArrayList<TriangleFeature> TriangleLists = new ArrayList<>();
-	/**
-	 * ArrayList of RectangleFeature objects to be drawn
-	 */
+
+	// ArrayList of RectangleFeature objects to be drawn
 	private ArrayList<RectangleFeature> RectangleLists = new ArrayList<>();
-	// ------------------------------------------------------------------
 
 	// ------------Currently Selected--------------------------------------
-	/**
-	 * ArrayList of PointFeature objects that are currently selected (will be drawn
-	 * in another color for visual feedback)
-	 */
+
+	// ArrayList of PointFeature objects that are currently selected
 	private ArrayList<PointFeature> selectedPointLists = new ArrayList<>();
-	/**
-	 * ArrayList of LineFeature objects that are currently selected (will be drawn
-	 * in another color for visual feedback)
-	 */
+
+	// ArrayList of LineFeature objects that are currently selected
 	private ArrayList<LineFeature> selectedLineLists = new ArrayList<>();
-	/**
-	 * ArrayList of TriangleFeature objects that are currently selected (will be
-	 * drawn in another color for visual feedback)
-	 */
+
+	// ArrayList of TriangleFeature objects that are currently selected
 	private ArrayList<TriangleFeature> selectedTriangleLists = new ArrayList<>();
-	/**
-	 * ArrayList of RectangleFeature objects that are currently selected (will be
-	 * drawn in another color for visual feedback)
-	 */
+
+	// ArrayList of RectangleFeature objects that are currently selected
 	private ArrayList<RectangleFeature> selectedRectangleLists = new ArrayList<>();
 	// ---------------------------------------------------------------------------
 
 	// -------------Altered Features-----------------------------------------------
-	/**
-	 * ArrayList of the different states of LineFeature objects that modified by
-	 * 'move' or 'selected'
-	 */
-	private ArrayList<LineFeature> Line_drawing = new ArrayList<>();
-	/*
-	 * ArrayList of the different states of TriangleFeature objects that modified by
-	 * 'move' or 'selected'
-	 */
-	private ArrayList<TriangleFeature> Triangle_drawing = new ArrayList<>();
-	/**
-	 * ArrayList of the different states of RectangleFeature objects that modified
-	 * by 'move' or 'selected'
-	 */
-	private ArrayList<RectangleFeature> Rectangle_drawing = new ArrayList<>();
 
-	// ::::::::::::::::::::::::::::::::::::::::::::::::::::
-	// ::
+	// ArrayList to store different states of LineFeature objects that is altered by
+	// different tools
+	//private ArrayList<LineFeature> Point_drawing = new ArrayList<>();
+
+	// ArrayList to store different states of LineFeature objects that is altered by
+	// different tools
+	private ArrayList<LineFeature> Line_drawing = new ArrayList<>();
+
+	// ArrayList to store different states of TriangleFeature objects that is
+	// altered by different tools
+	private ArrayList<TriangleFeature> Triangle_drawing = new ArrayList<>();
+
+	// ArrayList to store different states of RectangleFeature objects that is
+	// altered by tools
+	private ArrayList<RectangleFeature> Rectangle_drawing = new ArrayList<>();
 
 	// --------------------------------------------------------------------
 	// SELECTOR -
 	// --------------------------------------------------------------------
-	/**
-	 * Defines the selection rectangle for displaying it
-	 */
+	// Defines the selection rectangle
 	private Rectangle2D selectionRectangle = null;
-	// ------------------------------------------------------------
 
-	/**
-	 * Sets the selection Rectangle
-	 * 
-	 * @author
-	 * @param Rectangle
-	 */
+	// Sets the selection Rectangle
 	public void defineSelectionRectangle(Rectangle2D Rectangle) {
 		this.selectionRectangle = Rectangle;
 	}
@@ -107,13 +75,9 @@ public class DrawingCanvas extends JPanel {
 	// BRINGS ACTUALLY CREATED & SELECTED FEATURES FROM EDITORTOOLS CLASS to deal
 	// with them -
 	// --------------------------------------------------------------------
-	/**
-	 * Replaces the current contents of the ArrayLists in the DrawingCanvas with the
-	 * contents of the corresponding ArrayLists in the Editor class
-	 * 
-	 * @author
-	 * @param editor
-	 */
+
+	// Replaces the current contents of the ArrayLists in the DrawingCanvas with the
+	// contents of the corresponding ArrayLists in the EditorTools class
 	public void requestObjectLists(EditorTools editor) {
 		// Draw Objects
 		PointLists = editor.drawingPoints;
@@ -130,74 +94,58 @@ public class DrawingCanvas extends JPanel {
 	// --------------------------------------------------------------------
 	// NEW FEATURE CREATER IN ACTUAL DWRAWING-CANVAS CLASS
 	// --------------------------------------------------------------------
-	/*
-	 * public void storeDrawingPointElements(PointFeature point) {
-	 * Point_drawing.add(point); }
-	 */
+
+	// Appends new PointFeature to corresponding Arraylist
+	// public void storeDrawingPointElements(PointFeature point) {
+	//	 Point_drawing.add(point);
+	//}
+
+	// Appends new LineFeature to corresponding Arraylist
 	public void storeDrawingLineElements(LineFeature line) {
 		Line_drawing.add(line);
 	}
 
-	/**
-	 * Adds a TriangleFeature at the end of the corresponding ArrayList.
-	 * 
-	 * @author
-	 * @param triangle
-	 */
+	// Appends new TriangleFeature to corresponding Arraylist
 	public void storeDrawingTriangleElements(TriangleFeature triangle) {
 		Triangle_drawing.add(triangle);
 	}
 
-	/**
-	 * Adds a RectangleFeature at the end of the corresponding ArrayList.
-	 * 
-	 * @author
-	 * @param rectangle
-	 */
+	// Appends new RectangleFeature to corresponding Arraylist
 	public void storeDrawingRectangleElements(RectangleFeature rectangle) {
 		Rectangle_drawing.add(rectangle);
-	}// ................... new feature creater..............................
+	}
 
 	// --------------------------------------------------------------------
 	// i will come later here
 	// --------------------------------------------------------------------
-	/**
-	 * Clears all ArrayLists for live-displaying objects when drawn
-	 * 
-	 * @author
-	 */
+	
+	// Clears all ArrayLists for live-displaying objects when drawn
 	public void clearDrawingElements() {
 		// Point_drawing.clear()
 		Line_drawing.clear();
 		Triangle_drawing.clear();
 		Rectangle_drawing.clear();
-	}// -------------------------------------------------------------------
+	}
 
 	// --------------------------------------------------------------------
 	// DO DRAWING IN CANVAS FOR NEW FEATURES & SELECTION BOX
 	// --------------------------------------------------------------------
-	/*
-	 * public class DrawingPanel extends JPanel implements MouseListener,
-	 * MouseMotionListener {
-	 */
+
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-		// Color drawColor = new Color(0, 0, 0, 0.75f);
-		// g2d.setPaint(drawColor);//used to generate color during the rendering process
-
-		Color drawingColor = Color.cyan;
+		Color drawingColor = Color.black;
 		g2d.setPaint(drawingColor);
 
-		Color selectionColor = Color.red;// new Color(1, 0, 1, 1f);
+		Color selectionColor = Color.cyan;
 		g2d.setPaint(selectionColor);// used to generate color during the rendering process
 
-		// ::::::::::::::::::::::::::::::::::::::::::::::::::::
-		// Draw Point, Line, Triangle, Rectangle ::
-		// ::::::::::::::::::::::::::::::::::::::::::::::::::::
+		// ----------------------------------------------------
+		// Draw Point, Line, Triangle, Rectangle
+		// ----------------------------------------------------
 		// Draw Points
 		PointLists.forEach((PointFeature point) -> {
 			Ellipse2D pt = point.createPointFeature();
@@ -218,8 +166,6 @@ public class DrawingCanvas extends JPanel {
 			g2d.setPaint(drawingColor);
 		});
 
-		
-		
 		// Draw Rectangles
 		RectangleLists.forEach((RectangleFeature rectangle) -> {
 			Rectangle2D rct = rectangle.createRectangleFeature();
@@ -227,15 +173,15 @@ public class DrawingCanvas extends JPanel {
 			g2d.setPaint(drawingColor);
 		});
 
-		// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-		// Draw Selection Box ::
-		// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+		// --------------------------------------------------------
+		// Draw Selection Box 
+		// --------------------------------------------------------
 
 		// Draw Selections
 
-		if (selectionRectangle != null) {
+		/*if (selectionRectangle != null) {
 			g2d.draw(selectionRectangle);
-		}
+		}*/
 
 		// Draw selected Objects in Red
 		selectedPointLists.forEach((PointFeature point) -> {
@@ -262,9 +208,9 @@ public class DrawingCanvas extends JPanel {
 			g2d.setPaint(selectionColor);
 		});
 
-		// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-		// Live Display of states of objects modified by 'move' or 'change'::
-		// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+		// ------------------------------------------------------------------
+		// Displays states of objects modified
+		//-------------------------------------------------------------------
 
 		Line_drawing.forEach((LineFeature line) -> {
 			Line2D dln = line.createLineFeature();
@@ -282,6 +228,5 @@ public class DrawingCanvas extends JPanel {
 		});
 
 	}
-	
 
 }

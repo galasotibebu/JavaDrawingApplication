@@ -2,72 +2,35 @@ package javapackage;
 
 import java.awt.geom.Path2D;
 
-/**
- * Class for TollTriangles that stores triangle coordinates and provides methods
- * for creating drawable triangle geometries for the ToolDrawPanel, or for
- * importing/exporting the triangle coordinates. Inherits from
- * ObjectFundamenals.
- * 
- * @author
- */
 public class TriangleFeature extends ShapesParent {
 
-	/**
-	 * Stores the first, middle and last PointFeature of a TriangleFeature object
-	 */
+	// Stores the the vertexes of TriangleFeature object
 	public PointFeature[] triangleElements = new PointFeature[3];
 
-	/**
-	 * The constructor defines the type of geometry (see: constructor of
-	 * ObjectFundamentals)
-	 * 
-	 * @author
-	 */
-
+	// Defines type of geometry
 	public TriangleFeature() {
 		super("Triangle");
 	}
 
-	/**
-	 * Adds the first point of the triangle as the first entry of the List of
-	 * triangle elements
-	 * 
-	 * @author
-	 * @param point
-	 */
+	// Adds the first point of the triangle to the List of triangle elements
+	// as first entry	 
 	public void addTriangleStart(PointFeature point) {
 		triangleElements[0] = point;
 	}
 
-	/**
-	 * Adds the second point of the triangle as the first entry of the List of
-	 * triangle elements
-	 * 
-	 * @author
-	 * @param point
-	 */
+	// Adds the second point of the triangle to List of triangle elements
+	// as first entry
 	public void addTriangleMid(PointFeature point) {
 		triangleElements[1] = point;
 	}
 
-	/**
-	 * Adds the last point of the triangle as the first entry of the List of
-	 * triangle elements
-	 * 
-	 * @author
-	 * @param point
-	 */
+	// Adds the last point of the triangle to the List of
+	 // triangle elements as first entry
 	public void addTriangleEnd(PointFeature point) {
 		triangleElements[2] = point;
 	}
 
-	/**
-	 * Creates a drawable Path2D object with the points of the TriangleFeature
-	 * object
-	 * 
-	 * @author
-	 * @return Drawable triangle-shaped geometry
-	 */
+	// Creates a drawable Path2D object with the points of the TriangleFeature
 	public Path2D createTriangleFeature() {
 		Path2D pathTriangle = new Path2D.Double();
 		pathTriangle.moveTo((int) this.triangleElements[0].x, (int) this.triangleElements[0].y);
@@ -77,12 +40,7 @@ public class TriangleFeature extends ShapesParent {
 		return pathTriangle;
 	}
 
-	/**
-	 * Returns the coordinates of the TriangleFeature object as a String
-	 * 
-	 * @author
-	 * @return String of coordinates
-	 */
+	// Returns the coordinates of the TriangleFeature object as a String
 	public String getGeometryAsText() {
 		String textGeometry = String.valueOf(this.triangleElements[0].x) + " "
 				+ String.valueOf(this.triangleElements[0].y) + " " + String.valueOf(this.triangleElements[1].x) + " "
@@ -92,13 +50,7 @@ public class TriangleFeature extends ShapesParent {
 		return textGeometry;
 	}
 
-	/**
-	 * Sets the Triangle from a String (provided by database of '.csv').
-	 * 
-	 * @author
-	 * @param csvGeometry String containing the triangle coordinates
-	 * @return Whether the operation was successfully operated or not
-	 */
+	// Sets the Triangle from '.csv'
 	public boolean setGeometryFromCSV(String csvGeometry) {
 		try {
 			String[] coordinates = csvGeometry.split(" ");

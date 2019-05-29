@@ -22,7 +22,7 @@ public class PointFeature extends ShapesParent {
 		super("Point");
 	}
 
-	// Creates a drawable Ellipse2D object with the points of the ToolPoint object
+	// Creates a drawable Ellipse2D object of PointFeature object
 	// returns point geometry
 	public Ellipse2D createPointFeature() {
 		Ellipse2D point = new Ellipse2D.Double(this.x, this.y, pointsize, pointsize);
@@ -47,13 +47,8 @@ public class PointFeature extends ShapesParent {
 		return textGeometry;
 	}
 
-	/**
-	 * Sets the coordinates from a String (provided by database or '.csv').
-	 * 
-	 * @author
-	 * @param csvGeometry String containing the point coordinate
-	 * @return Whether the operation was successfully operated or not
-	 */
+	// Sets the coordinates from a String (provided by database or '.csv').
+	// Returns true when the operation is successful
 	public boolean setGeometryFromCSV(String csvGeometry) {
 		try {
 			String[] coordinatesPoint = csvGeometry.split(" ");

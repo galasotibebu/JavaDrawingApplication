@@ -1,71 +1,33 @@
 package javapackage;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 import java.util.ArrayList;
 import java.util.Collections;
 
-/**
- *
- * @author tibebu
- */
 public class ShapesParent {
-	/**
-	 * A unique ID of geometry objects // while shapes are created in panel
-	 */
+
+	// A unique ID of geometry objects // while shapes are created in panel
 	public int ShapesId = setShapesId(Main.frame.editor);
 
-	/**
-	 * The type of geometry (see constructor of Shapes and constructor of Main,
-	 * LineFeature, TriangleFeature and RectangleFeature
-	 */
+	// Geometry type
 	public String objectType;
 
-	/**
-	 * Constructor sets the type of the objects. (see: Constructors of ToolLine,
-	 * ToolTriangle, ToolRectangle)
-	 * 
-	 * @author
-	 * @param objectType String provided by the constructor of the geometrie objects
-	 *                   when created
-	 */
+	// Constructor sets the type of the objects
 	public ShapesParent(String objectType) {
 		this.objectType = objectType;
 	}
 
-	/**
-	 * Returns the identifier of an object.
-	 * 
-	 * @author
-	 * @return Identifier of the object
-	 */
+	// Returns the shape_id of an object
 	public int getShapesId() {
 		return this.ShapesId;
 	}
 
-	/**
-	 * Returns the type of an object.
-	 * 
-	 * @author
-	 * @return Type of the object
-	 */
+	// Returns the type of an object
 	public String getObjectType() {
 		return this.objectType;
 	}
 
-	/**
-	 * Iterates through objects of every type of geometry and adds every ShapesId to
-	 * the ShapeIdList, as long as the length of the ShapeIdList is > 0, the ShapeId
-	 * that is returned is the length of the SapesIdList + 1
-	 * 
-	 * @author
-	 * @param editor
-	 * @return New unique identifier
-	 */
+	// Iterates through objects of every type of geometry and adds every ShapesId to
+	// the ShapeIdList, as long as the length of the ShapeIdList is > 0
 	public int setShapesId(EditorTools editor) {
 		ArrayList<Integer> ShapesIdList = new ArrayList<>();
 		int latestShapesId;
