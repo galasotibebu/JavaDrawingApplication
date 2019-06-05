@@ -143,7 +143,7 @@ public class DrawingCanvas extends JPanel {
 		Color drawingColor = Color.black;
 		g2d.setPaint(drawingColor);
 		
-		Color selectionBoxColor = Color.gray;
+		Color selectionBoxColor = Color.red;
 		g2d.setPaint(selectionBoxColor);
 
 		// ----------------------------------------------------
@@ -216,7 +216,7 @@ public class DrawingCanvas extends JPanel {
 		// Displays states of objects modified
 		// -------------------------------------------------------------------
 		
-		for(PointFeature point: Point_drawing) {
+		/*for(PointFeature point: Point_drawing) {
 			Ellipse2D pts = point.createPointFeature();
 			g2d.draw(pts);
 		}
@@ -234,7 +234,7 @@ public class DrawingCanvas extends JPanel {
 		for(RectangleFeature drawRectangle: Rectangle_drawing) {
 			Rectangle2D rcts = drawRectangle.createRectangleFeature();
 			g2d.draw(rcts);
-		}
+		}*/
 
 	}
 

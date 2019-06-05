@@ -69,7 +69,8 @@ public class EditorTools {
 			//
 			if (selectionRectangles.contains(queryPoints) == true) {
 				selectedPoints.add(point);
-				System.out.println("Selected Point is:" + point);
+				System.out.println(drawingPoints.size() + "points created.");
+				System.out.println(selectedPoints.size() + "points selected.");
 			}
 		}
 
@@ -159,8 +160,6 @@ public class EditorTools {
 		for (int i = 0; i < drawingPoints.size(); i++) {
 			PointFeature point = drawingPoints.get(i);
 
-			System.out.println("Point is:" + point);
-			System.out.println("pointIdentifier is:" + point);
 
 			int pointIdentifier = point.getShapesId();
 			// if identifier from selectedPoints and from Points match then
