@@ -73,14 +73,10 @@ public class Main extends JFrame implements ActionListener {
 	// Functional Variables
 	String drawMode = "default";
 	boolean lineInitiated = false;
-	// Triangle
 	boolean triangleInitiated1 = false;
 	boolean triangleInitiated2 = false;
-	// Rectangle
 	boolean rectangleInitiated = false;
-	// Selection
 	boolean selectionInitiated = false;
-	// Change
 	boolean changeInitiated = false;
 
 	// Movement& Change Variables
@@ -157,14 +153,14 @@ public class Main extends JFrame implements ActionListener {
 		menubar.add(help);
 		// menubar.add(toolabout);
 
+		// creates object of editor
+		editor = new EditorTools();
+
 		toolbar.add(selectElements);
 		toolbar.add(rotateElements);
 		toolbar.add(shiftElements);
 		toolbar.add(deleteElements);
 		toolbar.add(saveElements);
-
-		// creates object of editor
-		editor = new EditorTools();
 
 		// Buttons add ActionListeners
 		selectElements.addActionListener(this);
@@ -181,14 +177,14 @@ public class Main extends JFrame implements ActionListener {
 		csvexport.addActionListener(this);
 		db.addActionListener(this);
 
-		// creates object of Tooldrawingpanel
+		// creates object of drawingpanel
 		drawingcanvas = new DrawingCanvas();
 		drawingcanvas.setBackground(Color.white);
 		drawingcanvas.addMouseListener(new MouseAdapter() {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-
+				// PointFeatures class will be used to draw features
 				point = new PointFeature();
 				point.setPoint(e.getX(), e.getY());
 
@@ -260,6 +256,7 @@ public class Main extends JFrame implements ActionListener {
 
 				case "SelectMode":
 					if (selectionInitiated == false) {
+						System.out.println("selection Initiated: false");
 						editor.clearCurrentSelection();
 						((DrawingCanvas) drawingcanvas).defineSelectionRectangle(null);
 						((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
@@ -271,6 +268,7 @@ public class Main extends JFrame implements ActionListener {
 						break;
 
 					} else if (selectionInitiated == true) {
+						System.out.println("selection Initiated: true");
 						selectionX2 = point.x;
 						selectionY2 = point.y;
 
@@ -813,12 +811,14 @@ public class Main extends JFrame implements ActionListener {
 				point.setPoint(e.getX(), e.getY());
 
 				if (lineInitiated == true) {
+					selectionInitiated = false;
 					line.addLineEnd(point);
 					((DrawingCanvas) drawingcanvas).storeDrawingLineElements(line);
 					drawingcanvas.repaint();
 				}
 
 				if (triangleInitiated1 == true && triangleInitiated2 == false) {
+					selectionInitiated = false;
 					triangle.addTriangleMid(point);
 					triangle.addTriangleEnd(point);
 					((DrawingCanvas) drawingcanvas).storeDrawingTriangleElements(triangle);
@@ -826,6 +826,7 @@ public class Main extends JFrame implements ActionListener {
 				}
 
 				if (triangleInitiated2 == true && triangleInitiated1 == false) {
+					selectionInitiated = false;
 					triangle.addTriangleEnd(point);
 					((DrawingCanvas) drawingcanvas).storeDrawingTriangleElements(triangle);
 					drawingcanvas.repaint();
@@ -833,6 +834,7 @@ public class Main extends JFrame implements ActionListener {
 				}
 
 				if (rectangleInitiated == true) {
+					selectionInitiated = false;
 					rectangle.addRectangleLastCorner(point);
 					// drawingcanvas.storeDrawingRectangleElements(rectangle);
 					drawingcanvas.repaint();
@@ -1086,7 +1088,6 @@ public class Main extends JFrame implements ActionListener {
 
 				}
 
-				
 				if (changeInitiated == true && movementInitiated == false) {
 
 					if (movingPoint == true) {
@@ -1181,7 +1182,7 @@ public class Main extends JFrame implements ActionListener {
 								int matchIdentifier = editor.drawingRectangles.get(i).ShapesId;
 								if (ShapesId == matchIdentifier) {
 									editor.drawingRectangles.get(i).addRetangleFirstCorner(point);
-								 ((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
+									((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
 									drawingcanvas.repaint();
 								}
 							}
@@ -1238,7 +1239,7 @@ public class Main extends JFrame implements ActionListener {
 	}
 
 	// ----------------------------------------
-	// MAIN METHOD 
+	// MAIN METHOD
 	// ----------------------------------------
 	public static void main(String[] args) {
 
@@ -1287,13 +1288,6 @@ public class Main extends JFrame implements ActionListener {
 				trackedMode.setText(drawMode + "    |    ");
 			}
 
-		} else if (eTarget.equals(deleteElements)) {
-			editor.deleteAffectedObjects();
-			editor.clearCurrentSelection();
-			((DrawingCanvas) drawingcanvas).defineSelectionRectangle(null);
-			((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
-			drawingcanvas.repaint();
-
 		} else if (eTarget.equals(selectElements)) {
 			if (!drawMode.equals("SelectMode")) {
 				drawMode = "SelectMode";
@@ -1302,10 +1296,18 @@ public class Main extends JFrame implements ActionListener {
 				drawMode = "default";
 				trackedMode.setText(drawMode + "    |    ");
 			}
+		} else if (eTarget.equals(deleteElements)) {
+			editor.deleteAffectedObjects();
+			editor.clearCurrentSelection();
+			((DrawingCanvas) drawingcanvas).defineSelectionRectangle(null);
+			((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
+			drawingcanvas.repaint();
 
-		} else if (eTarget.equals(shiftElements)) {
-			if (!drawMode.equals("MoveMode")) {
-				drawMode = "MoveMode";
+		}
+
+		else if (eTarget.equals(shiftElements)) {
+			if (!drawMode.equals("ShiftMode")) {
+				drawMode = "ShiftMode";
 				trackedMode.setText(drawMode + "    |    ");
 			} else {
 				drawMode = "default";
@@ -1313,8 +1315,8 @@ public class Main extends JFrame implements ActionListener {
 			}
 
 		} else if (eTarget.equals(rotateElements)) {
-			if (!drawMode.equals("ChangeMode")) {
-				drawMode = "ChangeMode";
+			if (!drawMode.equals("RotateMode")) {
+				drawMode = "RotateMode";
 				trackedMode.setText(drawMode + "    |    ");
 			} else {
 				drawMode = "default";

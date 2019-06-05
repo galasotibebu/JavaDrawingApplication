@@ -3,22 +3,22 @@ package javapackage;
 import java.awt.geom.*;
 import java.util.ArrayList;
 
-
 public class EditorTools {
 
 	// ----------------------------------------------------
-	// Declaration of ArrayLists to store new created Features 
+	// Declaration of ArrayLists to store new created Features
 	// ---------------------------------------------------
-	
-	 // ArrayList of new created objects. The arrayList can grow when a new point is created and
-	 // shrink when a point is deleted
+
+	// ArrayList of new created objects. The arrayList can grow when a new point is
+	// created and
+	// shrink when a point is deleted
 	public ArrayList<PointFeature> drawingPoints = new ArrayList<>();
 	public ArrayList<LineFeature> drawingLines = new ArrayList<>();
 	public ArrayList<RectangleFeature> drawingRectangles = new ArrayList<>();
 	public ArrayList<TriangleFeature> drawingTriangles = new ArrayList<>();
 
 	// -------------------------------------------------------------------
-	// Declaration of ArrayLists to store Corresponding Selected Features 
+	// Declaration of ArrayLists to store Corresponding Selected Features
 	// --------------------------------------------------------------------
 
 	// ArrayList of objects which are currently selected
@@ -56,62 +56,61 @@ public class EditorTools {
 	// --------------------------------------------------------------------
 	// PREPARES FOR MODIFICATION -
 	// --------------------------------------------------------------------
-	
+
 	// -----Choose features that lies inside 'Selecting Rectangle', and put them
 	// inside
 	// a declared empty ArrayList(selected..something..) for corresponding
 	// features
 	public void selectAffectedObjects(Rectangle2D selectionRectangles) {
-		drawingPoints.forEach((PointFeature point) -> {
-			Ellipse2D point_object = point.createPointFeature();
-			// Shape lies entirely within the indicated Rectangle2D
-			Rectangle2D queryArea = point_object.getBounds2D();
 
-			// if selection_rectangle contains the object then add this object so the
-			// selectedToolPoints
-			if (selectionRectangles.contains(queryArea) == true) {
+		for (PointFeature point : drawingPoints) {
+			Ellipse2D pointObj = point.createPointFeature();
+			Rectangle2D queryPoints = pointObj.getBounds2D();// reads the x,y coordinate of an affected PointFeatures
+			//
+			if (selectionRectangles.contains(queryPoints) == true) {
 				selectedPoints.add(point);
+				System.out.println("Selected Point is:" + point);
 			}
-		});
+		}
 
-		drawingLines.forEach((LineFeature line) -> {
-			Line2D line_object = line.createLineFeature();
-			Rectangle2D queryArea = line_object.getBounds2D();
+		for (LineFeature line : drawingLines) {
+			Line2D lineObj = line.createLineFeature();
+			Rectangle2D queryLines = lineObj.getBounds2D();
 
 			// if selection_rectangle contains the object then add this object so the
-			// selectedToolFeatures
-			if (selectionRectangles.contains(queryArea) == true) {
+			// selected Features
+			if (selectionRectangles.contains(queryLines) == true) {
 				selectedLines.add(line);
 			}
-		});
+		}
 
-		drawingTriangles.forEach((TriangleFeature triangle) -> {
-			Path2D triangle_object = triangle.createTriangleFeature();
-			Rectangle2D queryArea = triangle_object.getBounds2D();
+		for (TriangleFeature triangle : drawingTriangles) {
+			Path2D triangleObj = triangle.createTriangleFeature();
+			Rectangle2D queryTriangles = triangleObj.getBounds2D();
 
 			// if selection_rectangle contains the object then add this object so the
 			// selectedTriangleFeatures
-			if (selectionRectangles.contains(queryArea) == true) {
+			if (selectionRectangles.contains(queryTriangles) == true) {
 				selectedTriangles.add(triangle);
 			}
-		});
+		}
 
-		drawingRectangles.forEach((RectangleFeature rectangle) -> {
-			Rectangle2D rectangle_object = rectangle.createRectangleFeature();
-			Rectangle2D queryArea = rectangle_object.getBounds2D();
+		for (RectangleFeature rectangle : drawingRectangles) {
+			Rectangle2D rectangleObj = rectangle.createRectangleFeature();
+			Rectangle2D queryRect = rectangleObj.getBounds2D();
 
 			// if selection_rectangle contains the object then add this object so the
-			// selectedToolRectangles
-			if (selectionRectangles.contains(queryArea) == true) {
+			// selected Rectangles
+			if (selectionRectangles.contains(queryRect) == true) {
 				selectedRectangles.add(rectangle);
 			}
-		});
+		}
 	}
 
 	// --------------------------------------------------------------------
 	// CANCEL PREPARATIONS FOR MODIFICATION -
 	// --------------------------------------------------------------------
-	
+
 	// -------------Clears Current Selected Features---------------------
 	// releases the memory
 	public void clearCurrentSelection() {
@@ -124,49 +123,50 @@ public class EditorTools {
 	// --------------------------------------------------------------------
 	// PERFORMS DELETION ACTION BY CALLING DELETERS-
 	// --------------------------------------------------------------------
-	
+
 	// -----Deletes Features whose id's are the same as currently selected
 	// Features--------------------------
 	public void deleteAffectedObjects() {
+
 		for (PointFeature point : selectedPoints) {
 			int identifier = point.getShapesId();
 			deletePoint(identifier);
 		}
-		/*
-		 * selectedPoints.forEach((PointFeature point) -> { int identifier =
-		 * point.getShapesId(); deletePoint(identifier); });
-		 */
 
-		selectedLines.forEach((LineFeature line) -> {
+		for (LineFeature line : selectedLines) {
 			int identifier = line.getShapesId();
 			deleteLine(identifier);
-		});
+		}
 
-		selectedTriangles.forEach((TriangleFeature triangle) -> {
+		for (TriangleFeature triangle : selectedTriangles) {
 			int identifier = triangle.getShapesId();
 			deleteTriangle(identifier);
-		});
+		}
 
-		selectedRectangles.forEach((RectangleFeature rectangle) -> {
+		for (RectangleFeature rectangle : selectedRectangles) {
 			int identifier = rectangle.getShapesId();
 			deleteRectangle(identifier);
-		});
-	}	
+		}
+	}
 	// --------------------------------------------------------------------
 	// DELETERS -
 	// --------------------------------------------------------------------
-	
+
 	// Declaration of Deletion Methods that will be implemented for all
 	// Features--
 	private void deletePoint(int identifier) {
-		// loop through every point of managedToolPoints
-		for (int i = 0; i < selectedPoints.size(); i++) {
-			PointFeature point = selectedPoints.get(i);
+		// loop through every point of Points
+		for (int i = 0; i < drawingPoints.size(); i++) {
+			PointFeature point = drawingPoints.get(i);
+
+			System.out.println("Point is:" + point);
+			System.out.println("pointIdentifier is:" + point);
+
 			int pointIdentifier = point.getShapesId();
-			// if identifier from selectedToolPoints and from managedToolPoints match then
+			// if identifier from selectedPoints and from Points match then
 			// delete this point
 			if (pointIdentifier == identifier) {
-				selectedPoints.remove(i);
+				drawingPoints.remove(i);
 			}
 		}
 	}
@@ -176,7 +176,7 @@ public class EditorTools {
 		for (int i = 0; i < drawingLines.size(); i++) {
 			LineFeature line = drawingLines.get(i);
 			int lineIdentifier = line.getShapesId();
-			// if identifier from selectedToolFeatures and from drawLine match then delete
+			// if identifier from selectedFeatures and from drawLine match then delete
 			// this line
 			if (lineIdentifier == identifier) {
 				drawingLines.remove(i);
@@ -198,11 +198,11 @@ public class EditorTools {
 	}
 
 	private void deleteRectangle(int identifier) {
-		// loop through every rectangle of managedToolRectangles
+		// loop through every Rectangles
 		for (int i = 0; i < drawingRectangles.size(); i++) {
 			RectangleFeature rectangle = drawingRectangles.get(i);
 			int triangleIdentifier = rectangle.getShapesId();
-			// if identifier from selectedToolRectangle and from managedToolRectangles match
+			// if identifier from selected Rectangle and from Rectangles match
 			// then delete this rectangle
 			if (triangleIdentifier == identifier) {
 				drawingRectangles.remove(i);

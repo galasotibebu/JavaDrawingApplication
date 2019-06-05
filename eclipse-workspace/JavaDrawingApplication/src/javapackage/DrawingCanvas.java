@@ -46,7 +46,7 @@ public class DrawingCanvas extends JPanel {
 
 	// ArrayList to store different states of LineFeature objects that is altered by
 	// different tools
-	//private ArrayList<LineFeature> Point_drawing = new ArrayList<>();
+	private ArrayList<PointFeature> Point_drawing = new ArrayList<>();
 
 	// ArrayList to store different states of LineFeature objects that is altered by
 	// different tools
@@ -96,9 +96,9 @@ public class DrawingCanvas extends JPanel {
 	// --------------------------------------------------------------------
 
 	// Appends new PointFeature to corresponding Arraylist
-	// public void storeDrawingPointElements(PointFeature point) {
-	//	 Point_drawing.add(point);
-	//}
+	public void storeDrawingPointElements(PointFeature point) {
+		Point_drawing.add(point);
+	}
 
 	// Appends new LineFeature to corresponding Arraylist
 	public void storeDrawingLineElements(LineFeature line) {
@@ -118,10 +118,10 @@ public class DrawingCanvas extends JPanel {
 	// --------------------------------------------------------------------
 	// i will come later here
 	// --------------------------------------------------------------------
-	
+
 	// Clears all ArrayLists for live-displaying objects when drawn
 	public void clearDrawingElements() {
-		// Point_drawing.clear()
+		Point_drawing.clear();
 		Line_drawing.clear();
 		Triangle_drawing.clear();
 		Rectangle_drawing.clear();
@@ -137,95 +137,104 @@ public class DrawingCanvas extends JPanel {
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-		Color drawingColor = Color.black;
-		g2d.setPaint(drawingColor);
-
 		Color selectionColor = Color.cyan;
 		g2d.setPaint(selectionColor);// used to generate color during the rendering process
+
+		Color drawingColor = Color.black;
+		g2d.setPaint(drawingColor);
+		
+		Color selectionBoxColor = Color.gray;
+		g2d.setPaint(selectionBoxColor);
 
 		// ----------------------------------------------------
 		// Draw Point, Line, Triangle, Rectangle
 		// ----------------------------------------------------
 		// Draw Points
-		PointLists.forEach((PointFeature point) -> {
+		for (PointFeature point : PointLists) {
 			Ellipse2D pt = point.createPointFeature();
 			g2d.fill(pt);
-		});
+			g2d.setPaint(drawingColor);
+		}
 
 		// Draw Lines
-		LineLists.forEach((LineFeature line) -> {
+		for (LineFeature line : LineLists) {
 			Line2D ln = line.createLineFeature();
 			g2d.draw(ln);
 			g2d.setPaint(drawingColor);
-		});
+		}
 
 		// Draw Triangles
-		TriangleLists.forEach((TriangleFeature triangle) -> {
+		for (TriangleFeature triangle : TriangleLists) {
 			Path2D pth_t = triangle.createTriangleFeature();
 			g2d.draw(pth_t);
 			g2d.setPaint(drawingColor);
-		});
+		}
 
 		// Draw Rectangles
-		RectangleLists.forEach((RectangleFeature rectangle) -> {
+		for (RectangleFeature rectangle : RectangleLists) {
 			Rectangle2D rct = rectangle.createRectangleFeature();
 			g2d.draw(rct);
 			g2d.setPaint(drawingColor);
-		});
+		}
 
 		// --------------------------------------------------------
-		// Draw Selection Box 
+		// Draw Selection Box
 		// --------------------------------------------------------
-
-		// Draw Selections
-
-		/*if (selectionRectangle != null) {
+		if (selectionRectangle != null) {
 			g2d.draw(selectionRectangle);
-		}*/
+			g2d.setPaint(selectionBoxColor);
+		}
 
-		// Draw selected Objects in Red
-		selectedPointLists.forEach((PointFeature point) -> {
-			Ellipse2D ptS = point.createPointFeature();
-			g2d.fill(ptS);
+		// --------------------------------------------------------
+		// Draw Selected objects
+		// --------------------------------------------------------
+		for (PointFeature point : selectedPointLists) {
+			Ellipse2D pts = point.createPointFeature();
+			g2d.fill(pts);
 			g2d.setPaint(selectionColor);
-		});
+		}
 
-		selectedLineLists.forEach((LineFeature line) -> {
-			Line2D lnS = line.createLineFeature();
-			g2d.draw(lnS);
+		for (LineFeature line : selectedLineLists) {
+			Line2D lns = line.createLineFeature();
+			g2d.draw(lns);
 			g2d.setPaint(selectionColor);
-		});
+		}
 
-		selectedTriangleLists.forEach((TriangleFeature triangle) -> {
-			Path2D trS = triangle.createTriangleFeature();
-			g2d.draw(trS);
+		for (TriangleFeature triangle : selectedTriangleLists) {
+			Path2D trs = triangle.createTriangleFeature();
+			g2d.draw(trs);
 			g2d.setPaint(selectionColor);
-		});
+		}
 
-		selectedRectangleLists.forEach((RectangleFeature rectangle) -> {
-			Rectangle2D rcS = rectangle.createRectangleFeature();
-			g2d.draw(rcS);
+		for (RectangleFeature rectangle : selectedRectangleLists) {
+			Rectangle2D rcs = rectangle.createRectangleFeature();
+			g2d.draw(rcs);
 			g2d.setPaint(selectionColor);
-		});
+		}
 
 		// ------------------------------------------------------------------
 		// Displays states of objects modified
-		//-------------------------------------------------------------------
+		// -------------------------------------------------------------------
+		
+		for(PointFeature point: Point_drawing) {
+			Ellipse2D pts = point.createPointFeature();
+			g2d.draw(pts);
+		}
 
-		Line_drawing.forEach((LineFeature line) -> {
-			Line2D dln = line.createLineFeature();
-			g2d.draw(dln);
-		});
+		for(LineFeature line: Line_drawing) {
+			Line2D lns = line.createLineFeature();
+			g2d.draw(lns);
+		}
 
-		Triangle_drawing.forEach((TriangleFeature drawtriangle) -> {
-			Path2D dtr = drawtriangle.createTriangleFeature();
-			g2d.draw(dtr);
-		});
+		for(TriangleFeature drawtriangle: Triangle_drawing) {
+			Path2D trs = drawtriangle.createTriangleFeature();
+			g2d.draw(trs);
+		}
 
-		Rectangle_drawing.forEach((RectangleFeature drawRectangle) -> {
-			Rectangle2D drc = drawRectangle.createRectangleFeature();
-			g2d.draw(drc);
-		});
+		for(RectangleFeature drawRectangle: Rectangle_drawing) {
+			Rectangle2D rcts = drawRectangle.createRectangleFeature();
+			g2d.draw(rcts);
+		}
 
 	}
 

@@ -1,12 +1,13 @@
 package database;
 
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
+import static javapackage.Main.frame;
 
 import java.io.File;
 
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+
 import javapackage.EditorTools;
-import static javapackage.Main.frame;
 
 public class GUICSV {
 
