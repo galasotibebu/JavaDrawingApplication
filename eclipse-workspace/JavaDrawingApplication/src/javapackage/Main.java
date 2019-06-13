@@ -44,7 +44,7 @@ public class Main extends JFrame implements ActionListener {
 	JMenuItem obj2;
 	JMenuItem obj3;
 	JMenuItem obj4;
-	JMenuItem csv;
+	JMenuItem csvimport;
 	JMenuItem db;
 	JMenuItem csvexport;
 
@@ -126,7 +126,7 @@ public class Main extends JFrame implements ActionListener {
 		obj2 = new JMenuItem("Lines");
 		obj3 = new JMenuItem("Triangles");
 		obj4 = new JMenuItem("Rectangles");
-		csv = new JMenuItem("Import");
+		csvimport = new JMenuItem("Import");
 		csvexport = new JMenuItem("Export");
 		db = new JMenuItem("Database Manager");
 
@@ -140,7 +140,7 @@ public class Main extends JFrame implements ActionListener {
 
 		// Add items to main menu
 		this.setJMenuBar(menubar);
-		datamenu.add(csv);
+		datamenu.add(csvimport);
 		datamenu.add(csvexport);
 		datamenu.add(db);
 
@@ -174,7 +174,7 @@ public class Main extends JFrame implements ActionListener {
 		obj3.addActionListener(this);
 		obj4.addActionListener(this);
 
-		csv.addActionListener(this);
+		csvimport.addActionListener(this);
 		csvexport.addActionListener(this);
 		db.addActionListener(this);
 
@@ -397,23 +397,7 @@ public class Main extends JFrame implements ActionListener {
 										movementInitiated = true;
 										isStart = true;
 
-									} /*
-										 * else if (selectionRectangle.contains(point2) && movingTriangle == false) { x1
-										 * = triangle.triangleElements[1].x; y1 = triangle.triangleElements[1].y; x2 =
-										 * triangle.triangleElements[2].x; y2 = triangle.triangleElements[2].y; x3 =
-										 * triangle.triangleElements[0].x; y3 = triangle.triangleElements[0].y; ShapesId
-										 * = triangle.getShapesId(); movingTriangle = true; movementInitiated = true;
-										 * isMiddle = true;
-										 * 
-										 * } else if (selectionRectangle.contains(point3) && movingTriangle == false) {
-										 * x1 = triangle.triangleElements[0].x; y1 = triangle.triangleElements[0].y; x2
-										 * = triangle.triangleElements[1].x; y2 = triangle.triangleElements[1].y; x3 =
-										 * triangle.triangleElements[2].x; y3 = triangle.triangleElements[2].y; ShapesId
-										 * = triangle.getShapesId(); movingTriangle = true; movementInitiated = true;
-										 * isEnd = true;
-										 * 
-										 * }
-										 */
+									} 
 								}
 							});
 
@@ -1229,6 +1213,14 @@ public class Main extends JFrame implements ActionListener {
 		((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
 		drawingcanvas.repaint();
 	}
+	
+	public void dbUI() {
+	databaseUI = new DBUI();
+	databaseUI.setTitle("DB Interface");
+	databaseUI.setLocationRelativeTo(null);
+	databaseUI.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+	databaseUI.setVisible(true);
+  }
 
 	// sets 'drawingpanel' as ContentPane
 	// sets the layout for the frame
@@ -1263,13 +1255,7 @@ public class Main extends JFrame implements ActionListener {
 
 		frame = new Main();
 		frame.setLayout();
-		/*public void DbInterface() {
-			databaseUI = new DBUI();
-			databaseUI.setTitle("DB Interface");
-			databaseUI.setLocationRelativeTo(null);
-			databaseUI.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-			databaseUI.setVisible(true);
-		}*/
+		
 	}
 
 	@Override
@@ -1348,7 +1334,7 @@ public class Main extends JFrame implements ActionListener {
 				trackedMode.setText(drawMode + "    |    ");
 			}
 
-		} else if (eTarget.equals(csv)) {
+		} else if (eTarget.equals(csvimport)) {
 			try {
 				GUICSV.openFileChooserDialog();
 				GUICSV.displayObjectFromCSV();
@@ -1366,11 +1352,7 @@ public class Main extends JFrame implements ActionListener {
 				e1.printStackTrace();
 			}
 		} else if (eTarget.equals(db)) {
-			// DbInterface();
-		} else if (eTarget.equals(csv)) {
-			// openCsvInterface();
-		} else if (eTarget.equals(db)) {
-			// openDbInterface();
+			dbUI();
 		}
 
 	}

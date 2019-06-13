@@ -113,7 +113,7 @@ public class DBUI extends JFrame implements ActionListener{
 		
 		empty3 = new JLabel(" ");
 		add(empty3);
-		importer = new JButton("Import to Database");
+		importer = new JButton("Import from Database");
 		add(importer);
 		
 		connector.addActionListener(this);
