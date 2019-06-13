@@ -1,14 +1,12 @@
 package javapackage;
 
 import database.GUICSV;
-import javapackage.DBUI;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
@@ -27,11 +25,11 @@ public class Main extends JFrame implements ActionListener {
 
 	// Editor for storing and editing geometries
 	public EditorTools editor;
-	
+
 	/**
 	 * Database interface for connecting to a database
 	 */
-	public static DBUI databaseUI;
+	// public static DBUI databaseUI;
 
 	// MenuBar Variables
 	JMenuBar menubar;
@@ -65,15 +63,12 @@ public class Main extends JFrame implements ActionListener {
 	int trackedY;
 	// DrawMode Tracking
 	JLabel trackedMode;
-	
 
 	// Mouse Selection Variables
 	double selectionX1;
 	double selectionY1;
 	double selectionX2;
 	double selectionY2;
-
-	
 
 	// Functional Variables
 	String drawMode = "default";
@@ -90,7 +85,7 @@ public class Main extends JFrame implements ActionListener {
 	boolean movingLine = false;
 	boolean movingTriangle = false;
 	boolean movingRectangle = false;
-	Ellipse2D selectionCircle;
+	Rectangle2D selectionRectangle = null;
 	int ShapesId;
 	int moveStartX;
 	int moveStartY;
@@ -195,7 +190,7 @@ public class Main extends JFrame implements ActionListener {
 
 				switch (drawMode) {
 
-				case "PointMode":
+				case "PointMode":// DRAW POINT
 					// creates and stores the new object to the 'drawingPoints' ArrayLists in
 					// EditorTools class.
 					editor.addPoints(point);// see line 29
@@ -203,7 +198,7 @@ public class Main extends JFrame implements ActionListener {
 					drawingcanvas.repaint();
 					break;
 
-				case "LineMode":
+				case "LineMode": // DRAW LINE
 					if (lineInitiated == false) {
 						line = new LineFeature();
 						line.addLineStart(point);
@@ -220,7 +215,7 @@ public class Main extends JFrame implements ActionListener {
 						break;
 					}
 
-				case "TriangleMode":
+				case "TriangleMode":// DRAW TRIANGLE
 					if (triangleInitiated1 == false && triangleInitiated2 == false) {
 						triangle = new TriangleFeature();
 						triangle.addTriangleStart(point);
@@ -244,14 +239,16 @@ public class Main extends JFrame implements ActionListener {
 						break;
 					}
 
-				case "RectangleMode":
-					if (rectangleInitiated == false) {
+				case "RectangleMode":// DRAW RECTANGLE						
+					if (rectangleInitiated == false) {	
+						editor.clearCurrentSelection();
 						rectangle = new RectangleFeature();
 						rectangle.addRetangleFirstCorner(point);
 						rectangleInitiated = true;
 						break;
 
 					} else if (rectangleInitiated == true) {
+						editor.clearCurrentSelection();
 						rectangle.addRectangleLastCorner(point);
 						editor.addRectangles(rectangle);
 						((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
@@ -261,7 +258,7 @@ public class Main extends JFrame implements ActionListener {
 						break;
 					}
 
-				case "SelectMode":
+				case "SelectMode":// DRAW SELECTION BOX
 					if (selectionInitiated == false) {
 						System.out.println("selection Initiated: false");
 						editor.clearCurrentSelection();
@@ -299,10 +296,11 @@ public class Main extends JFrame implements ActionListener {
 						}
 
 						// Compose Selection Rectangle
-						Rectangle2D selectionRectangle = new Rectangle2D.Double();
+						// Rectangle2D selectionRectangle = new Rectangle2D.Double();
+						selectionRectangle = new Rectangle2D.Double();
 						selectionRectangle.setRect(rectangleStart, rectangleEnd, rectangleWidth, rectangleHeight);
 						((DrawingCanvas) drawingcanvas).defineSelectionRectangle(selectionRectangle);
-						drawingcanvas.repaint();
+						drawingcanvas.repaint();// we dont need the selection rectangle to be displayed.
 
 						editor.selectAffectedObjects(selectionRectangle);
 						((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
@@ -312,232 +310,241 @@ public class Main extends JFrame implements ActionListener {
 						break;
 					}
 
-				case "MoveMode":
+				case "ShiftMode":// CHECKS IF SELECTION BOX IS CREATED(features are selected) THEN CONTINUES to
+									// further conditions
 
-					if (movementInitiated == false) {
-						moveStartX = e.getX();
-						moveStartY = e.getY();
-						selectionCircle = new Ellipse2D.Double(e.getX() - 13, e.getY() - 13, 26, 26);
+					if (selectionRectangle != null) {
+						// initiates Shift
+						if (movementInitiated == false) {
+							moveStartX = e.getX();
+							moveStartY = e.getY();
+							// selectionRectangle = new Rectangle2D.Double(e.getX() - 13, e.getY() - 13, 26,
+							// 26);
 
-						// Moving Point 1
-						editor.drawingPoints.forEach((PointFeature point) -> {
-							if (movingPoint == false) {
-								point1 = new Point2D.Double(point.x, point.y);
+							// Moving Point 1
+							for (PointFeature point : editor.drawingPoints) {
+								if (movingPoint == false) {
+									point1 = new Point2D.Double(point.x, point.y);// here creates new point called
+																					// 'point1' from existing
+																					// pointfeature
 
-								if (selectionCircle.contains(point1) && movingPoint == false) {
-									x1 = point.x;
-									y1 = point.y;
-									ShapesId = point.getShapesId();
-									movingPoint = true;
-									movementInitiated = true;
+									if (selectionRectangle.contains(point1) && movingPoint == false) {// then if
+																										// selection box
+																										// contains this
+																										// new created
+																										// point1(copy
+																										// of original
+																										// points)
+										x1 = point.x;
+										y1 = point.y;
+										ShapesId = point.getShapesId();
+										movingPoint = true;
+										movementInitiated = true;
+									}
 								}
 							}
-						});
+							// Moving Line 1
+							editor.drawingLines.forEach((LineFeature line) -> {
+								if (movingLine == false && movingPoint == false) {
+									point1 = new Point2D.Double(line.lineElements[0].x, line.lineElements[0].y);
+									point2 = new Point2D.Double(line.lineElements[1].x, line.lineElements[1].y);
 
-						// Moving Line 1
-						editor.drawingLines.forEach((LineFeature line) -> {
-							if (movingLine == false && movingPoint == false) {
-								point1 = new Point2D.Double(line.lineElements[0].x, line.lineElements[0].y);
-								point2 = new Point2D.Double(line.lineElements[1].x, line.lineElements[1].y);
+									if (selectionRectangle.contains(point1) && movingLine == false) {
+										x1 = line.lineElements[0].x;
+										y1 = line.lineElements[0].y;
+										x2 = line.lineElements[1].x;
+										y2 = line.lineElements[1].y;
+										ShapesId = line.getShapesId();
+										movingLine = true;
+										movementInitiated = true;
+										isStart = true;
 
-								if (selectionCircle.contains(point1) && movingLine == false) {
-									x1 = line.lineElements[0].x;
-									y1 = line.lineElements[0].y;
-									x2 = line.lineElements[1].x;
-									y2 = line.lineElements[1].y;
-									ShapesId = line.getShapesId();
-									movingLine = true;
-									movementInitiated = true;
-									isStart = true;
-
-								} else if (selectionCircle.contains(point2) && movingLine == false) {
-									x1 = line.lineElements[1].x;
-									y1 = line.lineElements[1].y;
-									x2 = line.lineElements[0].x;
-									y2 = line.lineElements[0].y;
-									ShapesId = line.getShapesId();
-									movingLine = true;
-									movementInitiated = true;
-									isEnd = true;
+									} else if (selectionRectangle.contains(point2) && movingLine == false) {
+										x1 = line.lineElements[1].x;
+										y1 = line.lineElements[1].y;
+										x2 = line.lineElements[0].x;
+										y2 = line.lineElements[0].y;
+										ShapesId = line.getShapesId();
+										movingLine = true;
+										movementInitiated = true;
+										isEnd = true;
+									}
 								}
-							}
-						});
+							});
 
-						// Moving Triangle 1
-						editor.drawingTriangles.forEach((TriangleFeature triangle) -> {
-							if (movingTriangle == false && movingPoint == false && movingLine == false) {
-								point1 = new Point2D.Double(triangle.triangleElements[0].x,
-										triangle.triangleElements[0].y);
-								point2 = new Point2D.Double(triangle.triangleElements[1].x,
-										triangle.triangleElements[1].y);
-								point3 = new Point2D.Double(triangle.triangleElements[2].x,
-										triangle.triangleElements[2].y);
+							// Moving Triangle 1
+							editor.drawingTriangles.forEach((TriangleFeature triangle) -> {
+								if (movingTriangle == false && movingPoint == false && movingLine == false) {
+									point1 = new Point2D.Double(triangle.triangleElements[0].x,
+											triangle.triangleElements[0].y);
+									point2 = new Point2D.Double(triangle.triangleElements[1].x,
+											triangle.triangleElements[1].y);
+									point3 = new Point2D.Double(triangle.triangleElements[2].x,
+											triangle.triangleElements[2].y);
 
-								if (selectionCircle.contains(point1) && movingTriangle == false) {
-									x1 = triangle.triangleElements[0].x;
-									y1 = triangle.triangleElements[0].y;
-									x2 = triangle.triangleElements[1].x;
-									y2 = triangle.triangleElements[1].y;
-									x3 = triangle.triangleElements[2].x;
-									y3 = triangle.triangleElements[2].y;
-									ShapesId = triangle.getShapesId();
-									movingTriangle = true;
-									movementInitiated = true;
-									isStart = true;
+									// If triangle is totally contained in 'selectionRectangle'
+									if ((selectionRectangle.contains(point1) && selectionRectangle.contains(point2)
+											&& selectionRectangle.contains(point3)) && movingTriangle == false) {
+										x1 = triangle.triangleElements[0].x;
+										y1 = triangle.triangleElements[0].y;
+										x2 = triangle.triangleElements[1].x;
+										y2 = triangle.triangleElements[1].y;
+										x3 = triangle.triangleElements[2].x;
+										y3 = triangle.triangleElements[2].y;
+										ShapesId = triangle.getShapesId();
+										movingTriangle = true;
+										movementInitiated = true;
+										isStart = true;
 
-								} else if (selectionCircle.contains(point2) && movingTriangle == false) {
-									x1 = triangle.triangleElements[1].x;
-									y1 = triangle.triangleElements[1].y;
-									x2 = triangle.triangleElements[2].x;
-									y2 = triangle.triangleElements[2].y;
-									x3 = triangle.triangleElements[0].x;
-									y3 = triangle.triangleElements[0].y;
-									ShapesId = triangle.getShapesId();
-									movingTriangle = true;
-									movementInitiated = true;
-									isMiddle = true;
-
-								} else if (selectionCircle.contains(point3) && movingTriangle == false) {
-									x1 = triangle.triangleElements[0].x;
-									y1 = triangle.triangleElements[0].y;
-									x2 = triangle.triangleElements[1].x;
-									y2 = triangle.triangleElements[1].y;
-									x3 = triangle.triangleElements[2].x;
-									y3 = triangle.triangleElements[2].y;
-									ShapesId = triangle.getShapesId();
-									movingTriangle = true;
-									movementInitiated = true;
-									isEnd = true;
-
+									} /*
+										 * else if (selectionRectangle.contains(point2) && movingTriangle == false) { x1
+										 * = triangle.triangleElements[1].x; y1 = triangle.triangleElements[1].y; x2 =
+										 * triangle.triangleElements[2].x; y2 = triangle.triangleElements[2].y; x3 =
+										 * triangle.triangleElements[0].x; y3 = triangle.triangleElements[0].y; ShapesId
+										 * = triangle.getShapesId(); movingTriangle = true; movementInitiated = true;
+										 * isMiddle = true;
+										 * 
+										 * } else if (selectionRectangle.contains(point3) && movingTriangle == false) {
+										 * x1 = triangle.triangleElements[0].x; y1 = triangle.triangleElements[0].y; x2
+										 * = triangle.triangleElements[1].x; y2 = triangle.triangleElements[1].y; x3 =
+										 * triangle.triangleElements[2].x; y3 = triangle.triangleElements[2].y; ShapesId
+										 * = triangle.getShapesId(); movingTriangle = true; movementInitiated = true;
+										 * isEnd = true;
+										 * 
+										 * }
+										 */
 								}
-							}
-						});
+							});
 
-						// Moving Rectangles 1
-						editor.drawingRectangles.forEach((RectangleFeature rectangle) -> {
-							if (movingRectangle == false && movingTriangle == false && movingPoint == false
-									&& movingLine == false) {
-								point1 = new Point2D.Double(rectangle.rectangleElements[0].x,
-										rectangle.rectangleElements[0].y);
-								point2 = new Point2D.Double(rectangle.rectangleElements[1].x,
-										rectangle.rectangleElements[1].y);
+							// Moving Rectangles 1
+							editor.drawingRectangles.forEach((RectangleFeature rectangle) -> {
+								if (movingRectangle == false && movingTriangle == false && movingPoint == false
+										&& movingLine == false) {
+									point1 = new Point2D.Double(rectangle.rectangleElements[0].x,
+											rectangle.rectangleElements[0].y);
+									point2 = new Point2D.Double(rectangle.rectangleElements[1].x,
+											rectangle.rectangleElements[1].y);
 
-								if (selectionCircle.contains(point1) && movingRectangle == false) {
-									x1 = rectangle.rectangleElements[0].x;
-									y1 = rectangle.rectangleElements[0].y;
-									x2 = rectangle.rectangleElements[1].x;
-									y2 = rectangle.rectangleElements[1].y;
-									ShapesId = rectangle.getShapesId();
-									movingRectangle = true;
-									movementInitiated = true;
-									isStart = true;
+									if (selectionRectangle.contains(point1) && movingRectangle == false) {
+										x1 = rectangle.rectangleElements[0].x;
+										y1 = rectangle.rectangleElements[0].y;
+										x2 = rectangle.rectangleElements[1].x;
+										y2 = rectangle.rectangleElements[1].y;
+										ShapesId = rectangle.getShapesId();
+										movingRectangle = true;
+										movementInitiated = true;
+										isStart = true;
 
-								} else if (selectionCircle.contains(point2) && movingRectangle == false) {
-									x1 = rectangle.rectangleElements[1].x;
-									y1 = rectangle.rectangleElements[1].y;
-									x2 = rectangle.rectangleElements[0].x;
-									y2 = rectangle.rectangleElements[0].y;
-									ShapesId = rectangle.getShapesId();
-									movingRectangle = true;
-									movementInitiated = true;
-									isEnd = true;
+									} else if (selectionRectangle.contains(point2) && movingRectangle == false) {
+										x1 = rectangle.rectangleElements[1].x;
+										y1 = rectangle.rectangleElements[1].y;
+										x2 = rectangle.rectangleElements[0].x;
+										y2 = rectangle.rectangleElements[0].y;
+										ShapesId = rectangle.getShapesId();
+										movingRectangle = true;
+										movementInitiated = true;
+										isEnd = true;
+									}
 								}
-							}
-						});
-						break;
+							});
+							break;
 
-					} else if (movementInitiated == true) {
-						int moveDestinationX = e.getX();
-						int moveDestinationY = e.getY();
-						int moveDifferenceX = moveStartX - moveDestinationX;
-						int moveDifferenceY = moveStartY - moveDestinationY;
+						} else if (movementInitiated == true) {
+							int moveDestinationX = e.getX();
+							int moveDestinationY = e.getY();
+							int moveDifferenceX = moveStartX - moveDestinationX;
+							int moveDifferenceY = moveStartY - moveDestinationY;
 
-						// Moving Point 2
-						if (movingPoint == true) {
-							for (int i = 0; i < editor.drawingPoints.size(); i++) {
-								int matchIdentifier = editor.drawingPoints.get(i).ShapesId;
+							// Moving Point 2
+							if (movingPoint == true) {
+								for (int i = 0; i < editor.drawingPoints.size(); i++) {
+									int matchIdentifier = editor.drawingPoints.get(i).ShapesId;
 
-								if (ShapesId == matchIdentifier) {
-									objectArrayPosition = i;
-									editor.drawingPoints.get(i).x = moveDestinationX;
-									editor.drawingPoints.get(i).y = moveDestinationY;
-									((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
-									drawingcanvas.repaint();
-									movingPoint = false;
-									movementInitiated = false;
+									if (ShapesId == matchIdentifier) {
+										objectArrayPosition = i;
+										editor.drawingPoints.get(i).x = moveDestinationX;
+										editor.drawingPoints.get(i).y = moveDestinationY;
+										((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
+										drawingcanvas.repaint();
+										movingPoint = false;
+										movementInitiated = false;
+									}
 								}
+
 							}
 
+							// Moving Line 2
+							if (movingLine == true) {
+								for (int i = 0; i < editor.drawingLines.size(); i++) {
+									int matchIdentifier = editor.drawingLines.get(i).ShapesId;
+
+									if (ShapesId == matchIdentifier) {
+										objectArrayPosition = i;
+										editor.drawingLines.get(i).lineElements[0].x = x1 - moveDifferenceX;
+										editor.drawingLines.get(i).lineElements[0].y = y1 - moveDifferenceY;
+										editor.drawingLines.get(i).lineElements[1].x = x2 - moveDifferenceX;
+										editor.drawingLines.get(i).lineElements[1].y = y2 - moveDifferenceY;
+										((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
+										((DrawingCanvas) drawingcanvas).clearDrawingElements();
+										drawingcanvas.repaint();
+										movingLine = false;
+										movementInitiated = false;
+
+									}
+								}
+
+							}
+
+							// Moving Triangle 2
+							if (movingTriangle == true) {
+								for (int i = 0; i < editor.drawingTriangles.size(); i++) {
+									int matchIdentifier = editor.drawingTriangles.get(i).ShapesId;
+
+									if (ShapesId == matchIdentifier) {
+										objectArrayPosition = i;
+										editor.drawingTriangles.get(i).triangleElements[0].x = x1 - moveDifferenceX;
+										editor.drawingTriangles.get(i).triangleElements[0].y = y1 - moveDifferenceY;
+										editor.drawingTriangles.get(i).triangleElements[1].x = x2 - moveDifferenceX;
+										editor.drawingTriangles.get(i).triangleElements[1].y = y2 - moveDifferenceY;
+										editor.drawingTriangles.get(i).triangleElements[2].x = x3 - moveDifferenceX;
+										editor.drawingTriangles.get(i).triangleElements[2].y = y3 - moveDifferenceY;
+
+										((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
+										drawingcanvas.repaint();
+										movingTriangle = false;
+										movementInitiated = false;
+
+									}
+								}
+
+							}
+
+							// Moving Rectangles 2
+							if (movingRectangle == true) {
+								for (int i = 0; i < editor.drawingRectangles.size(); i++) {
+									int matchIdentifier = editor.drawingRectangles.get(i).ShapesId;
+
+									if (ShapesId == matchIdentifier) {
+										objectArrayPosition = i;
+										editor.drawingRectangles.get(i).rectangleElements[0].x = x1 - moveDifferenceX;
+										editor.drawingRectangles.get(i).rectangleElements[0].y = y1 - moveDifferenceY;
+										editor.drawingRectangles.get(i).rectangleElements[1].x = x2 - moveDifferenceX;
+										editor.drawingRectangles.get(i).rectangleElements[1].y = y2 - moveDifferenceY;
+									}
+								}
+								((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
+								drawingcanvas.repaint();
+								movingRectangle = false;
+								movementInitiated = false;
+							}
+							isStart = false;
+							isMiddle = false;
+							isEnd = false;
+							break;
 						}
-
-						// Moving Line 2
-						if (movingLine == true) {
-							for (int i = 0; i < editor.drawingLines.size(); i++) {
-								int matchIdentifier = editor.drawingLines.get(i).ShapesId;
-
-								if (ShapesId == matchIdentifier) {
-									objectArrayPosition = i;
-									editor.drawingLines.get(i).lineElements[0].x = x1 - moveDifferenceX;
-									editor.drawingLines.get(i).lineElements[0].y = y1 - moveDifferenceY;
-									editor.drawingLines.get(i).lineElements[1].x = x2 - moveDifferenceX;
-									editor.drawingLines.get(i).lineElements[1].y = y2 - moveDifferenceY;
-									((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
-									((DrawingCanvas) drawingcanvas).clearDrawingElements();
-									drawingcanvas.repaint();
-									movingLine = false;
-									movementInitiated = false;
-
-								}
-							}
-
-						}
-
-						// Moving Triangle 2
-						if (movingTriangle == true) {
-							for (int i = 0; i < editor.drawingTriangles.size(); i++) {
-								int matchIdentifier = editor.drawingTriangles.get(i).ShapesId;
-
-								if (ShapesId == matchIdentifier) {
-									objectArrayPosition = i;
-									editor.drawingTriangles.get(i).triangleElements[0].x = x1 - moveDifferenceX;
-									editor.drawingTriangles.get(i).triangleElements[0].y = y1 - moveDifferenceY;
-									editor.drawingTriangles.get(i).triangleElements[1].x = x2 - moveDifferenceX;
-									editor.drawingTriangles.get(i).triangleElements[1].y = y2 - moveDifferenceY;
-									editor.drawingTriangles.get(i).triangleElements[2].x = x3 - moveDifferenceX;
-									editor.drawingTriangles.get(i).triangleElements[2].y = y3 - moveDifferenceY;
-
-									((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
-									drawingcanvas.repaint();
-									movingTriangle = false;
-									movementInitiated = false;
-
-								}
-							}
-
-						}
-
-						// Moving Rectangles 2
-						if (movingRectangle == true) {
-							for (int i = 0; i < editor.drawingRectangles.size(); i++) {
-								int matchIdentifier = editor.drawingRectangles.get(i).ShapesId;
-
-								if (ShapesId == matchIdentifier) {
-									objectArrayPosition = i;
-									editor.drawingRectangles.get(i).rectangleElements[0].x = x1 - moveDifferenceX;
-									editor.drawingRectangles.get(i).rectangleElements[0].y = y1 - moveDifferenceY;
-									editor.drawingRectangles.get(i).rectangleElements[1].x = x2 - moveDifferenceX;
-									editor.drawingRectangles.get(i).rectangleElements[1].y = y2 - moveDifferenceY;
-								}
-							}
-							((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
-							drawingcanvas.repaint();
-							movingRectangle = false;
-							movementInitiated = false;
-						}
-						isStart = false;
-						isMiddle = false;
-						isEnd = false;
-						break;
+					} // selection rectangle is not null?
+					else {
+						System.out.println("PLEASE SELECT FIRST!");
 					}
 
 				case "ChangeMode":
@@ -545,14 +552,15 @@ public class Main extends JFrame implements ActionListener {
 					moveStartY = e.getY();
 
 					if (changeInitiated == false) {
-						selectionCircle = new Ellipse2D.Double(e.getX() - 13, e.getY() - 13, 26, 26);
+						// selectionRectangle = new Ellipse2D.Double(e.getX() - 13, e.getY() - 13, 26,
+						// 26);
 
 						// Changing Points
 						editor.drawingPoints.forEach((PointFeature point) -> {
 							if (movingPoint == false) {
 								point1 = new Point2D.Double(point.x, point.y);
 
-								if (selectionCircle.contains(point1) && movingPoint == false) {
+								if (selectionRectangle.contains(point1) && movingPoint == false) {
 									x1 = point.x;
 									y1 = point.y;
 									ShapesId = point.getShapesId();
@@ -568,13 +576,13 @@ public class Main extends JFrame implements ActionListener {
 								point1 = new Point2D.Double(line.lineElements[0].x, line.lineElements[0].y);
 								point2 = new Point2D.Double(line.lineElements[1].x, line.lineElements[1].y);
 
-								if (selectionCircle.contains(point1) && movingLine == false) {
+								if (selectionRectangle.contains(point1) && movingLine == false) {
 									ShapesId = line.getShapesId();
 									isStart = true;
 									movingLine = true;
 									changeInitiated = true;
 
-								} else if (selectionCircle.contains(point2) && movingLine == false) {
+								} else if (selectionRectangle.contains(point2) && movingLine == false) {
 									ShapesId = line.getShapesId();
 									isStart = false;
 									isEnd = true;
@@ -594,19 +602,19 @@ public class Main extends JFrame implements ActionListener {
 								point3 = new Point2D.Double(triangle.triangleElements[2].x,
 										triangle.triangleElements[2].y);
 
-								if (selectionCircle.contains(point1) && movingTriangle == false) {
+								if (selectionRectangle.contains(point1) && movingTriangle == false) {
 									ShapesId = triangle.getShapesId();
 									isStart = true;
 									movingTriangle = true;
 									changeInitiated = true;
 
-								} else if (selectionCircle.contains(point2) && movingTriangle == false) {
+								} else if (selectionRectangle.contains(point2) && movingTriangle == false) {
 									ShapesId = triangle.getShapesId();
 									isMiddle = true;
 									movingTriangle = true;
 									changeInitiated = true;
 
-								} else if (selectionCircle.contains(point3) && movingTriangle == false) {
+								} else if (selectionRectangle.contains(point3) && movingTriangle == false) {
 									ShapesId = triangle.getShapesId();
 									isEnd = true;
 									movingTriangle = true;
@@ -623,13 +631,13 @@ public class Main extends JFrame implements ActionListener {
 								point2 = new Point2D.Double(rectangle.rectangleElements[1].x,
 										rectangle.rectangleElements[1].y);
 
-								if (selectionCircle.contains(point1) && movingRectangle == false) {
+								if (selectionRectangle.contains(point1) && movingRectangle == false) {
 									ShapesId = rectangle.getShapesId();
 									isStart = true;
 									movingRectangle = true;
 									changeInitiated = true;
 
-								} else if (selectionCircle.contains(point2) && movingRectangle == false) {
+								} else if (selectionRectangle.contains(point2) && movingRectangle == false) {
 									ShapesId = rectangle.getShapesId();
 									isEnd = true;
 									movingRectangle = true;
@@ -1255,14 +1263,15 @@ public class Main extends JFrame implements ActionListener {
 		frame = new Main();
 		frame.setLayout();
 	}
-	
-	public void DbInterface() {
+
+	/*public void DbInterface() {
 		databaseUI = new DBUI();
 		databaseUI.setTitle("DB Interface");
 		databaseUI.setLocationRelativeTo(null);
 		databaseUI.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		databaseUI.setVisible(true);
-	}
+	}*/
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
@@ -1357,7 +1366,7 @@ public class Main extends JFrame implements ActionListener {
 				e1.printStackTrace();
 			}
 		} else if (eTarget.equals(db)) {
-			DbInterface();
+			// DbInterface();
 		} else if (eTarget.equals(csv)) {
 			// openCsvInterface();
 		} else if (eTarget.equals(db)) {

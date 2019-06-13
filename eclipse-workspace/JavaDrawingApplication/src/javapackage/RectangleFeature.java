@@ -1,11 +1,5 @@
 package javapackage;
-import javapackage.EditorTools;
 import java.awt.geom.Rectangle2D;
-import javax.swing.JPanel;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.event.*;
 
 
 public class RectangleFeature extends ShapesParent {
@@ -58,14 +52,14 @@ public class RectangleFeature extends ShapesParent {
 	
 	//****************Dragging Rectangle********************
 	
-	public class MoveFeature extends JPanel {
+	/*public class MoveFeature extends JPanel {
 
 		//selectedRectangleLists
 		private Rectangle2D.Float myRect = new Rectangle2D.Float(50, 50, 50, 50);
 
 		  MovingAdapter ma = new MovingAdapter();
 
-		  public EditorTools() {
+		  public void EditorTools() {
 		    addMouseMotionListener(ma);
 		    addMouseListener(ma);
 		  }
@@ -96,7 +90,7 @@ public class RectangleFeature extends ShapesParent {
 		      y += dy;
 		    }
 		  }
-		}
+//		}*/
 	
 	
 	

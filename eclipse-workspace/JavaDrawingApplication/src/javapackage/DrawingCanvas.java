@@ -144,8 +144,8 @@ public class DrawingCanvas extends JPanel {
 		Color drawingColor = Color.black;
 		g2d.setPaint(drawingColor);
 		
-		Color selectionBoxColor = Color.red;
-		g2d.setPaint(selectionBoxColor);
+		Color selectionBoxColor = Color.cyan;
+		//g2d.setPaint(selectionBoxColor);
 
 		// ----------------------------------------------------
 		// Draw Point, Line, Triangle, Rectangle

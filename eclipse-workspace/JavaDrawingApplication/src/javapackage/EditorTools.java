@@ -1,13 +1,11 @@
 package javapackage;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.geom.*;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
-import javapackage.RectangleFeature.MoveFeature.MovingAdapter;
+//import javapackage.RectangleFeature.MoveFeature.MovingAdapter;
 
 public class EditorTools extends JPanel {
 
@@ -15,6 +13,10 @@ public class EditorTools extends JPanel {
 	// Declaration of ArrayLists to store new created Features
 	// ---------------------------------------------------
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	// ArrayList of new created objects. The arrayList can grow when a new point is
 	// created and
 	// shrink when a point is deleted
