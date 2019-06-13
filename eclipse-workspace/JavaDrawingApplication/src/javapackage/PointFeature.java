@@ -22,9 +22,12 @@ public class PointFeature extends ShapesParent {
 		super("Point");
 	}
 
-	// Creates a drawable Ellipse2D object of PointFeature object
-	// returns point geometry
-	public Ellipse2D createPointFeature() {
+	
+	/**
+	 * 
+	 * @return point
+	 */
+	public Ellipse2D createPointFeature() {// Creates a drawable Ellipse2D object of PointFeature object// returns point geometry
 		Ellipse2D point = new Ellipse2D.Double(this.x, this.y, pointsize, pointsize);
 		return point;
 	}

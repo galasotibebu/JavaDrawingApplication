@@ -58,6 +58,9 @@ public class Main extends JFrame implements ActionListener {
 	JLabel trackedCoord;
 	int trackedX;
 	int trackedY;
+	// DrawMode Tracking
+	JLabel trackedMode;
+	
 
 	// Mouse Selection Variables
 	double selectionX1;
@@ -65,10 +68,7 @@ public class Main extends JFrame implements ActionListener {
 	double selectionX2;
 	double selectionY2;
 
-	// DrawMode Tracking
-	JLabel trackedMode;
-
-	Box trackingBox;
+	
 
 	// Functional Variables
 	String drawMode = "default";
@@ -191,7 +191,9 @@ public class Main extends JFrame implements ActionListener {
 				switch (drawMode) {
 
 				case "PointMode":
-					editor.addPoints(point);
+					// creates and stores the new object to the 'drawingPoints' ArrayLists in
+					// EditorTools class.
+					editor.addPoints(point);// see line 29
 					((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
 					drawingcanvas.repaint();
 					break;
@@ -261,7 +263,7 @@ public class Main extends JFrame implements ActionListener {
 						((DrawingCanvas) drawingcanvas).defineSelectionRectangle(null);
 						((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
 						drawingcanvas.repaint();
-
+						// x,y of first click of selection mode
 						selectionX1 = point.x;
 						selectionY1 = point.y;
 						selectionInitiated = true;
@@ -808,8 +810,10 @@ public class Main extends JFrame implements ActionListener {
 				trackedY = e.getY();
 				trackedCoord.setText("X: " + trackedX + "    Y: " + trackedY + "   ");
 				point = new PointFeature();
+				// After each click on the canvas the PointFeature for general purpose will be
+				// created.
 				point.setPoint(e.getX(), e.getY());
-
+				// first click was the first pointFeature then it checks for the next condition
 				if (lineInitiated == true) {
 					selectionInitiated = false;
 					line.addLineEnd(point);

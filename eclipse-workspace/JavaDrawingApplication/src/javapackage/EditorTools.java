@@ -12,7 +12,7 @@ public class EditorTools {
 	// ArrayList of new created objects. The arrayList can grow when a new point is
 	// created and
 	// shrink when a point is deleted
-	public ArrayList<PointFeature> drawingPoints = new ArrayList<>();
+	public ArrayList<PointFeature> drawingPoints = new ArrayList<>();//see line 34 below & line 195 of class Main.
 	public ArrayList<LineFeature> drawingLines = new ArrayList<>();
 	public ArrayList<RectangleFeature> drawingRectangles = new ArrayList<>();
 	public ArrayList<TriangleFeature> drawingTriangles = new ArrayList<>();
@@ -28,12 +28,9 @@ public class EditorTools {
 	public ArrayList<RectangleFeature> selectedRectangles = new ArrayList<>();
 
 	// --------------------------------------------------------------------
-	// CREATE -
-	// --------------------------------------------------------------------
-
-	// ----Creates new features and put them inside declared ArrayList
-	// (drawing..something..)---
-	// --stored in memory--------
+	// Declaration of new method which adds any object to its corresponding ArrayList(drawingPoints, drawingLines...)
+	// Creates new features and put them inside declared ArrayList
+	// (drawing..something..)-----stored in memory--------
 	public void addPoints(PointFeature point) {
 		drawingPoints.add(point);
 	}
@@ -55,19 +52,16 @@ public class EditorTools {
 
 	// --------------------------------------------------------------------
 	// PREPARES FOR MODIFICATION -
-	// --------------------------------------------------------------------
-
-	// -----Choose features that lies inside 'Selecting Rectangle', and put them
-	// inside
-	// a declared empty ArrayList(selected..something..) for corresponding
-	// features
-	public void selectAffectedObjects(Rectangle2D selectionRectangles) {
+	// Choose features that lies inside 'Selecting Rectangle', and put them inside
+	// a declared empty ArrayList(selected..something..) for corresponding features
+	public void selectAffectedObjects(Rectangle2D selectionRectangles) {//new object called selectionRectangles created here for the first time
 
 		for (PointFeature point : drawingPoints) {
-			Ellipse2D pointObj = point.createPointFeature();
+			Ellipse2D pointObj = point.createPointFeature();//create a new object while looping through the existing collection of objects
 			Rectangle2D queryPoints = pointObj.getBounds2D();// reads the x,y coordinate of an affected PointFeatures
 			//
 			if (selectionRectangles.contains(queryPoints) == true) {
+				//adds those points their x,y exists inside the selectionRectangle to 'ArrayLists of selectedPoints'.
 				selectedPoints.add(point);
 				System.out.println(drawingPoints.size() + "points created.");
 				System.out.println(selectedPoints.size() + "points selected.");
@@ -110,10 +104,8 @@ public class EditorTools {
 
 	// --------------------------------------------------------------------
 	// CANCEL PREPARATIONS FOR MODIFICATION -
-	// --------------------------------------------------------------------
-
-	// -------------Clears Current Selected Features---------------------
-	// releases the memory
+	// Clears Current Selected Features
+	// releases the memory-------------------------------------------------
 	public void clearCurrentSelection() {
 		selectedPoints = new ArrayList<>();
 		selectedLines = new ArrayList<>();
@@ -123,10 +115,8 @@ public class EditorTools {
 
 	// --------------------------------------------------------------------
 	// PERFORMS DELETION ACTION BY CALLING DELETERS-
-	// --------------------------------------------------------------------
-
-	// -----Deletes Features whose id's are the same as currently selected
-	// Features--------------------------
+	// Deletes Features whose id's are the same as currently selected
+	// Features------------------------------------------------------------
 	public void deleteAffectedObjects() {
 
 		for (PointFeature point : selectedPoints) {
@@ -149,12 +139,11 @@ public class EditorTools {
 			deleteRectangle(identifier);
 		}
 	}
+	
+	
 	// --------------------------------------------------------------------
-	// DELETERS -
-	// --------------------------------------------------------------------
-
-	// Declaration of Deletion Methods that will be implemented for all
-	// Features--
+	// Declaration of Deletion Methods that will be implemented for all Features
+	// ------------------------------------------------------------
 	private void deletePoint(int identifier) {
 		// loop through every point of Points
 		for (int i = 0; i < drawingPoints.size(); i++) {
