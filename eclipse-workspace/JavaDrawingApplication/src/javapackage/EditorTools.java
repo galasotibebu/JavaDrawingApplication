@@ -1,9 +1,15 @@
 package javapackage;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.geom.*;
 import java.util.ArrayList;
 
-public class EditorTools {
+import javax.swing.JPanel;
+
+import javapackage.RectangleFeature.MoveFeature.MovingAdapter;
+
+public class EditorTools extends JPanel {
 
 	// ----------------------------------------------------
 	// Declaration of ArrayLists to store new created Features
@@ -197,5 +203,39 @@ public class EditorTools {
 			}
 		}
 	}
+	
+	
+	
+	
+	// -----Move Features whose id's are the same as currently selected
+	// Features--------------------------
+	public void moveAffectedObjects() {
+
+		for (RectangleFeature rectangle : selectedRectangles) {
+			int identifier = rectangle.getShapesId();
+			moveRectangle(identifier);
+		}
+	}
+	
+//****************Methods for moving objects on the canvas********************
+	
+
+	private void moveRectangle(int identifier) {
+		// loop through every Rectangles
+		for (int i = 0; i < drawingRectangles.size(); i++) {
+			RectangleFeature rectangle = drawingRectangles.get(i);
+			int rectangleIdentifier = rectangle.getShapesId();
+			// if identifier from selected Rectangle and from Rectangles match
+			// then delete this rectangle
+			if (rectangleIdentifier == identifier) {
+				
+				
+//				drawingRectangles.move(i);
+			}
+		}
+	}
+	
+	
+
 
 }

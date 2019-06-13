@@ -1,6 +1,8 @@
 package javapackage;
 
 import database.GUICSV;
+import javapackage.DBUI;
+
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,8 +12,6 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-import javax.swing.Box;
-import javax.swing.JButton;
 import javax.swing.*;
 
 //@SuppressWarnings("serial")
@@ -27,6 +27,11 @@ public class Main extends JFrame implements ActionListener {
 
 	// Editor for storing and editing geometries
 	public EditorTools editor;
+	
+	/**
+	 * Database interface for connecting to a database
+	 */
+	public static DBUI databaseUI;
 
 	// MenuBar Variables
 	JMenuBar menubar;
@@ -1250,7 +1255,14 @@ public class Main extends JFrame implements ActionListener {
 		frame = new Main();
 		frame.setLayout();
 	}
-
+	
+	public void DbInterface() {
+		databaseUI = new DBUI();
+		databaseUI.setTitle("DB Interface");
+		databaseUI.setLocationRelativeTo(null);
+		databaseUI.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		databaseUI.setVisible(true);
+	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
@@ -1345,7 +1357,7 @@ public class Main extends JFrame implements ActionListener {
 				e1.printStackTrace();
 			}
 		} else if (eTarget.equals(db)) {
-			// openDbInterface();
+			DbInterface();
 		} else if (eTarget.equals(csv)) {
 			// openCsvInterface();
 		} else if (eTarget.equals(db)) {
