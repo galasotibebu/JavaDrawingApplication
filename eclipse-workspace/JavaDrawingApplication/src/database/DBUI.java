@@ -19,9 +19,9 @@ import javax.swing.JTextField;
 @SuppressWarnings("serial")
 public class DBUI extends JFrame implements ActionListener{
 	
-	DatabaseLogin databaselogin;
+	DatabaseLogin dblogin;
 	EditorTools editor;
-	EditorTools neweditortool;
+	EditorTools neweditor;
 	
 	JLabel dbmanaLab;
 	JTextField dbmanaField;
@@ -139,8 +139,8 @@ public class DBUI extends JFrame implements ActionListener{
 			}
 		} else if (eTarget.equals(importer)) {
 			try {
-				neweditortool = databaselogin.extractGeometricFeature();
-				frame.overwriteObjects(neweditortool);
+				neweditor = dblogin.extractObjects();
+				frame.overwriteObjects(neweditor);
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
@@ -164,16 +164,16 @@ public class DBUI extends JFrame implements ActionListener{
 	}
 	
 	public Connection getConnection() throws SQLException {
-		databaselogin = new DatabaseLogin();
-		databaselogin.DBMS = (String) dbmanaField.getText();
-		databaselogin.dbName = (String) dbnameField.getText();
-		databaselogin.dbHost = (String) hostField.getText();
-		databaselogin.dbPort = (String) portField.getText();
-		databaselogin.dbUser = (String) userField.getText();
-		databaselogin.dbPassword = (String) passField.getText();
+		dblogin = new DatabaseLogin();
+		dblogin.DBMS = (String) dbmanaField.getText();
+		dblogin.dbName = (String) dbnameField.getText();
+		dblogin.dbHost = (String) hostField.getText();
+		dblogin.dbPort = (String) portField.getText();
+		dblogin.dbUser = (String) userField.getText();
+		//dblogin.dbPassword = (String) passField.getText();
 
 		
-		return databaselogin.accessorConnection();
+		return dblogin.accessorConnection();
 	}
 	
 	/**
@@ -185,7 +185,7 @@ public class DBUI extends JFrame implements ActionListener{
 		String dbName = dbnameField.getText();
 		createTable();
 		deleteEntries();
-		databaselogin.InsertGeometricFeature(editor);
+		dblogin.insertObjects(neweditor);
 		JOptionPane.showMessageDialog(null, "Saved to cadproject in " + dbName);
 	}
 	

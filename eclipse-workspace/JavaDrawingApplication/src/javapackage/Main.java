@@ -1,10 +1,7 @@
 package javapackage;
 
 import database.GUICSV;
-<<<<<<< HEAD
-=======
 import database.DBUI;
->>>>>>> 9cce3ed4e6e98a7a9e411e90ebb5bc4a314e90b6
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -33,7 +30,7 @@ public class Main extends JFrame implements ActionListener {
 	/**
 	 * Database interface for connecting to a database
 	 */
-	// public static DBUI databaseUI;
+	public static DBUI databaseUI;
 
 	// MenuBar Variables
 	JMenuBar menubar;
@@ -1256,8 +1253,8 @@ public class Main extends JFrame implements ActionListener {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(640, 480);
 		setLocationRelativeTo(null);
-
 	}
+	
 
 	// ----------------------------------------
 	// MAIN METHOD
@@ -1266,15 +1263,14 @@ public class Main extends JFrame implements ActionListener {
 
 		frame = new Main();
 		frame.setLayout();
+		/*public void DbInterface() {
+			databaseUI = new DBUI();
+			databaseUI.setTitle("DB Interface");
+			databaseUI.setLocationRelativeTo(null);
+			databaseUI.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			databaseUI.setVisible(true);
+		}*/
 	}
-
-	/*public void DbInterface() {
-		databaseUI = new DBUI();
-		databaseUI.setTitle("DB Interface");
-		databaseUI.setLocationRelativeTo(null);
-		databaseUI.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		databaseUI.setVisible(true);
-	}*/
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
