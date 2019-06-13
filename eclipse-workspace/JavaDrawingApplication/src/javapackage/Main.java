@@ -1,7 +1,7 @@
 package javapackage;
 
 import database.GUICSV;
-import javapackage.DBUI;
+import database.DBUI;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -14,10 +14,10 @@ import java.awt.geom.Rectangle2D;
 
 import javax.swing.*;
 
-//@SuppressWarnings("serial")
+@SuppressWarnings("serial")
 public class Main extends JFrame implements ActionListener {
 
-	private static final long serialVersionUID = 1L;
+
 
 	// GraphicalUser Interface between user and software
 	public static Main frame;
