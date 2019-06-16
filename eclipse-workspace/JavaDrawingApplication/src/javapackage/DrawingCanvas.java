@@ -10,6 +10,13 @@ import javax.swing.JPanel;
 
 // Drawing canvas class requests ArrayLists with geometry objects from an
 // EditorTools class and displays them.
+
+/**
+ * This class stores the  graphic objects in their respective arrays.
+ * It also contains arrays for painting,selecting and deleting graphical objects from the canvas.
+ * It inherits from JPanel class
+ * @author T Galaso
+ */
 @SuppressWarnings("serial")
 public class DrawingCanvas extends JPanel {
 
@@ -68,6 +75,13 @@ public class DrawingCanvas extends JPanel {
 
 	// Sets the selection Rectangle
 	//will get rectangle drwn in main class as parameter
+	/**
+	 * Defines the selection rectangle
+	 * 
+	 * @param Rectangle
+	 * @Author T Galaso
+	 * 
+	 */
 	public void defineSelectionRectangle(Rectangle2D Rectangle) {
 		this.selectionRectangle = Rectangle;
 		
@@ -80,6 +94,11 @@ public class DrawingCanvas extends JPanel {
 
 	// Replaces the current contents of the ArrayLists in the DrawingCanvas with the
 	// contents of the corresponding ArrayLists in the EditorTools class
+	/**
+	 * 
+	 * 
+	 * 
+	 */
 	public void requestObjectLists(EditorTools editor) {
 		// Draw Objects
 		PointLists = editor.drawingPoints;//assigns points drawn in main-->EditorTools to PointLists in current class
