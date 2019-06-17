@@ -43,6 +43,14 @@ public class PointFeature extends ShapesParent {
 		this.y = y;
 		return true;
 	}
+	
+	public double getXcoor() {
+		return this.x;
+	}
+	
+	public double getYcoor() {
+		return this.y;
+	}
 
 	//Returns the coordinates of the ToolPoint object as a String
 	public String getGeometryAsText() {

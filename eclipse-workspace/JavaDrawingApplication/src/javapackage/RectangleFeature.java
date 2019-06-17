@@ -49,54 +49,6 @@ public class RectangleFeature extends ShapesParent {
 		return Rectangle;
 	}
 	
-	
-	//****************Dragging Rectangle********************
-	
-	/*public class MoveFeature extends JPanel {
-
-		//selectedRectangleLists
-		private Rectangle2D.Float myRect = new Rectangle2D.Float(50, 50, 50, 50);
-
-		  MovingAdapter ma = new MovingAdapter();
-
-		  public void EditorTools() {
-		    addMouseMotionListener(ma);
-		    addMouseListener(ma);
-		  }
-
-
-		  class MovingAdapter extends MouseAdapter {
-
-		    private int x;
-
-		    private int y;
-
-		    public void mousePressed(MouseEvent e) {
-		      x = e.getX();
-		      y = e.getY();
-		    }
-
-		    public void mouseDragged(MouseEvent e) {
-
-		      int dx = e.getX() - x;
-		      int dy = e.getY() - y;
-
-		      if (myRect.getBounds2D().contains(x, y)) {
-		        myRect.x += dx;
-		        myRect.y += dy;
-		        repaint();
-		      }
-		      x += dx;
-		      y += dy;
-		    }
-		  }
-//		}*/
-	
-	
-	
-	
-	
-	//****************End Of Dragging Rectangle********************
 
 	// Returns the coordinates of the RectangleFeature object as a String
 	public String getGeometryAsText() {

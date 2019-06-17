@@ -51,7 +51,7 @@ public class DBUI extends JFrame implements ActionListener{
 	JButton save;
 	
 	JLabel empty3;
-	JButton importer;
+	JButton importdb;
 	
 	public DBUI() {
 		this.editor = frame.editor;
@@ -113,12 +113,12 @@ public class DBUI extends JFrame implements ActionListener{
 		
 		empty3 = new JLabel(" ");
 		add(empty3);
-		importer = new JButton("Import from Database");
-		add(importer);
+		importdb = new JButton("Import from Database");
+		add(importdb);
 		
 		connector.addActionListener(this);
 		save.addActionListener(this);
-		importer.addActionListener(this);
+		importdb.addActionListener(this);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
@@ -137,7 +137,7 @@ public class DBUI extends JFrame implements ActionListener{
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
-		} else if (eTarget.equals(importer)) {
+		} else if (eTarget.equals(importdb)) {
 			try {
 				neweditor = dblogin.extractObjects();
 				frame.overwriteObjects(neweditor);
@@ -170,7 +170,7 @@ public class DBUI extends JFrame implements ActionListener{
 		dblogin.dbHost = (String) hostField.getText();
 		dblogin.dbPort = (String) portField.getText();
 		dblogin.dbUser = (String) userField.getText();
-		//dblogin.dbPassword = (String) passField.getText();
+		dblogin.dbPassword = (String) passField.getText();
 
 		
 		return dblogin.accessorConnection();

@@ -44,6 +44,11 @@ public class ShapesParent {
 		for (RectangleFeature rectangle : editor.drawingRectangles) {
 			ShapesIdList.add(rectangle.getShapesId());
 		}
+		for (PolygonFeature polygon : editor.drawingPolygons) {
+			ShapesIdList.add(polygon.getShapesId());
+		}
+		
+		
 
 		for (PointFeature point : editor.selectedPoints) {
 			ShapesIdList.add(point.getShapesId());
@@ -57,6 +62,10 @@ public class ShapesParent {
 		for (RectangleFeature rectangle : editor.selectedRectangles) {
 			ShapesIdList.add(rectangle.getShapesId());
 		}
+		for (PolygonFeature polygon : editor.selectedPolygons) {
+			ShapesIdList.add(polygon.getShapesId());
+		}
+		
 
 		if (ShapesIdList.isEmpty()) {
 			latestShapesId = 0;

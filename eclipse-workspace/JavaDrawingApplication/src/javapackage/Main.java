@@ -16,8 +16,6 @@ import javax.swing.*;
 @SuppressWarnings("serial")
 public class Main extends JFrame implements ActionListener {
 
-
-
 	// GraphicalUser Interface between user and software
 	public static Main frame;
 
@@ -44,6 +42,7 @@ public class Main extends JFrame implements ActionListener {
 	JMenuItem obj2;
 	JMenuItem obj3;
 	JMenuItem obj4;
+	JMenuItem obj5;
 	JMenuItem csvimport;
 	JMenuItem db;
 	JMenuItem csvexport;
@@ -77,8 +76,11 @@ public class Main extends JFrame implements ActionListener {
 	boolean triangleInitiated1 = false;
 	boolean triangleInitiated2 = false;
 	boolean rectangleInitiated = false;
+	boolean polygonInitiated1 = false;
+	boolean polygonInitiated2 = false;
 	boolean selectionInitiated = false;
 	boolean changeInitiated = false;
+	boolean polygonIsNowComplete = false;
 
 	// Movement& Change Variables
 	boolean movementInitiated = false;
@@ -86,6 +88,7 @@ public class Main extends JFrame implements ActionListener {
 	boolean movingLine = false;
 	boolean movingTriangle = false;
 	boolean movingRectangle = false;
+	boolean movingPolygon = false;
 	Rectangle2D selectionRectangle = null;
 	int ShapesId;
 	int moveStartX;
@@ -111,6 +114,7 @@ public class Main extends JFrame implements ActionListener {
 	LineFeature line;
 	TriangleFeature triangle;
 	RectangleFeature rectangle;
+	PolygonFeature polygon;
 
 	public Main() {
 
@@ -126,6 +130,7 @@ public class Main extends JFrame implements ActionListener {
 		obj2 = new JMenuItem("Lines");
 		obj3 = new JMenuItem("Triangles");
 		obj4 = new JMenuItem("Rectangles");
+		obj5 = new JMenuItem("Polygons");
 		csvimport = new JMenuItem("Import");
 		csvexport = new JMenuItem("Export");
 		db = new JMenuItem("Database Manager");
@@ -148,6 +153,7 @@ public class Main extends JFrame implements ActionListener {
 		objmenu.add(obj2);
 		objmenu.add(obj3);
 		objmenu.add(obj4);
+		objmenu.add(obj5);
 
 		menubar.add(datamenu);
 		menubar.add(objmenu);
@@ -173,6 +179,7 @@ public class Main extends JFrame implements ActionListener {
 		obj2.addActionListener(this);
 		obj3.addActionListener(this);
 		obj4.addActionListener(this);
+		obj5.addActionListener(this);
 
 		csvimport.addActionListener(this);
 		csvexport.addActionListener(this);
@@ -218,18 +225,21 @@ public class Main extends JFrame implements ActionListener {
 
 				case "TriangleMode":// DRAW TRIANGLE
 					if (triangleInitiated1 == false && triangleInitiated2 == false) {
+						System.out.println("TRIANGLE ONCE CLICKED");
 						triangle = new TriangleFeature();
 						triangle.addTriangleStart(point);
 						triangleInitiated1 = true;
 						break;
 
 					} else if (triangleInitiated1 == true && triangleInitiated2 == false) {
+						System.out.println("TRIANGLE TWICE CLICKED");
 						triangle.addTriangleMid(point);
 						triangleInitiated1 = false;
 						triangleInitiated2 = true;
 						break;
 
 					} else if (triangleInitiated1 == false && triangleInitiated2 == true) {
+						System.out.println("TRIANGLE TRICE CLICKED");
 						triangle.addTriangleEnd(point);
 						editor.addTriangles(triangle);
 						((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
@@ -239,6 +249,12 @@ public class Main extends JFrame implements ActionListener {
 						triangleInitiated2 = false;
 						break;
 					}
+				case "PolygonMode":// DRAW RECTANGLE
+					System.out.println("POLYGON ONCE CLICKED");
+						polygon = new PolygonFeature();
+						polygon.addPolygonP1(point);
+						break;
+					
 
 				case "RectangleMode":// DRAW RECTANGLE						
 					if (rectangleInitiated == false) {	
@@ -258,7 +274,8 @@ public class Main extends JFrame implements ActionListener {
 						rectangleInitiated = false;
 						break;
 					}
-
+				
+					
 				case "SelectMode":// DRAW SELECTION BOX
 					if (selectionInitiated == false) {
 						System.out.println("selection Initiated: false");
@@ -531,6 +548,11 @@ public class Main extends JFrame implements ActionListener {
 					else {
 						System.out.println("PLEASE SELECT FIRST!");
 					}
+					
+					
+					
+					
+					
 
 				case "ChangeMode":
 					moveStartX = e.getX();
@@ -1213,14 +1235,14 @@ public class Main extends JFrame implements ActionListener {
 		((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
 		drawingcanvas.repaint();
 	}
-	
+
 	public void dbUI() {
-	databaseUI = new DBUI();
-	databaseUI.setTitle("DB Interface");
-	databaseUI.setLocationRelativeTo(null);
-	databaseUI.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-	databaseUI.setVisible(true);
-  }
+		databaseUI = new DBUI();
+		databaseUI.setTitle("DB Interface");
+		databaseUI.setLocationRelativeTo(null);
+		databaseUI.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		databaseUI.setVisible(true);
+	}
 
 	// sets 'drawingpanel' as ContentPane
 	// sets the layout for the frame
@@ -1246,7 +1268,6 @@ public class Main extends JFrame implements ActionListener {
 		setSize(640, 480);
 		setLocationRelativeTo(null);
 	}
-	
 
 	// ----------------------------------------
 	// MAIN METHOD
@@ -1255,7 +1276,7 @@ public class Main extends JFrame implements ActionListener {
 
 		frame = new Main();
 		frame.setLayout();
-		
+
 	}
 
 	@Override
@@ -1299,6 +1320,15 @@ public class Main extends JFrame implements ActionListener {
 				trackedMode.setText(drawMode + "    |    ");
 			}
 
+		} else if (eTarget.equals(obj5)) {
+			if (!drawMode.equals("PolygonMode")) {
+				drawMode = "PolygonMode";
+				trackedMode.setText(drawMode + "    |    ");
+			} else {
+				drawMode = "default";
+				trackedMode.setText(drawMode + "    |    ");
+			}
+
 		} else if (eTarget.equals(selectElements)) {
 			if (!drawMode.equals("SelectMode")) {
 				drawMode = "SelectMode";
@@ -1319,15 +1349,6 @@ public class Main extends JFrame implements ActionListener {
 		else if (eTarget.equals(shiftElements)) {
 			if (!drawMode.equals("ShiftMode")) {
 				drawMode = "ShiftMode";
-				trackedMode.setText(drawMode + "    |    ");
-			} else {
-				drawMode = "default";
-				trackedMode.setText(drawMode + "    |    ");
-			}
-
-		} else if (eTarget.equals(rotateElements)) {
-			if (!drawMode.equals("RotateMode")) {
-				drawMode = "RotateMode";
 				trackedMode.setText(drawMode + "    |    ");
 			} else {
 				drawMode = "default";
