@@ -540,8 +540,6 @@ public class Main extends JFrame implements ActionListener {
 					moveStartY = e.getY();
 
 					if (changeInitiated == false) {
-						// selectionRectangle = new Ellipse2D.Double(e.getX() - 13, e.getY() - 13, 26,
-						// 26);
 
 						// Changing Points
 						editor.drawingPoints.forEach((PointFeature point) -> {
@@ -841,7 +839,6 @@ public class Main extends JFrame implements ActionListener {
 				if (rectangleInitiated == true) {
 					selectionInitiated = false;
 					rectangle.addRectangleLastCorner(point);
-					// newcanvas.storeDrawingRectangleElements(rectangle);
 					newcanvas.repaint();
 				}
 
