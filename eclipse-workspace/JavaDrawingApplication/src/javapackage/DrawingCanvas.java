@@ -73,7 +73,7 @@ public class DrawingCanvas extends JPanel {
 	private Rectangle2D selectionRectangle = null;
 
 	// Sets the selection Rectangle
-	//will get rectangle drwn in main class as parameter
+	// will get rectangle drwn in main class as parameter
 	/**
 	 * Defines the selection rectangle
 	 * 
@@ -83,7 +83,7 @@ public class DrawingCanvas extends JPanel {
 	 */
 	public void defineSelectionRectangle(Rectangle2D Rectangle) {
 		this.selectionRectangle = Rectangle;
-		
+
 	}
 
 	// --------------------------------------------------------------------
@@ -102,7 +102,7 @@ public class DrawingCanvas extends JPanel {
 	 */
 	public void requestObjectLists(EditorTools editor) {
 		// Draw Objects
-		PointLists = editor.drawingPoints;//assigns points drawn in main-->EditorTools to PointLists in current class
+		PointLists = editor.drawingPoints;// assigns points drawn in main-->EditorTools to PointLists in current class
 		LineLists = editor.drawingLines;
 		TriangleLists = editor.drawingTriangles;
 		RectangleLists = editor.drawingRectangles;
@@ -192,9 +192,9 @@ public class DrawingCanvas extends JPanel {
 
 		Color drawingColor = Color.black;
 		g2d.setPaint(drawingColor);
-		
+
 		Color selectionBoxColor = Color.cyan;
-		//g2d.setPaint(selectionBoxColor);
+		// g2d.setPaint(selectionBoxColor);
 
 		// ----------------------------------------------------
 		// Draw Point, Line, Triangle, Rectangle
@@ -229,8 +229,8 @@ public class DrawingCanvas extends JPanel {
 
 		// --------------------------------------------------------
 		// Draw Selection Box
-		// --------------------------------------------------------	
-		
+		// --------------------------------------------------------
+
 		if (selectionRectangle != null) {
 			g2d.draw(selectionRectangle);
 			g2d.setPaint(selectionBoxColor);
@@ -266,27 +266,26 @@ public class DrawingCanvas extends JPanel {
 		// ------------------------------------------------------------------
 		// Displays states of objects modified
 		// -------------------------------------------------------------------
-		
-		for(PointFeature point: Point_drawing) {
+
+		for (PointFeature point : Point_drawing) {
 			Ellipse2D pts = point.createPointFeature();
 			g2d.draw(pts);
 		}
 
-		for(LineFeature line: Line_drawing) {
+		for (LineFeature line : Line_drawing) {
 			Line2D lns = line.createLineFeature();
 			g2d.draw(lns);
 		}
 
-		for(TriangleFeature drawtriangle: Triangle_drawing) {
+		for (TriangleFeature drawtriangle : Triangle_drawing) {
 			Path2D trs = drawtriangle.createTriangleFeature();
 			g2d.draw(trs);
 		}
 
-		for(RectangleFeature drawRectangle: Rectangle_drawing) {
+		for (RectangleFeature drawRectangle : Rectangle_drawing) {
 			Rectangle2D rcts = drawRectangle.createRectangleFeature();
 			g2d.draw(rcts);
 		}
 
 	}
-
 }

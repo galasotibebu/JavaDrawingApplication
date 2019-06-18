@@ -10,26 +10,25 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-
 import javax.swing.*;
-
+/**
+ * Creates the GUI for the application 
+ * 
+ * @author T Galaso
+ */
 @SuppressWarnings("serial")
 public class Main extends JFrame implements ActionListener {
 
 
-
-	// GraphicalUser Interface between user and software
-	public static Main frame;
-
-	// drawing panel for displaying geometries in the editor object
-	public JPanel drawingcanvas;
+	public static Main maineditor;
+	
+	
+	public DrawingCanvas newcanvas;
 
 	// Editor for storing and editing geometries
-	public EditorTools editor;
+     public EditorTools editor;
 
-	/**
-	 * Database interface for connecting to a database
-	 */
+	
 	public static DBUI databaseUI;
 
 	// MenuBar Variables
@@ -44,6 +43,7 @@ public class Main extends JFrame implements ActionListener {
 	JMenuItem obj2;
 	JMenuItem obj3;
 	JMenuItem obj4;
+	JMenuItem obj5;
 	JMenuItem csvimport;
 	JMenuItem db;
 	JMenuItem csvexport;
@@ -55,8 +55,6 @@ public class Main extends JFrame implements ActionListener {
 	JButton selectElements;
 	JButton deleteElements;
 	JButton shiftElements;
-	JButton rotateElements;
-	JButton saveElements;
 
 	// Mouse Tracking Variables Done
 	JLabel trackedCoord;
@@ -77,8 +75,11 @@ public class Main extends JFrame implements ActionListener {
 	boolean triangleInitiated1 = false;
 	boolean triangleInitiated2 = false;
 	boolean rectangleInitiated = false;
+	boolean polygonInitiated1 = false;
+	boolean polygonInitiated2 = false;
 	boolean selectionInitiated = false;
 	boolean changeInitiated = false;
+	boolean polygonIsNowComplete = false;
 
 	// Movement& Change Variables
 	boolean movementInitiated = false;
@@ -86,6 +87,7 @@ public class Main extends JFrame implements ActionListener {
 	boolean movingLine = false;
 	boolean movingTriangle = false;
 	boolean movingRectangle = false;
+	boolean movingPolygon = false;
 	Rectangle2D selectionRectangle = null;
 	int ShapesId;
 	int moveStartX;
@@ -111,7 +113,10 @@ public class Main extends JFrame implements ActionListener {
 	LineFeature line;
 	TriangleFeature triangle;
 	RectangleFeature rectangle;
-
+/**
+ * 
+ *
+ */
 	public Main() {
 
 		// MenuBar & menus
@@ -119,7 +124,6 @@ public class Main extends JFrame implements ActionListener {
 		datamenu = new JMenu("File");
 		objmenu = new JMenu("Objects");
 		help = new JMenu("Help");
-		// toolabout = new JMenu("About");
 
 		// MenuItems
 		obj1 = new JMenuItem("Points");
@@ -130,44 +134,38 @@ public class Main extends JFrame implements ActionListener {
 		csvexport = new JMenuItem("Export");
 		db = new JMenuItem("Database Manager");
 
-		// ToolBar & its elements
+		// New ToolBar.
 		toolbar = new JToolBar("Editor", JToolBar.HORIZONTAL);
+		//ToolBar elements
 		selectElements = new JButton("Select");
-		rotateElements = new JButton("Rotate");
 		shiftElements = new JButton("Shift");
 		deleteElements = new JButton("Delete");
-		saveElements = new JButton("Save Edits");
 
-		// Add items to main menu
+		// Adds items to main menu.
 		this.setJMenuBar(menubar);
 		datamenu.add(csvimport);
 		datamenu.add(csvexport);
 		datamenu.add(db);
-
+        
+		//Adds items to 'Objects' menu.
 		objmenu.add(obj1);
 		objmenu.add(obj2);
 		objmenu.add(obj3);
 		objmenu.add(obj4);
-
+		
+        //Adds three basic menus to main menu.
 		menubar.add(datamenu);
 		menubar.add(objmenu);
 		menubar.add(help);
-		// menubar.add(toolabout);
-
-		// creates object of editor
-		editor = new EditorTools();
 
 		toolbar.add(selectElements);
-		toolbar.add(rotateElements);
 		toolbar.add(shiftElements);
 		toolbar.add(deleteElements);
-		toolbar.add(saveElements);
 
 		// Buttons add ActionListeners
 		selectElements.addActionListener(this);
 		deleteElements.addActionListener(this);
 		shiftElements.addActionListener(this);
-		rotateElements.addActionListener(this);
 		// ActionListener for MenuItems
 		obj1.addActionListener(this);
 		obj2.addActionListener(this);
@@ -177,11 +175,15 @@ public class Main extends JFrame implements ActionListener {
 		csvimport.addActionListener(this);
 		csvexport.addActionListener(this);
 		db.addActionListener(this);
+		
+		//creates object of editor
+		editor = new EditorTools();
 
 		// creates object of drawingpanel
-		drawingcanvas = new DrawingCanvas();
-		drawingcanvas.setBackground(Color.white);
-		drawingcanvas.addMouseListener(new MouseAdapter() {
+		newcanvas = new DrawingCanvas();
+		newcanvas.setBackground(Color.white);
+
+		newcanvas.addMouseListener(new MouseAdapter() {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -195,8 +197,8 @@ public class Main extends JFrame implements ActionListener {
 					// creates and stores the new object to the 'drawingPoints' ArrayLists in
 					// EditorTools class.
 					editor.addPoints(point);// see line 29
-					((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
-					drawingcanvas.repaint();
+					newcanvas.requestObjectLists(editor);
+					newcanvas.repaint();
 					break;
 
 				case "LineMode": // DRAW LINE
@@ -209,39 +211,42 @@ public class Main extends JFrame implements ActionListener {
 					} else if (lineInitiated == true) {
 						line.addLineEnd(point);
 						editor.addLines(line);
-						((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
-						((DrawingCanvas) drawingcanvas).clearDrawingElements();
-						drawingcanvas.repaint();
+						newcanvas.requestObjectLists(editor);
+						newcanvas.clearDrawingElements();
+						newcanvas.repaint();
 						lineInitiated = false;
 						break;
 					}
 
 				case "TriangleMode":// DRAW TRIANGLE
 					if (triangleInitiated1 == false && triangleInitiated2 == false) {
+						System.out.println("TRIANGLE ONCE CLICKED");
 						triangle = new TriangleFeature();
 						triangle.addTriangleStart(point);
 						triangleInitiated1 = true;
 						break;
 
 					} else if (triangleInitiated1 == true && triangleInitiated2 == false) {
+						System.out.println("TRIANGLE TWICE CLICKED");
 						triangle.addTriangleMid(point);
 						triangleInitiated1 = false;
 						triangleInitiated2 = true;
 						break;
 
 					} else if (triangleInitiated1 == false && triangleInitiated2 == true) {
+						System.out.println("TRIANGLE TRICE CLICKED");
 						triangle.addTriangleEnd(point);
 						editor.addTriangles(triangle);
-						((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
-						((DrawingCanvas) drawingcanvas).clearDrawingElements();
-						drawingcanvas.repaint();
+						newcanvas.requestObjectLists(editor);
+						newcanvas.clearDrawingElements();
+						newcanvas.repaint();
 						triangleInitiated1 = false;
 						triangleInitiated2 = false;
 						break;
 					}
 
-				case "RectangleMode":// DRAW RECTANGLE						
-					if (rectangleInitiated == false) {	
+				case "RectangleMode":// DRAW RECTANGLE
+					if (rectangleInitiated == false) {
 						editor.clearCurrentSelection();
 						rectangle = new RectangleFeature();
 						rectangle.addRetangleFirstCorner(point);
@@ -252,9 +257,9 @@ public class Main extends JFrame implements ActionListener {
 						editor.clearCurrentSelection();
 						rectangle.addRectangleLastCorner(point);
 						editor.addRectangles(rectangle);
-						((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
-						((DrawingCanvas) drawingcanvas).clearDrawingElements();
-						drawingcanvas.repaint();
+						newcanvas.requestObjectLists(editor);
+						newcanvas.clearDrawingElements();
+						newcanvas.repaint();
 						rectangleInitiated = false;
 						break;
 					}
@@ -263,9 +268,9 @@ public class Main extends JFrame implements ActionListener {
 					if (selectionInitiated == false) {
 						System.out.println("selection Initiated: false");
 						editor.clearCurrentSelection();
-						((DrawingCanvas) drawingcanvas).defineSelectionRectangle(null);
-						((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
-						drawingcanvas.repaint();
+						newcanvas.defineSelectionRectangle(null);
+						newcanvas.requestObjectLists(editor);
+						newcanvas.repaint();
 						// x,y of first click of selection mode
 						selectionX1 = point.x;
 						selectionY1 = point.y;
@@ -300,12 +305,12 @@ public class Main extends JFrame implements ActionListener {
 						// Rectangle2D selectionRectangle = new Rectangle2D.Double();
 						selectionRectangle = new Rectangle2D.Double();
 						selectionRectangle.setRect(rectangleStart, rectangleEnd, rectangleWidth, rectangleHeight);
-						((DrawingCanvas) drawingcanvas).defineSelectionRectangle(selectionRectangle);
-						drawingcanvas.repaint();// we dont need the selection rectangle to be displayed.
+						newcanvas.defineSelectionRectangle(selectionRectangle);
+						newcanvas.repaint();// we dont need the selection rectangle to be displayed.
 
 						editor.selectAffectedObjects(selectionRectangle);
-						((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
-						drawingcanvas.repaint();
+						 newcanvas.requestObjectLists(editor);
+						newcanvas.repaint();
 
 						selectionInitiated = false;
 						break;
@@ -325,9 +330,7 @@ public class Main extends JFrame implements ActionListener {
 							// Moving Point 1
 							for (PointFeature point : editor.drawingPoints) {
 								if (movingPoint == false) {
-									point1 = new Point2D.Double(point.x, point.y);// here creates new point called
-																					// 'point1' from existing
-																					// pointfeature
+									point1 = new Point2D.Double(point.x, point.y);// here creates new point called 'point1' from existing pointfeature
 
 									if (selectionRectangle.contains(point1) && movingPoint == false) {// then if
 																										// selection box
@@ -397,7 +400,7 @@ public class Main extends JFrame implements ActionListener {
 										movementInitiated = true;
 										isStart = true;
 
-									} 
+									}
 								}
 							});
 
@@ -449,8 +452,8 @@ public class Main extends JFrame implements ActionListener {
 										objectArrayPosition = i;
 										editor.drawingPoints.get(i).x = moveDestinationX;
 										editor.drawingPoints.get(i).y = moveDestinationY;
-										((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
-										drawingcanvas.repaint();
+										newcanvas.requestObjectLists(editor);
+										newcanvas.repaint();
 										movingPoint = false;
 										movementInitiated = false;
 									}
@@ -469,9 +472,9 @@ public class Main extends JFrame implements ActionListener {
 										editor.drawingLines.get(i).lineElements[0].y = y1 - moveDifferenceY;
 										editor.drawingLines.get(i).lineElements[1].x = x2 - moveDifferenceX;
 										editor.drawingLines.get(i).lineElements[1].y = y2 - moveDifferenceY;
-										((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
-										((DrawingCanvas) drawingcanvas).clearDrawingElements();
-										drawingcanvas.repaint();
+										newcanvas.requestObjectLists(editor);
+										 newcanvas.clearDrawingElements();
+										newcanvas.repaint();
 										movingLine = false;
 										movementInitiated = false;
 
@@ -494,8 +497,8 @@ public class Main extends JFrame implements ActionListener {
 										editor.drawingTriangles.get(i).triangleElements[2].x = x3 - moveDifferenceX;
 										editor.drawingTriangles.get(i).triangleElements[2].y = y3 - moveDifferenceY;
 
-										((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
-										drawingcanvas.repaint();
+										newcanvas.requestObjectLists(editor);
+										newcanvas.repaint();
 										movingTriangle = false;
 										movementInitiated = false;
 
@@ -517,8 +520,8 @@ public class Main extends JFrame implements ActionListener {
 										editor.drawingRectangles.get(i).rectangleElements[1].y = y2 - moveDifferenceY;
 									}
 								}
-								((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
-								drawingcanvas.repaint();
+								newcanvas.requestObjectLists(editor);
+								newcanvas.repaint();
 								movingRectangle = false;
 								movementInitiated = false;
 							}
@@ -537,8 +540,6 @@ public class Main extends JFrame implements ActionListener {
 					moveStartY = e.getY();
 
 					if (changeInitiated == false) {
-						// selectionRectangle = new Ellipse2D.Double(e.getX() - 13, e.getY() - 13, 26,
-						// 26);
 
 						// Changing Points
 						editor.drawingPoints.forEach((PointFeature point) -> {
@@ -646,8 +647,8 @@ public class Main extends JFrame implements ActionListener {
 									editor.drawingPoints.get(i).x = moveStartX;
 									editor.drawingPoints.get(i).y = moveStartY;
 
-									((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
-									drawingcanvas.repaint();
+									newcanvas.requestObjectLists(editor);
+									newcanvas.repaint();
 									movingPoint = false;
 									changeInitiated = false;
 								}
@@ -665,9 +666,9 @@ public class Main extends JFrame implements ActionListener {
 										editor.drawingLines.get(i).lineElements[0].x = moveDestinationX;
 										editor.drawingLines.get(i).lineElements[0].y = moveDestinationY;
 
-										((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
-										((DrawingCanvas) drawingcanvas).clearDrawingElements();
-										drawingcanvas.repaint();
+										newcanvas.requestObjectLists(editor);
+										newcanvas.clearDrawingElements();
+										newcanvas.repaint();
 										movingLine = false;
 										changeInitiated = false;
 									}
@@ -686,9 +687,9 @@ public class Main extends JFrame implements ActionListener {
 											editor.drawingLines.get(i).lineElements[1].x = moveDestinationX;
 											editor.drawingLines.get(i).lineElements[1].y = moveDestinationY;
 
-											((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
-											((DrawingCanvas) drawingcanvas).clearDrawingElements();
-											drawingcanvas.repaint();
+											newcanvas.requestObjectLists(editor);
+											newcanvas.clearDrawingElements();
+											newcanvas.repaint();
 											movingLine = false;
 											changeInitiated = false;
 										}
@@ -709,8 +710,8 @@ public class Main extends JFrame implements ActionListener {
 										editor.drawingTriangles.get(i).triangleElements[0].x = moveDestinationX;
 										editor.drawingTriangles.get(i).triangleElements[0].y = moveDestinationY;
 
-										((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
-										drawingcanvas.repaint();
+										newcanvas.requestObjectLists(editor);
+										newcanvas.repaint();
 										movingTriangle = false;
 										changeInitiated = false;
 
@@ -727,8 +728,8 @@ public class Main extends JFrame implements ActionListener {
 										editor.drawingTriangles.get(i).triangleElements[1].x = moveDestinationX;
 										editor.drawingTriangles.get(i).triangleElements[1].y = moveDestinationY;
 
-										((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
-										drawingcanvas.repaint();
+										newcanvas.requestObjectLists(editor);
+										newcanvas.repaint();
 										movingTriangle = false;
 										changeInitiated = false;
 									}
@@ -744,8 +745,8 @@ public class Main extends JFrame implements ActionListener {
 										editor.drawingTriangles.get(i).triangleElements[2].x = moveDestinationX;
 										editor.drawingTriangles.get(i).triangleElements[2].y = moveDestinationY;
 
-										((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
-										drawingcanvas.repaint();
+										 newcanvas.requestObjectLists(editor);
+										newcanvas.repaint();
 										movingTriangle = false;
 										changeInitiated = false;
 									}
@@ -765,8 +766,8 @@ public class Main extends JFrame implements ActionListener {
 										editor.drawingRectangles.get(i).rectangleElements[0].y = moveDestinationY;
 									}
 								}
-								((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
-								drawingcanvas.repaint();
+								newcanvas.requestObjectLists(editor);
+								newcanvas.repaint();
 								movingRectangle = false;
 								changeInitiated = false;
 							}
@@ -781,8 +782,8 @@ public class Main extends JFrame implements ActionListener {
 										editor.drawingRectangles.get(i).rectangleElements[1].y = moveDestinationY;
 
 									}
-									((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
-									drawingcanvas.repaint();
+									 newcanvas.requestObjectLists(editor);
+									newcanvas.repaint();
 									movingRectangle = false;
 									changeInitiated = false;
 								}
@@ -799,7 +800,7 @@ public class Main extends JFrame implements ActionListener {
 			}
 		});
 
-		drawingcanvas.addMouseMotionListener(new MouseAdapter() {
+		newcanvas.addMouseMotionListener(new MouseAdapter() {
 
 			// visualise while creating and modifying features
 			@Override
@@ -815,31 +816,30 @@ public class Main extends JFrame implements ActionListener {
 				if (lineInitiated == true) {
 					selectionInitiated = false;
 					line.addLineEnd(point);
-					((DrawingCanvas) drawingcanvas).storeDrawingLineElements(line);
-					drawingcanvas.repaint();
+					newcanvas.storeDrawingLineElements(line);
+					newcanvas.repaint();
 				}
 
 				if (triangleInitiated1 == true && triangleInitiated2 == false) {
 					selectionInitiated = false;
 					triangle.addTriangleMid(point);
 					triangle.addTriangleEnd(point);
-					((DrawingCanvas) drawingcanvas).storeDrawingTriangleElements(triangle);
-					drawingcanvas.repaint();
+					newcanvas.storeDrawingTriangleElements(triangle);
+					newcanvas.repaint();
 				}
 
 				if (triangleInitiated2 == true && triangleInitiated1 == false) {
 					selectionInitiated = false;
 					triangle.addTriangleEnd(point);
-					((DrawingCanvas) drawingcanvas).storeDrawingTriangleElements(triangle);
-					drawingcanvas.repaint();
+					newcanvas.storeDrawingTriangleElements(triangle);
+					newcanvas.repaint();
 
 				}
 
 				if (rectangleInitiated == true) {
 					selectionInitiated = false;
 					rectangle.addRectangleLastCorner(point);
-					// drawingcanvas.storeDrawingRectangleElements(rectangle);
-					drawingcanvas.repaint();
+					newcanvas.repaint();
 				}
 
 				if (selectionInitiated == true) {
@@ -868,9 +868,9 @@ public class Main extends JFrame implements ActionListener {
 					// Compose Selection Rectangle
 					Rectangle2D selectionRectangle = new Rectangle2D.Double();
 					selectionRectangle.setRect(rectangleStart, rectangleEnd, rectangleWidth, rectangleHeight);
-					((DrawingCanvas) drawingcanvas).defineSelectionRectangle(selectionRectangle);
-					((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
-					drawingcanvas.repaint();
+					newcanvas.defineSelectionRectangle(selectionRectangle);
+					 newcanvas.requestObjectLists(editor);
+					newcanvas.repaint();
 				}
 
 				if (movementInitiated == true && changeInitiated == false) {
@@ -883,8 +883,8 @@ public class Main extends JFrame implements ActionListener {
 								editor.drawingPoints.get(i).x = point.x;
 								editor.drawingPoints.get(i).y = point.y;
 
-								((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
-								drawingcanvas.repaint();
+								newcanvas.requestObjectLists(editor);
+								newcanvas.repaint();
 							}
 						}
 					}
@@ -907,8 +907,8 @@ public class Main extends JFrame implements ActionListener {
 									newPoint.y = editor.drawingLines.get(i).lineElements[0].y - diffY;
 									editor.drawingLines.get(i).addLineEnd(newPoint);
 
-									((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
-									drawingcanvas.repaint();
+									newcanvas.requestObjectLists(editor);
+									newcanvas.repaint();
 								}
 							}
 						}
@@ -930,8 +930,8 @@ public class Main extends JFrame implements ActionListener {
 									newPoint.y = editor.drawingLines.get(i).lineElements[1].y + diffY;
 									editor.drawingLines.get(i).addLineStart(newPoint);
 
-									((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
-									drawingcanvas.repaint();
+									newcanvas.requestObjectLists(editor);
+									newcanvas.repaint();
 								}
 							}
 						}
@@ -965,8 +965,8 @@ public class Main extends JFrame implements ActionListener {
 									editor.drawingTriangles.get(i).addTriangleMid(newPoint1);
 									editor.drawingTriangles.get(i).addTriangleEnd(newPoint2);
 
-									((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
-									drawingcanvas.repaint();
+									newcanvas.requestObjectLists(editor);
+									newcanvas.repaint();
 
 								}
 							}
@@ -998,8 +998,8 @@ public class Main extends JFrame implements ActionListener {
 									editor.drawingTriangles.get(i).addTriangleStart(newPoint1);
 									editor.drawingTriangles.get(i).addTriangleEnd(newPoint2);
 
-									((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
-									drawingcanvas.repaint();
+									newcanvas.requestObjectLists(editor);
+									newcanvas.repaint();
 
 								}
 							}
@@ -1031,8 +1031,8 @@ public class Main extends JFrame implements ActionListener {
 									editor.drawingTriangles.get(i).addTriangleMid(newPoint1);
 									editor.drawingTriangles.get(i).addTriangleStart(newPoint2);
 
-									((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
-									drawingcanvas.repaint();
+									newcanvas.requestObjectLists(editor);
+									newcanvas.repaint();
 
 								}
 							}
@@ -1058,8 +1058,8 @@ public class Main extends JFrame implements ActionListener {
 									newPoint.y = editor.drawingRectangles.get(i).rectangleElements[0].y - diffY1;
 									editor.drawingRectangles.get(i).addRectangleLastCorner(newPoint);
 
-									((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
-									drawingcanvas.repaint();
+									newcanvas.requestObjectLists(editor);
+									newcanvas.repaint();
 								}
 							}
 						}
@@ -1081,8 +1081,8 @@ public class Main extends JFrame implements ActionListener {
 									newPoint.y = editor.drawingRectangles.get(i).rectangleElements[1].y - diffY1;
 									editor.drawingRectangles.get(i).addRetangleFirstCorner(newPoint);
 
-									((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
-									drawingcanvas.repaint();
+									newcanvas.requestObjectLists(editor);
+									newcanvas.repaint();
 								}
 							}
 						}
@@ -1099,8 +1099,8 @@ public class Main extends JFrame implements ActionListener {
 							if (ShapesId == matchIdentifier) {
 								editor.drawingPoints.get(i).x = point.x;
 								editor.drawingPoints.get(i).y = point.y;
-								((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
-								drawingcanvas.repaint();
+								newcanvas.requestObjectLists(editor);
+								newcanvas.repaint();
 							}
 						}
 					}
@@ -1113,8 +1113,8 @@ public class Main extends JFrame implements ActionListener {
 
 								if (ShapesId == matchIdentifier) {
 									editor.drawingLines.get(i).addLineStart(point);
-									((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
-									drawingcanvas.repaint();
+									newcanvas.requestObjectLists(editor);
+									newcanvas.repaint();
 								}
 							}
 						}
@@ -1126,8 +1126,8 @@ public class Main extends JFrame implements ActionListener {
 
 								if (ShapesId == matchIdentifier) {
 									editor.drawingLines.get(i).addLineEnd(point);
-									((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
-									drawingcanvas.repaint();
+									newcanvas.requestObjectLists(editor);
+									newcanvas.repaint();
 								}
 							}
 						}
@@ -1141,8 +1141,8 @@ public class Main extends JFrame implements ActionListener {
 
 								if (ShapesId == matchIdentifier) {
 									editor.drawingTriangles.get(i).addTriangleStart(point);
-									((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
-									drawingcanvas.repaint();
+									 newcanvas.requestObjectLists(editor);
+									newcanvas.repaint();
 
 								}
 							}
@@ -1156,8 +1156,8 @@ public class Main extends JFrame implements ActionListener {
 								if (ShapesId == matchIdentifier) {
 									editor.drawingTriangles.get(i).addTriangleMid(point);
 
-									((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
-									drawingcanvas.repaint();
+									 newcanvas.requestObjectLists(editor);
+									newcanvas.repaint();
 
 								}
 							}
@@ -1169,8 +1169,8 @@ public class Main extends JFrame implements ActionListener {
 								int matchIdentifier = editor.drawingTriangles.get(i).ShapesId;
 								if (ShapesId == matchIdentifier) {
 									editor.drawingTriangles.get(i).addTriangleEnd(point);
-									((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
-									drawingcanvas.repaint();
+									 newcanvas.requestObjectLists(editor);
+									newcanvas.repaint();
 
 								}
 							}
@@ -1184,8 +1184,8 @@ public class Main extends JFrame implements ActionListener {
 								int matchIdentifier = editor.drawingRectangles.get(i).ShapesId;
 								if (ShapesId == matchIdentifier) {
 									editor.drawingRectangles.get(i).addRetangleFirstCorner(point);
-									((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
-									drawingcanvas.repaint();
+									 newcanvas.requestObjectLists(editor);
+									newcanvas.repaint();
 								}
 							}
 						}
@@ -1196,8 +1196,8 @@ public class Main extends JFrame implements ActionListener {
 								int matchIdentifier = editor.drawingRectangles.get(i).ShapesId;
 								if (ShapesId == matchIdentifier) {
 									editor.drawingRectangles.get(i).addRectangleLastCorner(point);
-									((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
-									drawingcanvas.repaint();
+									 newcanvas.requestObjectLists(editor);
+									newcanvas.repaint();
 								}
 							}
 						}
@@ -1207,27 +1207,37 @@ public class Main extends JFrame implements ActionListener {
 		});
 	}
 
-	// replaces editor with the contents of the neweditor
+
+	/**
+	 * Assigns new content to editor
+	 *@param neweditor 
+	 *@author T Galaso 
+	 */
 	public void overwriteObjects(EditorTools neweditor) {
 		this.editor = neweditor;
-		((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
-		drawingcanvas.repaint();
+		 newcanvas.requestObjectLists(editor);
+		 newcanvas.repaint();
 	}
-	
+/**
+ * Sets attributes for database user interface
+ * @author T Galaso
+ */
 	public void dbUI() {
-	databaseUI = new DBUI();
-	databaseUI.setTitle("DB Interface");
-	databaseUI.setLocationRelativeTo(null);
-	databaseUI.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-	databaseUI.setVisible(true);
-  }
+		databaseUI = new DBUI();
+		databaseUI.setTitle("DB Interface");
+		databaseUI.setLocationRelativeTo(null);
+		databaseUI.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		databaseUI.setVisible(true);
+	}
 
-	// sets 'drawingpanel' as ContentPane
-	// sets the layout for the frame
+	/**
+	 * Sets frame layout
+	 * @author T Galaso
+	 */
 	public void setLayout() {
 
 		// Set ContentPane
-		setContentPane(drawingcanvas);
+		setContentPane(newcanvas);
 
 		// Status Bar
 		menubar.add(Box.createHorizontalGlue());
@@ -1240,22 +1250,21 @@ public class Main extends JFrame implements ActionListener {
 		// Frame layout
 		setTitle("CAD APP");
 		setVisible(true);
-		drawingcanvas.add(toolbar);
+		newcanvas.add(toolbar);
 		toolbar.setFloatable(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(640, 480);
 		setLocationRelativeTo(null);
 	}
-	
 
 	// ----------------------------------------
 	// MAIN METHOD
 	// ----------------------------------------
 	public static void main(String[] args) {
 
-		frame = new Main();
-		frame.setLayout();
-		
+		maineditor = new Main();
+		maineditor.setLayout();
+
 	}
 
 	@Override
@@ -1299,6 +1308,15 @@ public class Main extends JFrame implements ActionListener {
 				trackedMode.setText(drawMode + "    |    ");
 			}
 
+		} else if (eTarget.equals(obj5)) {
+			if (!drawMode.equals("PolygonMode")) {
+				drawMode = "PolygonMode";
+				trackedMode.setText(drawMode + "    |    ");
+			} else {
+				drawMode = "default";
+				trackedMode.setText(drawMode + "    |    ");
+			}
+
 		} else if (eTarget.equals(selectElements)) {
 			if (!drawMode.equals("SelectMode")) {
 				drawMode = "SelectMode";
@@ -1310,24 +1328,15 @@ public class Main extends JFrame implements ActionListener {
 		} else if (eTarget.equals(deleteElements)) {
 			editor.deleteAffectedObjects();
 			editor.clearCurrentSelection();
-			((DrawingCanvas) drawingcanvas).defineSelectionRectangle(null);
-			((DrawingCanvas) drawingcanvas).requestObjectLists(editor);
-			drawingcanvas.repaint();
+			 newcanvas.defineSelectionRectangle(null);
+			 newcanvas.requestObjectLists(editor);
+			newcanvas.repaint();
 
 		}
 
 		else if (eTarget.equals(shiftElements)) {
 			if (!drawMode.equals("ShiftMode")) {
 				drawMode = "ShiftMode";
-				trackedMode.setText(drawMode + "    |    ");
-			} else {
-				drawMode = "default";
-				trackedMode.setText(drawMode + "    |    ");
-			}
-
-		} else if (eTarget.equals(rotateElements)) {
-			if (!drawMode.equals("RotateMode")) {
-				drawMode = "RotateMode";
 				trackedMode.setText(drawMode + "    |    ");
 			} else {
 				drawMode = "default";
@@ -1346,7 +1355,7 @@ public class Main extends JFrame implements ActionListener {
 		} else if (eTarget.equals(csvexport)) {
 			try {
 				GUICSV.saveFileChooserDialog();
-				GUICSV.saveObjectsToCSV();
+				GUICSV.exportAsCsv();
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -1356,5 +1365,6 @@ public class Main extends JFrame implements ActionListener {
 		}
 
 	}
+
 
 }

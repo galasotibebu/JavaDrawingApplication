@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 
 /**
+ * Contains ArrayLists for storing new geometries and selected geometries. Also has methods for adding,
+ * selecting and deleting geometries.
  * 
  * 
  * It inherits from the JPanel class
@@ -18,17 +20,15 @@ public class EditorTools extends JPanel {
 	// Declaration of ArrayLists to store new created Features
 	// ---------------------------------------------------
 
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	// ArrayList of new created objects. The arrayList can grow when a new point is
 	// created and
 	// shrink when a point is deleted
-	public ArrayList<PointFeature> drawingPoints = new ArrayList<>();//see line 34 below & line 195 of class Main.
+	public ArrayList<PointFeature> drawingPoints = new ArrayList<>();
 	public ArrayList<LineFeature> drawingLines = new ArrayList<>();
-	public ArrayList<RectangleFeature> drawingRectangles = new ArrayList<>();
 	public ArrayList<TriangleFeature> drawingTriangles = new ArrayList<>();
+	public ArrayList<RectangleFeature> drawingRectangles = new ArrayList<>();
 
 	// -------------------------------------------------------------------
 	// Declaration of ArrayLists to store Corresponding Selected Features
@@ -39,11 +39,9 @@ public class EditorTools extends JPanel {
 	public ArrayList<LineFeature> selectedLines = new ArrayList<>();
 	public ArrayList<TriangleFeature> selectedTriangles = new ArrayList<>();
 	public ArrayList<RectangleFeature> selectedRectangles = new ArrayList<>();
+	
 
-	// --------------------------------------------------------------------
-	// Declaration of new method which adds any object to its corresponding ArrayList(drawingPoints, drawingLines...)
-	// Creates new features and put them inside declared ArrayList
-	// (drawing..something..)-----stored in memory--------
+
 	
 	/**Adds a point feature to ArrayList of points
 	 * 
@@ -81,10 +79,7 @@ public class EditorTools extends JPanel {
 		drawingRectangles.add(rectangle);
 	}
 
-	// --------------------------------------------------------------------
-	// PREPARES FOR MODIFICATION -
-	// Choose features that lies inside 'Selecting Rectangle', and put them inside
-	// a declared empty ArrayList(selected..something..) for corresponding features
+
 	
 	/**
 	 * Selects features that lie within the selection Rectangle. Selected features are added to an empty array list
@@ -154,10 +149,7 @@ public class EditorTools extends JPanel {
 		selectedRectangles = new ArrayList<>();
 	}
 
-	// --------------------------------------------------------------------
-	// PERFORMS DELETION ACTION BY CALLING DELETERS-
-	// Deletes Features whose id's are the same as currently selected
-	// Features------------------------------------------------------------
+
 	
 	/**
 	 * Iterates through the array lists of all graphical feature types. If the unique ID of the selected features

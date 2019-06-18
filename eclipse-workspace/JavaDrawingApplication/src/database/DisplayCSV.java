@@ -1,6 +1,6 @@
 package database;
 
-import static javapackage.Main.frame;
+import static javapackage.Main.maineditor;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -13,7 +13,10 @@ import javapackage.LineFeature;
 import javapackage.PointFeature;
 import javapackage.RectangleFeature;
 import javapackage.TriangleFeature;
-
+/**
+ * Reads CSV contents
+ * @author 
+ */
 public class DisplayCSV {
 
 	String filePath;
@@ -24,7 +27,7 @@ public class DisplayCSV {
 
 	public DisplayCSV(String filePath) {
 		this.filePath = filePath;
-		DisplayCSV.editor = frame.editor;
+		DisplayCSV.editor = maineditor.editor;
 	}
 
 	public EditorTools displayObjects() throws FileNotFoundException, IOException {

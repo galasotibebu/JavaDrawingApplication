@@ -1,15 +1,17 @@
 package database;
 
 import javapackage.EditorTools;
+
 import javapackage.PointFeature;
 import javapackage.LineFeature;
 import javapackage.TriangleFeature;
 import javapackage.RectangleFeature;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
+import java.sql.*;
+/**
+ * Declaration of variables
+ * @author gykr1011
+ *
+ */
 public class DatabaseLogin {
 	
 	public String DBMS;
@@ -17,16 +19,15 @@ public class DatabaseLogin {
 	public String dbHost;
 	public String dbPort;
 	public String dbUser;
-	public String dbPassword;
-	public String tableName;	
+	public String dbPassword;	
 	
 	int countIdentifier = 0;
 	
 	/**
-	 * Making connection with database based on database user and password and database port 
+	 * Connect the java application with the MySQL database by giving database port user and password and database name 
 	 * @return
 	 * @throws SQLException
-	 * @author ghsa1011
+	 * @author amse1013
 	 */
 	public Connection accessorConnection() throws SQLException {
 		String connection =  "jdbc:" + DBMS +"://" + dbHost + ":" + dbPort + "/" +	dbName + "?autoReconnect=true&useSSL=false&serverTimezone=UTC";
@@ -37,11 +38,14 @@ public class DatabaseLogin {
 		return dbmsConnection;
 	}
 	
+	
+	
+	
 	/**
-	 * Inserting objects in to the toolobjects_db with information of object type and object geometry 
+	 * Inserting objects in to the cadfeatures_db with information of object type and object geometry 
 	 * @param objectmanager
 	 * @throws SQLException
-	 * @author ghsa1011
+	 * @author amse1013
 	 */
 	public void insertObjects(EditorTools editor) throws SQLException {
 		Connection connection = accessorConnection();
@@ -52,7 +56,7 @@ public class DatabaseLogin {
 		for (PointFeature point : editor.drawingPoints) {
 			objectType = point.getObjectType();
 			objectGeometry = point.getGeometryAsText();
-			PreparedStatement insertPointFeature = connection.prepareStatement("INSERT INTO toolobjects_db"+
+			PreparedStatement insertPointFeature = connection.prepareStatement("INSERT INTO cadfeatures_db"+
 					"(type, geom) VALUES('" + objectType + "','" + objectGeometry + "')");
 			insertPointFeature.executeUpdate();
 		}
@@ -60,7 +64,7 @@ public class DatabaseLogin {
 		for (LineFeature line : editor.drawingLines) {
 			objectType = line.getObjectType();
 			objectGeometry = line.getGeometryAsText();
-			PreparedStatement insertToolLine = connection.prepareStatement("INSERT INTO toolobjects_db"+
+			PreparedStatement insertToolLine = connection.prepareStatement("INSERT INTO cadfeatures_db"+
 					"(type, geom) VALUES('" + objectType + "','" + objectGeometry + "')");
 			insertToolLine.executeUpdate();
 		}
@@ -68,7 +72,7 @@ public class DatabaseLogin {
 		for (TriangleFeature triangle : editor.drawingTriangles) {
 			objectType = triangle.getObjectType();
 			objectGeometry = triangle.getGeometryAsText();
-			PreparedStatement insertToolTriangle = connection.prepareStatement("INSERT INTO toolobjects_db"+
+			PreparedStatement insertToolTriangle = connection.prepareStatement("INSERT INTO cadfeatures_db"+
 					"(type, geom) VALUES('" + objectType + "','" + objectGeometry + "')");
 			insertToolTriangle.executeUpdate();
 		}
@@ -76,17 +80,17 @@ public class DatabaseLogin {
 		for (RectangleFeature rectangle : editor.drawingRectangles) {
 			objectType = rectangle.getObjectType();
 			objectGeometry = rectangle.getGeometryAsText();
-			PreparedStatement insertToolRectangle = connection.prepareStatement("INSERT INTO toolobjects_db"+
+			PreparedStatement insertToolRectangle = connection.prepareStatement("INSERT INTO cadfeatures_db"+
 					"(type, geom) VALUES('" + objectType + "','" + objectGeometry + "')");
 			insertToolRectangle.executeUpdate();
 		}
 	}
 	
 	/**
-	 * Extract objects from toolobjects_db based on object type and object geometry and overwite to the old objects if they exist 
+	 * Extract objects from cadfeatures_db based on object type and object geometry and overwite to the old objects if they exist 
 	 * @return
 	 * @throws SQLException
-	 * @author ghsa1011
+	 * @author amse1013
 	 */
 	public EditorTools extractObjects() throws SQLException {
 		EditorTools new_editor = new EditorTools();
@@ -95,7 +99,7 @@ public class DatabaseLogin {
 		java.sql.ResultSet resultSet;
 		PreparedStatement displayObjects;
 		
-		displayObjects = connection.prepareStatement("SELECT * FROM toolobjects_db");
+		displayObjects = connection.prepareStatement("SELECT * FROM cadfeatures_db");
 		resultSet = displayObjects.executeQuery();
 		
 		while (resultSet.next()) {
@@ -146,21 +150,7 @@ public class DatabaseLogin {
 			}
 			
 		}
-		/*
-		if (new_editor.managedToolLines.size() >=2) {
-			System.out.println(new_editor.managedToolLines.size());
-			new_editor.managedToolLines.remove(new_editor.managedToolLines.size()-1);
-		}
-		
-		if (new_editor.managedToolTriangles.size() >=2) {
-			new_editor.managedToolTriangles.remove(new_editor.managedToolTriangles.size()-1);
-		}
-		
-		if (new_editor.managedToolRectangles.size() >=2) {
-			new_editor.managedToolRectangles.remove(new_editor.managedToolRectangles.size()-1);
-		}	
-		*/
-		
+
 		countIdentifier = 0;
 		
 		resultSet.close();

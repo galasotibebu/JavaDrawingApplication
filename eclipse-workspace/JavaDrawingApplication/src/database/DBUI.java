@@ -1,7 +1,7 @@
 package database;
 
 import database.DatabaseLogin;
-import static javapackage.Main.frame;
+import static javapackage.Main.maineditor;
 import javapackage.EditorTools;
 
 import java.awt.*;
@@ -15,7 +15,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-
+/**
+ * Declaration of the user interface's elements
+ * @author gykr1011
+ */
 @SuppressWarnings("serial")
 public class DBUI extends JFrame implements ActionListener{
 	
@@ -51,13 +54,16 @@ public class DBUI extends JFrame implements ActionListener{
 	JButton save;
 	
 	JLabel empty3;
-	JButton importer;
+	JButton importdb;
 	
 	public DBUI() {
-		this.editor = frame.editor;
+		this.editor = maineditor.editor;
 		setLayout();
 	}
-
+	/**
+	 * Constructor for the user interface
+	 * includes labels, text fields and buttons
+	 */
 	private void setLayout() {
 		
 		GridLayout layout = new GridLayout(10,2);
@@ -97,7 +103,7 @@ public class DBUI extends JFrame implements ActionListener{
 		
 		tabLab = new JLabel ("Table Name: ");
 		add(tabLab);
-		tabField = new JTextField("cadproject", 20);
+		tabField = new JTextField("cadfeatures_db", 20);
 		tabField.setEditable(false);
 		add(tabField);
 		
@@ -113,18 +119,23 @@ public class DBUI extends JFrame implements ActionListener{
 		
 		empty3 = new JLabel(" ");
 		add(empty3);
-		importer = new JButton("Import from Database");
-		add(importer);
+		importdb = new JButton("Import from Database");
+		add(importdb);
 		
 		connector.addActionListener(this);
 		save.addActionListener(this);
-		importer.addActionListener(this);
+		importdb.addActionListener(this);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
 		
 	}
-
+	/**
+	 * Adds functions to the buttons
+	 * 1st case: database connection
+	 * 2nd case: save
+	 * 3rd case: overwrite
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object eTarget = e.getSource();
@@ -137,10 +148,10 @@ public class DBUI extends JFrame implements ActionListener{
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
-		} else if (eTarget.equals(importer)) {
+		} else if (eTarget.equals(importdb)) {
 			try {
 				neweditor = dblogin.extractObjects();
-				frame.overwriteObjects(neweditor);
+				maineditor.overwriteObjects(neweditor);
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
@@ -148,7 +159,10 @@ public class DBUI extends JFrame implements ActionListener{
 		}
 		
 	}
-
+	/**
+	 * Indicator whether the connection works or not
+	 * Updates one of the labels
+	 */
 	public void connectDatabase() {
 		try {
 			getConnection();
@@ -162,7 +176,10 @@ public class DBUI extends JFrame implements ActionListener{
 			e.printStackTrace();
 		}
 	}
-	
+	/**
+	 * Connects to the database based on the given parameters in the GUI
+	 * @throws SQLException
+	 */
 	public Connection getConnection() throws SQLException {
 		dblogin = new DatabaseLogin();
 		dblogin.DBMS = (String) dbmanaField.getText();
@@ -170,7 +187,7 @@ public class DBUI extends JFrame implements ActionListener{
 		dblogin.dbHost = (String) hostField.getText();
 		dblogin.dbPort = (String) portField.getText();
 		dblogin.dbUser = (String) userField.getText();
-		//dblogin.dbPassword = (String) passField.getText();
+		dblogin.dbPassword=String.valueOf(passField.getPassword());
 
 		
 		return dblogin.accessorConnection();
@@ -186,19 +203,17 @@ public class DBUI extends JFrame implements ActionListener{
 		createTable();
 		deleteEntries();
 		dblogin.insertObjects(neweditor);
-		JOptionPane.showMessageDialog(null, "Saved to cadproject in " + dbName);
+		JOptionPane.showMessageDialog(null, "Saved to cadfeatures_db in " + dbName);
 	}
 	
 	/**
-	 * Creates a table 'toolobject_db' in the database if this table doesn't already exist
-	 * [Added in the course of the Module Integration Test]
+	 * Creates a table called "cadfeatures_db" in the database if this table doesn't exist yet
 	 * @throws SQLException
-	 * @author 
 	 */
 	public void createTable() throws SQLException {
 		Connection connection = getConnection();
 		PreparedStatement createTable = connection.prepareStatement("CREATE TABLE IF NOT EXISTS "+
-				"cadproject (gid int NOT NULL AUTO_INCREMENT, "
+				"cadfeatures_db (gid int NOT NULL AUTO_INCREMENT, "
 					+ "type varchar(10), "
 					+ "geom longtext, "
 					+ "PRIMARY KEY(gid))");
@@ -206,13 +221,12 @@ public class DBUI extends JFrame implements ActionListener{
 	}
 	
 	/**
-	 * Delete Entries and truncate toolobjects_db database 
+	 * Delete Entries and truncate "cadfeatures_db" table 
 	 * @throws SQLException
-	 * @author ghsa1011
 	 */
 	public void deleteEntries() throws SQLException {
 		Connection connection = getConnection();
-		PreparedStatement truncateDatabase = connection.prepareStatement("TRUNCATE cadproject");
+		PreparedStatement truncateDatabase = connection.prepareStatement("TRUNCATE cadfeatures_db");
 		truncateDatabase.executeUpdate();
 	}
 }

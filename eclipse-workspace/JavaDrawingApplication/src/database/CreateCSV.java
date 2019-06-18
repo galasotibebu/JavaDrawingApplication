@@ -7,93 +7,109 @@ import javapackage.LineFeature;
 import javapackage.TriangleFeature;
 import javapackage.RectangleFeature;
 
-import static javapackage.Main.frame;
+import static javapackage.Main.maineditor;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Formatter;
-
+/**
+ * Declaration of variables, methods for creating and opening csv
+ * @author gykr1011
+ */
 public class CreateCSV {
 
+	
+	String type;
+	String coords;
+	String location;
+	Formatter formatFile;
+	FileWriter writeCsv;
+	
+	
+	
 	public GUICSV csvInterface;
 	public static EditorTools editor;
+	
 
-	Formatter fileFormatter;
-
-	FileWriter csvWriter;
-
-	String objectType;
-
-	String objectGeometry;
-
-	String filePath;
+	
 
 	public CreateCSV() {
-		CreateCSV.editor = frame.editor;
+		CreateCSV.editor = maineditor.editor;
 	}
-
+	/**
+	 * Method for opening .csv files
+	 * @author gykr1011
+	 */
 	public void openFile() {
 		try {
-			filePath = GUICSV.getFilePath();
-			fileFormatter = new Formatter(filePath);
+			location = GUICSV.getFilePath();
+			formatFile = new Formatter(location);
 		} catch (FileNotFoundException e) {
 
-			System.out.println("Error occured while saving");
+			System.out.println("File couldn`t be saved");
 		}
 	}
-
+	/**
+	 * Method for closing .csv file
+	 * @author gykr1011
+	 */
 	public void closeFile() {
-		fileFormatter.close();
+		formatFile.close();
 	}
-
-	public boolean fillFile(String filePath) {
+	/**
+	 * Method for updating file with information about the different geometries
+	 * @param location
+	 * @return true
+	 * @author gykr1011
+	 */
+	public boolean addFeatures(String location) {
 		try {
-			csvWriter = new FileWriter(new File(filePath));
-			csvWriter.write("object_type;object_geometry" + "\n");
+			writeCsv = new FileWriter(new File(location));
+			writeCsv.write("FeatureType;Geometry" + "\n");
 
 			editor.drawingPoints.forEach((PointFeature point) -> {
-				objectType = point.getObjectType();
-				objectGeometry = point.getGeometryAsText();
+				type = point.getObjectType();
+				coords = point.getGeometryAsText();
 				try {
-					csvWriter.write(objectType + ";" + objectGeometry + "\n");
+					writeCsv.write(type + ";" + coords + "\n");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			});
 
 			editor.drawingLines.forEach((LineFeature line) -> {
-				objectType = line.getObjectType();
-				objectGeometry = line.getGeometryAsText();
+				type = line.getObjectType();
+				coords = line.getGeometryAsText();
 				try {
-					csvWriter.write(objectType + ";" + objectGeometry + "\n");
+					writeCsv.write(type + ";" + coords + "\n");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			});
 
 			editor.drawingTriangles.forEach((TriangleFeature triangle) -> {
-				objectType = triangle.getObjectType();
-				objectGeometry = triangle.getGeometryAsText();
+				type = triangle.getObjectType();
+				coords = triangle.getGeometryAsText();
 				try {
-					csvWriter.write(objectType + ";" + objectGeometry + "\n");
+					writeCsv.write(type + ";" + coords + "\n");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			});
 
 			editor.drawingRectangles.forEach((RectangleFeature rectangle) -> {
-				objectType = rectangle.getObjectType();
-				objectGeometry = rectangle.getGeometryAsText();
+				type = rectangle.getObjectType();
+				coords = rectangle.getGeometryAsText();
 				try {
-					csvWriter.write(objectType + ";" + objectGeometry + "\n");
+					writeCsv.write(type + ";" + coords + "\n");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			});
 
-			csvWriter.close();
+			writeCsv.close();
 
 		} catch (IOException e) {
 			e.printStackTrace();

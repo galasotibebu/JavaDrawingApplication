@@ -81,13 +81,6 @@ public class RectangleFeature extends ShapesParent {
 
 		return Rectangle;
 	}
-	
-	
-
-
-	// Returns the coordinates of the RectangleFeature object as a String
-	
-	
 	/**
 	 * The method returns the coordinates of two corners of the rectangle as a string
 	 * 

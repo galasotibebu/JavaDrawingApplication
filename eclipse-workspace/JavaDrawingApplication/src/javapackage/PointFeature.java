@@ -3,9 +3,7 @@ package javapackage;
 import java.awt.Color;
 import java.awt.geom.Ellipse2D;
 
-// stores point coordinates and provides methods for
-// creating drawable point geometries 
-// ShapesParent
+// stores point coordinates and provides methods for creates drawable point geometries 
 
 /**
  * This class is the base for drawing point geometries on the canvas.
@@ -71,6 +69,14 @@ public class PointFeature extends ShapesParent {
 		this.x = x;
 		this.y = y;
 		return true;
+	}
+	
+	public double getXcoor() {
+		return this.x;
+	}
+	
+	public double getYcoor() {
+		return this.y;
 	}
 
 

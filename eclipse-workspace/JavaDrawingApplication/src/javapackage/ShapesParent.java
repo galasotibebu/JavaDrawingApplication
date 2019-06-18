@@ -2,6 +2,7 @@ package javapackage;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import static javapackage.Main.maineditor;
 
 
 /**
@@ -12,7 +13,7 @@ import java.util.Collections;
 public class ShapesParent {
 
 	// A unique ID of geometry objects // while shapes are created in panel
-	public int ShapesId = setShapesId(Main.frame.editor);
+	public int ShapesId = setShapesId(maineditor.editor);
 
 	// Geometry type
 	public String objectType;
@@ -84,6 +85,8 @@ public class ShapesParent {
 		for (RectangleFeature rectangle : editor.drawingRectangles) {
 			ShapesIdList.add(rectangle.getShapesId());
 		}
+		
+		
 
 		for (PointFeature point : editor.selectedPoints) {
 			ShapesIdList.add(point.getShapesId());
@@ -97,6 +100,7 @@ public class ShapesParent {
 		for (RectangleFeature rectangle : editor.selectedRectangles) {
 			ShapesIdList.add(rectangle.getShapesId());
 		}
+		
 
 		if (ShapesIdList.isEmpty()) {
 			latestShapesId = 0;

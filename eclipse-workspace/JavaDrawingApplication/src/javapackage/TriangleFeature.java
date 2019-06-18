@@ -7,7 +7,7 @@ import java.awt.geom.Path2D;
  * It contains methods for creating a triangle feature based on coordinates of rectangle 
  * corners. It inherits from the ShapesParent class
  * 
- * @author T Galaso
+ * @author A Mashoko
  * 
  */
 
@@ -18,7 +18,7 @@ public class TriangleFeature extends ShapesParent {
 
 	/**
 	 * The purpose of the constructor is to define the geometry type, which is Triangle
-	 * @author T Galaso
+	 * @author A Mashoko
 	 */
 	public TriangleFeature() {
 		super("Triangle");
@@ -30,7 +30,7 @@ public class TriangleFeature extends ShapesParent {
 	 * and appends it to an array of point coordinates.
 	 * 
 	 * @param The first triangle corner as a point
-	 * @author T Galaso
+	 * @author A Mashoko
 	 * 
 	 */
 	public void addTriangleStart(PointFeature point) {
@@ -42,7 +42,7 @@ public class TriangleFeature extends ShapesParent {
 	 * and appends it to an array of point coordinates.
 	 * 
 	 * @param The second triangle corner as a point
-	 * @author T Galaso
+	 * @author A Mashoko
 	 * 
 	 */
 	public void addTriangleMid(PointFeature point) {
@@ -53,7 +53,7 @@ public class TriangleFeature extends ShapesParent {
 	 * and appends it to an array of point coordinates.
 	 * 
 	 * @param The third triangle corner as a point
-	 * @author T Galaso
+	 * @author A Mashoko
 	 * 
 	 */
 	public void addTriangleEnd(PointFeature point) {
@@ -65,7 +65,7 @@ public class TriangleFeature extends ShapesParent {
 	/**
 	 * The method creates a Triangle feature that is drawn to the canvas
 	 * @return pathTriangle outline of the newly created rectangle
-	 * @author T Galaso
+	 * @author A Mashoko
 	 * 
 	 */
 	public Path2D createTriangleFeature() {
@@ -82,7 +82,7 @@ public class TriangleFeature extends ShapesParent {
 	 * The method returns the coordinates of the three corners of the Triangle as a string
 	 * 
 	 * @return textGeometry corners coordinates as text
-	 * @authorT Galaso
+	 * @authorA Mashoko
 	 */
 	public String getGeometryAsText() {
 		String textGeometry = String.valueOf(this.triangleElements[0].x) + " "
@@ -98,7 +98,7 @@ public class TriangleFeature extends ShapesParent {
 	 * The method gets the coordinates of corners of a triangle
 	 * @param csvGeometry coordinates of triangle corners as a string in csv
 	 * @return true if coordinates were extracted from csv successfully
-	 * @author T Galaso
+	 * @author A Mashoko
 	 * 
 	 * 
 	 */
