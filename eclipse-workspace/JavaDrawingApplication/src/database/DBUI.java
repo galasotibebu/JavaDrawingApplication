@@ -1,7 +1,7 @@
 package database;
 
 import database.DatabaseLogin;
-import static javapackage.Main.frame;
+import static javapackage.Main.maineditor;
 import javapackage.EditorTools;
 
 import java.awt.*;
@@ -54,7 +54,7 @@ public class DBUI extends JFrame implements ActionListener{
 	JButton importdb;
 	
 	public DBUI() {
-		this.editor = frame.editor;
+		this.editor = maineditor.editor;
 		setLayout();
 	}
 
@@ -140,7 +140,7 @@ public class DBUI extends JFrame implements ActionListener{
 		} else if (eTarget.equals(importdb)) {
 			try {
 				neweditor = dblogin.extractObjects();
-				frame.overwriteObjects(neweditor);
+				maineditor.overwriteObjects(neweditor);
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
@@ -170,7 +170,7 @@ public class DBUI extends JFrame implements ActionListener{
 		dblogin.dbHost = (String) hostField.getText();
 		dblogin.dbPort = (String) portField.getText();
 		dblogin.dbUser = (String) userField.getText();
-		dblogin.dbPassword = (String) passField.getText();
+		dblogin.dbPassword = null;//(String) passField.getText();
 
 		
 		return dblogin.accessorConnection();

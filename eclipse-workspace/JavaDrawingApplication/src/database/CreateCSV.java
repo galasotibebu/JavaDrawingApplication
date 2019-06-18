@@ -7,7 +7,7 @@ import javapackage.LineFeature;
 import javapackage.TriangleFeature;
 import javapackage.RectangleFeature;
 
-import static javapackage.Main.frame;
+import static javapackage.Main.maineditor;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -31,7 +31,7 @@ public class CreateCSV {
 	String filePath;
 
 	public CreateCSV() {
-		CreateCSV.editor = frame.editor;
+		CreateCSV.editor = maineditor.editor;
 	}
 
 	public void openFile() {

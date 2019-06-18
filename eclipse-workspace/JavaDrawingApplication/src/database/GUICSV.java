@@ -1,6 +1,6 @@
 package database;
 
-import static javapackage.Main.frame;
+import static javapackage.Main.maineditor;
 
 import java.io.File;
 
@@ -80,7 +80,7 @@ public class GUICSV {
 	public static void displayObjectFromCSV() throws Exception {
 		DisplayCSV displayCSV = new DisplayCSV(filePath);
 		neweditor = displayCSV.displayObjects();
-		frame.overwriteObjects(neweditor);
+		maineditor.overwriteObjects(neweditor);
 	}
 
 	public static String getFilePath() {

@@ -1,6 +1,13 @@
 package javapackage;
 import java.awt.geom.Rectangle2D;
-
+/**
+ * This class is the base for drawing rectangles  on the canvas.
+ * It contains methods for creating a rectangle feature based on coordinates of rectangle 
+ * corners. It inherits from the ShapesParent class
+ * 
+ * @author A Mashoko
+ * 
+ */
 
 public class RectangleFeature extends ShapesParent {
 
@@ -8,21 +15,47 @@ public class RectangleFeature extends ShapesParent {
 
 	public PointFeature[] rectangleElements = new PointFeature[2];
 
-	// The constructor defines the rectangle geometry
-	// inherits ShapesParent
+	
+	/**
+	 * The purpose of the constructor is to define the geometry type, which is Rectangle
+	 * @author A Mashoko
+	 */
 	public RectangleFeature() {
 		super("Rectangle");
 	}
 
+	/**
+	 * sets the first specified corner as an element of the rectangleElements array
+	 * which is used to draw the Rectangle
+	 * 
+	 * @param point The first rectangle corner as a point
+	 * @author A Mashoko
+	 * 
+	 */
 	public void addRetangleFirstCorner(PointFeature point) {
 		rectangleElements[0] = point;
 	}
-
+	/**
+	 * sets the second specified corner as an element of the rectangleElements array
+	 * which is used to draw the Rectangle
+	 * 
+	 * @param point The second rectangle corner as a point
+	 * @author A Mashoko
+	 * 
+	 */
 	public void addRectangleLastCorner(PointFeature point) {
 		rectangleElements[1] = point;
 	}
 
 	// Creates a rectangle object with the points of the RectangleFeature object
+	
+	
+    /**
+     * creates a rectangle feature using coordinates of specified rectangle corner coordinates
+     * 
+     * @return Rectangle the rectangle feature drawn on the canvas
+     * @author  A Mashoko
+     */
 	public Rectangle2D createRectangleFeature() {
 		Rectangle2D Rectangle = new Rectangle2D.Double();
 
@@ -49,8 +82,35 @@ public class RectangleFeature extends ShapesParent {
 		return Rectangle;
 	}
 	
+<<<<<<< .mine
+
+=======
+	
+>>>>>>> .theirs
+
+<<<<<<< .mine
+	// Returns the coordinates of the RectangleFeature object as a String
+
+
+
+
+
+
+
+
+
+=======
 
 	// Returns the coordinates of the RectangleFeature object as a String
+	
+	
+	/**
+	 * The method returns the coordinates of two corners of the rectangle as a string
+	 * 
+	 * @return textGeometry corners coordinates as text
+	 * @author A Mashoko
+	 */
+>>>>>>> .theirs
 	public String getGeometryAsText() {
 		String textGeometry = String.valueOf(this.rectangleElements[0].x) + " "
 				+ String.valueOf(this.rectangleElements[0].y) + " " + String.valueOf(this.rectangleElements[1].x) + " "
@@ -58,7 +118,19 @@ public class RectangleFeature extends ShapesParent {
 		return textGeometry;
 	}
 
-	// Sets the Rectangle from a String (from csv file)
+
+	
+	
+	
+	/**
+	 * The method gets the coordinates of corners of a rectangle from a CSV
+	 * 
+	 * @param csvGeometry coordinates of rectangle corners as a string in csv
+	 * @return true if coordinates were extracted from csv successfully
+	 * @author A Mashoko
+	 * 
+	 * 
+	 */
 	public boolean setGeometryFromCSV(String csvGeometry) {
 		try {
 			String[] coordinates = csvGeometry.split(" ");

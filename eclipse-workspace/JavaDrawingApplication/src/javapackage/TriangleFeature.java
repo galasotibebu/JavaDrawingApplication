@@ -2,35 +2,72 @@ package javapackage;
 
 import java.awt.geom.Path2D;
 
+/**
+ * This class is the base for drawing triangles  on the canvas.
+ * It contains methods for creating a triangle feature based on coordinates of rectangle 
+ * corners. It inherits from the ShapesParent class
+ * 
+ * @author T Galaso
+ * 
+ */
+
 public class TriangleFeature extends ShapesParent {
 
 	// Stores the the vertexes of TriangleFeature object
 	public PointFeature[] triangleElements = new PointFeature[3];
 
-	// Defines type of geometry
+	/**
+	 * The purpose of the constructor is to define the geometry type, which is Triangle
+	 * @author T Galaso
+	 */
 	public TriangleFeature() {
 		super("Triangle");
 	}
 
-	// Adds the first point of the triangle to the List of triangle elements
-	// as first entry	 
+ 
+	/**
+	 * This methods captures the coordinates of the first corner that defines a triangle
+	 * and appends it to an array of point coordinates.
+	 * 
+	 * @param The first triangle corner as a point
+	 * @author T Galaso
+	 * 
+	 */
 	public void addTriangleStart(PointFeature point) {
 		triangleElements[0] = point;
 	}
 
-	// Adds the second point of the triangle to List of triangle elements
-	// as first entry
+	/**
+	 * This methods captures the coordinates of the second corner that defines a triangle
+	 * and appends it to an array of point coordinates.
+	 * 
+	 * @param The second triangle corner as a point
+	 * @author T Galaso
+	 * 
+	 */
 	public void addTriangleMid(PointFeature point) {
 		triangleElements[1] = point;
 	}
-
-	// Adds the last point of the triangle to the List of
-	 // triangle elements as first entry
+	/**
+	 * Captures the coordinates of the third corner that defines a triangle
+	 * and appends it to an array of point coordinates.
+	 * 
+	 * @param The third triangle corner as a point
+	 * @author T Galaso
+	 * 
+	 */
 	public void addTriangleEnd(PointFeature point) {
 		triangleElements[2] = point;
 	}
 
-	// Creates a drawable Path2D object with the points of the TriangleFeature
+
+	
+	/**
+	 * The method creates a Triangle feature that is drawn to the canvas
+	 * @return pathTriangle outline of the newly created rectangle
+	 * @author T Galaso
+	 * 
+	 */
 	public Path2D createTriangleFeature() {
 		Path2D pathTriangle = new Path2D.Double();
 		pathTriangle.moveTo((int) this.triangleElements[0].x, (int) this.triangleElements[0].y);
@@ -40,7 +77,13 @@ public class TriangleFeature extends ShapesParent {
 		return pathTriangle;
 	}
 
-	// Returns the coordinates of the TriangleFeature object as a String
+
+	/**
+	 * The method returns the coordinates of the three corners of the Triangle as a string
+	 * 
+	 * @return textGeometry corners coordinates as text
+	 * @authorT Galaso
+	 */
 	public String getGeometryAsText() {
 		String textGeometry = String.valueOf(this.triangleElements[0].x) + " "
 				+ String.valueOf(this.triangleElements[0].y) + " " + String.valueOf(this.triangleElements[1].x) + " "
@@ -50,7 +93,15 @@ public class TriangleFeature extends ShapesParent {
 		return textGeometry;
 	}
 
-	// Sets the Triangle from '.csv'
+
+	/**
+	 * The method gets the coordinates of corners of a triangle
+	 * @param csvGeometry coordinates of triangle corners as a string in csv
+	 * @return true if coordinates were extracted from csv successfully
+	 * @author T Galaso
+	 * 
+	 * 
+	 */
 	public boolean setGeometryFromCSV(String csvGeometry) {
 		try {
 			String[] coordinates = csvGeometry.split(" ");

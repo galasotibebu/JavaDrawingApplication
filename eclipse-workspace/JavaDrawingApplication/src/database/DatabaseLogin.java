@@ -1,14 +1,12 @@
 package database;
 
 import javapackage.EditorTools;
+
 import javapackage.PointFeature;
 import javapackage.LineFeature;
 import javapackage.TriangleFeature;
 import javapackage.RectangleFeature;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class DatabaseLogin {
 	
@@ -37,8 +35,11 @@ public class DatabaseLogin {
 		return dbmsConnection;
 	}
 	
+	
+	
+	
 	/**
-	 * Inserting objects in to the toolobjects_db with information of object type and object geometry 
+	 * Inserting objects in to the objects_db with information of object type and object geometry 
 	 * @param objectmanager
 	 * @throws SQLException
 	 * @author ghsa1011
@@ -52,7 +53,7 @@ public class DatabaseLogin {
 		for (PointFeature point : editor.drawingPoints) {
 			objectType = point.getObjectType();
 			objectGeometry = point.getGeometryAsText();
-			PreparedStatement insertPointFeature = connection.prepareStatement("INSERT INTO toolobjects_db"+
+			PreparedStatement insertPointFeature = connection.prepareStatement("INSERT INTO objects_db"+
 					"(type, geom) VALUES('" + objectType + "','" + objectGeometry + "')");
 			insertPointFeature.executeUpdate();
 		}
@@ -60,7 +61,7 @@ public class DatabaseLogin {
 		for (LineFeature line : editor.drawingLines) {
 			objectType = line.getObjectType();
 			objectGeometry = line.getGeometryAsText();
-			PreparedStatement insertToolLine = connection.prepareStatement("INSERT INTO toolobjects_db"+
+			PreparedStatement insertToolLine = connection.prepareStatement("INSERT INTO objects_db"+
 					"(type, geom) VALUES('" + objectType + "','" + objectGeometry + "')");
 			insertToolLine.executeUpdate();
 		}
@@ -68,7 +69,7 @@ public class DatabaseLogin {
 		for (TriangleFeature triangle : editor.drawingTriangles) {
 			objectType = triangle.getObjectType();
 			objectGeometry = triangle.getGeometryAsText();
-			PreparedStatement insertToolTriangle = connection.prepareStatement("INSERT INTO toolobjects_db"+
+			PreparedStatement insertToolTriangle = connection.prepareStatement("INSERT INTO objects_db"+
 					"(type, geom) VALUES('" + objectType + "','" + objectGeometry + "')");
 			insertToolTriangle.executeUpdate();
 		}
@@ -76,14 +77,14 @@ public class DatabaseLogin {
 		for (RectangleFeature rectangle : editor.drawingRectangles) {
 			objectType = rectangle.getObjectType();
 			objectGeometry = rectangle.getGeometryAsText();
-			PreparedStatement insertToolRectangle = connection.prepareStatement("INSERT INTO toolobjects_db"+
+			PreparedStatement insertToolRectangle = connection.prepareStatement("INSERT INTO objects_db"+
 					"(type, geom) VALUES('" + objectType + "','" + objectGeometry + "')");
 			insertToolRectangle.executeUpdate();
 		}
 	}
 	
 	/**
-	 * Extract objects from toolobjects_db based on object type and object geometry and overwite to the old objects if they exist 
+	 * Extract objects from objects_db based on object type and object geometry and overwite to the old objects if they exist 
 	 * @return
 	 * @throws SQLException
 	 * @author ghsa1011
@@ -95,7 +96,7 @@ public class DatabaseLogin {
 		java.sql.ResultSet resultSet;
 		PreparedStatement displayObjects;
 		
-		displayObjects = connection.prepareStatement("SELECT * FROM toolobjects_db");
+		displayObjects = connection.prepareStatement("SELECT * FROM objects_db");
 		resultSet = displayObjects.executeQuery();
 		
 		while (resultSet.next()) {
