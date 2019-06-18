@@ -5,7 +5,12 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
-//import javapackage.RectangleFeature.MoveFeature.MovingAdapter;
+/**
+ * 
+ * 
+ * It inherits from the JPanel class
+ * @author T Galaso
+ */
 
 public class EditorTools extends JPanel {
 
@@ -39,21 +44,39 @@ public class EditorTools extends JPanel {
 	// Declaration of new method which adds any object to its corresponding ArrayList(drawingPoints, drawingLines...)
 	// Creates new features and put them inside declared ArrayList
 	// (drawing..something..)-----stored in memory--------
+	
+	/**Adds a point feature to ArrayList of points
+	 * 
+	 * @param point feature to be added to ArrayList
+	 * @Author T Galaso
+	 */
 	public void addPoints(PointFeature point) {
 		drawingPoints.add(point);
 	}
 
-	// Adds a LineFeature at the end of the corresponding ArrayList
+	/**Adds a line feature to ArrayList of lines
+	 * 
+	 * @param line feature to be added to ArrayList
+	 * @Author T Galaso
+	 */
 	public void addLines(LineFeature line) {
 		drawingLines.add(line);
 	}
 
-	// Adds a TriangleFeature at the end of the corresponding ArrayList
+	/**Adds a triangle feature to ArrayList of triangles
+	 * 
+	 * @param triangle
+	 * @Author T Galaso
+	 */
 	public void addTriangles(TriangleFeature triangle) {
 		drawingTriangles.add(triangle);
 	}
 
-	// Adds a RectangleFeature at the end of the corresponding ArrayList
+	/**Adds a Rectangle feature to ArrayList of rectangles
+	 * 
+	 * @param point
+	 * @Author T Galaso
+	 */
 	public void addRectangles(RectangleFeature rectangle) {
 		drawingRectangles.add(rectangle);
 	}
@@ -62,6 +85,13 @@ public class EditorTools extends JPanel {
 	// PREPARES FOR MODIFICATION -
 	// Choose features that lies inside 'Selecting Rectangle', and put them inside
 	// a declared empty ArrayList(selected..something..) for corresponding features
+	
+	/**
+	 * Selects features that lie within the selection Rectangle. Selected features are added to an empty array list
+	 * that corresponds to their geometry type
+	 * @param selectionRectangles
+	 * @author T Galaso
+	 */
 	public void selectAffectedObjects(Rectangle2D selectionRectangles) {//new object called selectionRectangles created here for the first time
 
 		for (PointFeature point : drawingPoints) {
@@ -110,10 +140,13 @@ public class EditorTools extends JPanel {
 		}
 	}
 
-	// --------------------------------------------------------------------
-	// CANCEL PREPARATIONS FOR MODIFICATION -
-	// Clears Current Selected Features
-	// releases the memory-------------------------------------------------
+
+	
+	/**
+	 *Sets empty arrays that will store selected features
+	 * 
+	 * @author T Galaso
+	 */
 	public void clearCurrentSelection() {
 		selectedPoints = new ArrayList<>();
 		selectedLines = new ArrayList<>();
@@ -125,6 +158,14 @@ public class EditorTools extends JPanel {
 	// PERFORMS DELETION ACTION BY CALLING DELETERS-
 	// Deletes Features whose id's are the same as currently selected
 	// Features------------------------------------------------------------
+	
+	/**
+	 * Iterates through the array lists of all graphical feature types. If the unique ID of the selected features
+	 * matches the unique ID of the features on the canvas, those features are deleted. The deleting is done by calling
+	 * the defined delete methods
+	 * 
+	 * @author T Galaso
+	 */
 	public void deleteAffectedObjects() {
 
 		for (PointFeature point : selectedPoints) {
@@ -152,6 +193,15 @@ public class EditorTools extends JPanel {
 	// --------------------------------------------------------------------
 	// Declaration of Deletion Methods that will be implemented for all Features
 	// ------------------------------------------------------------
+	
+	/**
+	 * 
+	 * Deletes all points that lie within selection rectangle
+	 * 
+	 * @param identifier unique ID for points
+	 * @author T Galaso
+	 * 
+	 */
 	private void deletePoint(int identifier) {
 		// loop through every point of Points
 		for (int i = 0; i < drawingPoints.size(); i++) {
@@ -166,7 +216,14 @@ public class EditorTools extends JPanel {
 			}
 		}
 	}
-
+	/**
+	 * 
+	 * Deletes all lines that lie within selection rectangle
+	 * 
+	 * @param identifier unique ID for lines
+	 * @author T Galaso
+	 * 
+	 */
 	private void deleteLine(int identifier) {
 		// loop through every line of drawLine
 		for (int i = 0; i < drawingLines.size(); i++) {
@@ -179,7 +236,14 @@ public class EditorTools extends JPanel {
 			}
 		}
 	}
-
+	/**
+	 * 
+	 * Deletes all triangles that lie within selection rectangle
+	 * 
+	 * @param identifier unique ID for triangles
+	 * @author T Galaso
+	 * 
+	 */
 	private void deleteTriangle(int identifier) {
 		// loop through every triangle of drawtriangle
 		for (int i = 0; i < drawingTriangles.size(); i++) {
@@ -192,7 +256,14 @@ public class EditorTools extends JPanel {
 			}
 		}
 	}
-
+	/**
+	 * 
+	 * Deletes all rectangles that lie within selection rectangle
+	 * 
+	 * @param identifier unique ID for rectangles
+	 * @author T Galaso
+	 * 
+	 */
 	private void deleteRectangle(int identifier) {
 		// loop through every Rectangles
 		for (int i = 0; i < drawingRectangles.size(); i++) {
@@ -211,6 +282,13 @@ public class EditorTools extends JPanel {
 	
 	// -----Move Features whose id's are the same as currently selected
 	// Features--------------------------
+	
+	
+	/**
+	 * Moves features that are currently selected by calling the moveRectangle method
+	 * @author T Galaso
+	 * 
+	 */
 	public void moveAffectedObjects() {
 
 		for (RectangleFeature rectangle : selectedRectangles) {
@@ -232,7 +310,6 @@ public class EditorTools extends JPanel {
 			if (rectangleIdentifier == identifier) {
 				
 				
-//				drawingRectangles.move(i);
 			}
 		}
 	}

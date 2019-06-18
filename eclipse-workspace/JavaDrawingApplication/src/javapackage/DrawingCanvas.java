@@ -8,12 +8,11 @@ import java.awt.geom.*;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 
-// Drawing canvas class requests ArrayLists with geometry objects from an
-// EditorTools class and displays them.
 
 /**
- * This class stores the  graphic objects in their respective arrays.
- * It also contains arrays for painting,selecting and deleting graphical objects from the canvas.
+ * Drawing canvas class requests ArrayLists with geometry objects from the
+ * EditorTools class and displays them.
+ * It also contains methods for painting,selecting and deleting graphical objects on the canvas.
  * It inherits from JPanel class
  * @author T Galaso
  */
@@ -95,8 +94,10 @@ public class DrawingCanvas extends JPanel {
 	// Replaces the current contents of the ArrayLists in the DrawingCanvas with the
 	// contents of the corresponding ArrayLists in the EditorTools class
 	/**
-	 * 
-	 * 
+	 * Assigns graphical objects drawn in EditorTools class to Array Lists in
+	 * the Drawing canvas class.
+	 * @param editor
+	 * @Author T Galaso
 	 * 
 	 */
 	public void requestObjectLists(EditorTools editor) {
@@ -112,25 +113,43 @@ public class DrawingCanvas extends JPanel {
 		selectedRectangleLists = editor.selectedRectangles;
 	}
 	// --------------------------------------------------------------------
-	// NEW FEATURE CREATER IN ACTUAL DWRAWING-CANVAS CLASS
+	// NEW FEATURE CREATER IN ACTUAL DRAWING-CANVAS CLASS
 	// --------------------------------------------------------------------
 
-	// Appends new PointFeature to corresponding Arraylist
+
+	
+	/**
+	 * 	Appends new PointFeature to the ArrayList of new Points
+	 * @param point 
+	 * @author T Galaso
+	 */
 	public void storeDrawingPointElements(PointFeature point) {
 		Point_drawing.add(point);
 	}
 
-	// Appends new LineFeature to corresponding Arraylist
+	/**
+	 * 	Appends new LineFeature to the ArrayList of new Lines
+	 * @param line 
+	 * @author T Galaso
+	 */
 	public void storeDrawingLineElements(LineFeature line) {
 		Line_drawing.add(line);
 	}
-
-	// Appends new TriangleFeature to corresponding Arraylist
+	
+	/**
+	 * 	Appends new TriangleFeature to the ArrayList of new Triangles
+	 * @param triangle
+	 * @author T Galaso
+	 */
 	public void storeDrawingTriangleElements(TriangleFeature triangle) {
 		Triangle_drawing.add(triangle);
 	}
 
-	// Appends new RectangleFeature to corresponding Arraylist
+	/**
+	 * Appends new RectangleFeature to the ArrayList of new Rectangles
+	 * @param rectangle 
+	 * @author T Galaso
+	 */
 	public void storeDrawingRectangleElements(RectangleFeature rectangle) {
 		Rectangle_drawing.add(rectangle);
 	}
@@ -140,6 +159,12 @@ public class DrawingCanvas extends JPanel {
 	// --------------------------------------------------------------------
 
 	// Clears all ArrayLists for live-displaying objects when drawn
+	
+	/**
+	 * Deletes all the elements of the ArrayLists that contain all the graphical features
+	 * @Author T Galaso
+	 * 
+	 */
 	public void clearDrawingElements() {
 		Point_drawing.clear();
 		Line_drawing.clear();
@@ -150,7 +175,12 @@ public class DrawingCanvas extends JPanel {
 	// --------------------------------------------------------------------
 	// DO DRAWING IN CANVAS FOR NEW FEATURES & SELECTION BOX
 	// --------------------------------------------------------------------
-
+	/**
+	 * Draws features on the canvas and also draws the selection box
+	 * @param g the graphic object to be drawn
+	 * @Author T. Galaso
+	 * 
+	 */
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);

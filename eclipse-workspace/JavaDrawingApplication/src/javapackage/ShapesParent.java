@@ -64,7 +64,7 @@ public class ShapesParent {
 	 * The method adds the ShapesId for each each feature to an array 
 	 * 
 	 * @param editor 
-	 * @author A Mashoko
+	 * @author T Galaso
 	 * @return The next shapesID
 	 * 
 	 */
