@@ -23,8 +23,7 @@ public class EditorTools extends JPanel {
 	public ArrayList<PointFeature> drawingPoints = new ArrayList<>();//see line 34 below & line 195 of class Main.
 	public ArrayList<LineFeature> drawingLines = new ArrayList<>();
 	public ArrayList<TriangleFeature> drawingTriangles = new ArrayList<>();
-	public ArrayList<RectangleFeature> drawingRectangles = new ArrayList<>();	
-	public ArrayList<PolygonFeature> drawingPolygons = new ArrayList<>();
+	public ArrayList<RectangleFeature> drawingRectangles = new ArrayList<>();
 
 	// -------------------------------------------------------------------
 	// Declaration of ArrayLists to store Corresponding Selected Features
@@ -35,7 +34,6 @@ public class EditorTools extends JPanel {
 	public ArrayList<LineFeature> selectedLines = new ArrayList<>();
 	public ArrayList<TriangleFeature> selectedTriangles = new ArrayList<>();
 	public ArrayList<RectangleFeature> selectedRectangles = new ArrayList<>();
-	public ArrayList<PolygonFeature> selectedPolygons = new ArrayList<>();
 	
 
 	// --------------------------------------------------------------------
@@ -60,11 +58,6 @@ public class EditorTools extends JPanel {
 	public void addRectangles(RectangleFeature rectangle) {
 		drawingRectangles.add(rectangle);
 	}
-	
-	// Adds a PolygonFeature at the end of the corresponding ArrayList
-		public void addPolygons(PolygonFeature polygon) {
-			drawingPolygons.add(polygon);
-		}
 
 	// --------------------------------------------------------------------
 	// PREPARES FOR MODIFICATION -
@@ -116,17 +109,6 @@ public class EditorTools extends JPanel {
 				selectedRectangles.add(rectangle);
 			}
 		}
-		
-		for (PolygonFeature polygon : drawingPolygons) {
-			Path2D rectangleObj = polygon.createPolygonFeature();
-			Rectangle2D queryRect = rectangleObj.getBounds2D();
-
-			// if selection_rectangle contains the object then add this object so the
-			// selected Rectangles
-			if (selectionRectangles.contains(queryRect) == true) {
-				selectedPolygons.add(polygon);
-			}
-		}
 	}
 
 	// --------------------------------------------------------------------
@@ -138,7 +120,6 @@ public class EditorTools extends JPanel {
 		selectedLines = new ArrayList<>();
 		selectedTriangles = new ArrayList<>();
 		selectedRectangles = new ArrayList<>();
-		selectedPolygons = new ArrayList<>();
 	}
 
 	// --------------------------------------------------------------------
@@ -165,11 +146,6 @@ public class EditorTools extends JPanel {
 		for (RectangleFeature rectangle : selectedRectangles) {
 			int identifier = rectangle.getShapesId();
 			deleteRectangle(identifier);
-		}
-		
-		for (PolygonFeature rectangle : selectedPolygons) {
-			int identifier = rectangle.getShapesId();
-			deletePolygon(identifier);
 		}
 	}
 	
@@ -226,19 +202,6 @@ public class EditorTools extends JPanel {
 			// if identifier from selected Rectangle and from Rectangles match
 			// then delete this rectangle
 			if (triangleIdentifier == identifier) {
-				drawingRectangles.remove(i);
-			}
-		}
-	}
-
-	private void deletePolygon(int identifier) {
-		// loop through every Rectangles
-		for (int i = 0; i < drawingPolygons.size(); i++) {
-			PolygonFeature polygon = drawingPolygons.get(i);
-			int polygonIdentifier = polygon.getShapesId();
-			// if identifier from selected Rectangle and from Rectangles match
-			// then delete this rectangle
-			if (polygonIdentifier == identifier) {
 				drawingRectangles.remove(i);
 			}
 		}

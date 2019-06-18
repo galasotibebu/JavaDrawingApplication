@@ -15,10 +15,13 @@ import javax.swing.*;
 @SuppressWarnings("serial")
 public class Main extends JFrame implements ActionListener {
 
-	// GraphicalUser Interface between user and software
+	/**
+	 * Main as (GraphicalUser)Interface between user and software
+	 * (invoked in main method)
+	 */
 	public static Main maineditor;
 	
-	//
+	
 	public DrawingCanvas newcanvas;
 
 	// Editor for storing and editing geometries
@@ -55,8 +58,6 @@ public class Main extends JFrame implements ActionListener {
 	JButton selectElements;
 	JButton deleteElements;
 	JButton shiftElements;
-	JButton rotateElements;
-	JButton saveElements;
 
 	// Mouse Tracking Variables Done
 	JLabel trackedCoord;
@@ -115,7 +116,6 @@ public class Main extends JFrame implements ActionListener {
 	LineFeature line;
 	TriangleFeature triangle;
 	RectangleFeature rectangle;
-	PolygonFeature polygon;
 
 	public Main() {
 
@@ -159,22 +159,18 @@ public class Main extends JFrame implements ActionListener {
 		menubar.add(help);
 
 		toolbar.add(selectElements);
-		toolbar.add(rotateElements);
 		toolbar.add(shiftElements);
 		toolbar.add(deleteElements);
-		toolbar.add(saveElements);
 
 		// Buttons add ActionListeners
 		selectElements.addActionListener(this);
 		deleteElements.addActionListener(this);
 		shiftElements.addActionListener(this);
-		rotateElements.addActionListener(this);
 		// ActionListener for MenuItems
 		obj1.addActionListener(this);
 		obj2.addActionListener(this);
 		obj3.addActionListener(this);
 		obj4.addActionListener(this);
-		obj5.addActionListener(this);
 
 		csvimport.addActionListener(this);
 		csvexport.addActionListener(this);
@@ -248,11 +244,6 @@ public class Main extends JFrame implements ActionListener {
 						triangleInitiated2 = false;
 						break;
 					}
-				case "PolygonMode":// DRAW RECTANGLE
-					System.out.println("POLYGON ONCE CLICKED");
-					polygon = new PolygonFeature();
-					polygon.addPolygonP1(point);
-					break;
 
 				case "RectangleMode":// DRAW RECTANGLE
 					if (rectangleInitiated == false) {
@@ -339,9 +330,7 @@ public class Main extends JFrame implements ActionListener {
 							// Moving Point 1
 							for (PointFeature point : editor.drawingPoints) {
 								if (movingPoint == false) {
-									point1 = new Point2D.Double(point.x, point.y);// here creates new point called
-																					// 'point1' from existing
-																					// pointfeature
+									point1 = new Point2D.Double(point.x, point.y);// here creates new point called 'point1' from existing pointfeature
 
 									if (selectionRectangle.contains(point1) && movingPoint == false) {// then if
 																										// selection box

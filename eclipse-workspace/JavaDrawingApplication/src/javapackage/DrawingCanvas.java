@@ -34,8 +34,6 @@ public class DrawingCanvas extends JPanel {
 	// ArrayList of RectangleFeature objects to be drawn
 	private ArrayList<RectangleFeature> RectangleLists = new ArrayList<>();
 
-	private ArrayList<PolygonFeature> PolygonLists = new ArrayList<>();
-
 	// ------------Currently Selected--------------------------------------
 
 	// ArrayList of PointFeature objects that are currently selected
@@ -49,9 +47,6 @@ public class DrawingCanvas extends JPanel {
 
 	// ArrayList of RectangleFeature objects that are currently selected
 	private ArrayList<RectangleFeature> selectedRectangleLists = new ArrayList<>();
-
-	// ArrayList of RectangleFeature objects that are currently selected
-	private ArrayList<PolygonFeature> selectedPolygonLists = new ArrayList<>();
 	// ---------------------------------------------------------------------------
 
 	// -------------Altered Features-----------------------------------------------
@@ -71,8 +66,6 @@ public class DrawingCanvas extends JPanel {
 	// ArrayList to store different states of RectangleFeature objects that is
 	// altered by tools
 	private ArrayList<RectangleFeature> Rectangle_drawing = new ArrayList<>();
-
-	private ArrayList<PolygonFeature> Polygon_drawing = new ArrayList<>();
 
 	// --------------------------------------------------------------------
 	// SELECTOR -
@@ -112,13 +105,11 @@ public class DrawingCanvas extends JPanel {
 		LineLists = editor.drawingLines;
 		TriangleLists = editor.drawingTriangles;
 		RectangleLists = editor.drawingRectangles;
-		PolygonLists = editor.drawingPolygons;
 		// Selection Objects
 		selectedPointLists = editor.selectedPoints;
 		selectedLineLists = editor.selectedLines;
 		selectedTriangleLists = editor.selectedTriangles;
 		selectedRectangleLists = editor.selectedRectangles;
-		selectedPolygonLists = editor.selectedPolygons;
 	}
 	// --------------------------------------------------------------------
 	// NEW FEATURE CREATER IN ACTUAL DWRAWING-CANVAS CLASS
@@ -144,11 +135,6 @@ public class DrawingCanvas extends JPanel {
 		Rectangle_drawing.add(rectangle);
 	}
 
-	// Appends new RectangleFeature to corresponding Arraylist
-	public void storeDrawingPolygonElements(PolygonFeature polygon) {
-		Polygon_drawing.add(polygon);
-	}
-
 	// --------------------------------------------------------------------
 	// i will come later here
 	// --------------------------------------------------------------------
@@ -159,7 +145,6 @@ public class DrawingCanvas extends JPanel {
 		Line_drawing.clear();
 		Triangle_drawing.clear();
 		Rectangle_drawing.clear();
-		Polygon_drawing.clear();
 	}
 
 	// --------------------------------------------------------------------
@@ -212,13 +197,6 @@ public class DrawingCanvas extends JPanel {
 			g2d.setPaint(drawingColor);
 		}
 
-		// Draw Rectangles
-		for (PolygonFeature polygon : PolygonLists) {
-			Path2D ply = polygon.createPolygonFeature();
-			g2d.draw(ply);
-			g2d.setPaint(drawingColor);
-		}
-
 		// --------------------------------------------------------
 		// Draw Selection Box
 		// --------------------------------------------------------
@@ -255,12 +233,6 @@ public class DrawingCanvas extends JPanel {
 			g2d.setPaint(selectionColor);
 		}
 
-		for (PolygonFeature polygon : selectedPolygonLists) {
-			Path2D pls = polygon.createPolygonFeature();
-			g2d.draw(pls);
-			g2d.setPaint(selectionColor);
-		}
-
 		// ------------------------------------------------------------------
 		// Displays states of objects modified
 		// -------------------------------------------------------------------
@@ -283,12 +255,6 @@ public class DrawingCanvas extends JPanel {
 		for (RectangleFeature drawRectangle : Rectangle_drawing) {
 			Rectangle2D rcts = drawRectangle.createRectangleFeature();
 			g2d.draw(rcts);
-		}
-
-		for (PolygonFeature drawPolygon : Polygon_drawing) {
-			Path2D pls = drawPolygon.createPolygonFeature();
-			g2d.draw(pls);
-
 		}
 
 	}

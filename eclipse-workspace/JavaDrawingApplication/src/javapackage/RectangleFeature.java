@@ -81,36 +81,12 @@ public class RectangleFeature extends ShapesParent {
 
 		return Rectangle;
 	}
-	
-<<<<<<< .mine
-
-=======
-	
->>>>>>> .theirs
-
-<<<<<<< .mine
-	// Returns the coordinates of the RectangleFeature object as a String
-
-
-
-
-
-
-
-
-
-=======
-
-	// Returns the coordinates of the RectangleFeature object as a String
-	
-	
 	/**
 	 * The method returns the coordinates of two corners of the rectangle as a string
 	 * 
 	 * @return textGeometry corners coordinates as text
 	 * @author A Mashoko
 	 */
->>>>>>> .theirs
 	public String getGeometryAsText() {
 		String textGeometry = String.valueOf(this.rectangleElements[0].x) + " "
 				+ String.valueOf(this.rectangleElements[0].y) + " " + String.valueOf(this.rectangleElements[1].x) + " "

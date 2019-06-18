@@ -85,9 +85,6 @@ public class ShapesParent {
 		for (RectangleFeature rectangle : editor.drawingRectangles) {
 			ShapesIdList.add(rectangle.getShapesId());
 		}
-		for (PolygonFeature polygon : editor.drawingPolygons) {
-			ShapesIdList.add(polygon.getShapesId());
-		}
 		
 		
 
@@ -102,9 +99,6 @@ public class ShapesParent {
 		}
 		for (RectangleFeature rectangle : editor.selectedRectangles) {
 			ShapesIdList.add(rectangle.getShapesId());
-		}
-		for (PolygonFeature polygon : editor.selectedPolygons) {
-			ShapesIdList.add(polygon.getShapesId());
 		}
 		
 
