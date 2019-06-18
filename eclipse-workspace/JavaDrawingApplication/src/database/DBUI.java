@@ -15,7 +15,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-
+/**
+ * Declaration of the user interface's elements
+ * @author gykr1011
+ */
 @SuppressWarnings("serial")
 public class DBUI extends JFrame implements ActionListener{
 	
@@ -57,7 +60,10 @@ public class DBUI extends JFrame implements ActionListener{
 		this.editor = maineditor.editor;
 		setLayout();
 	}
-
+	/**
+	 * Constructor for the user interface
+	 * includes labels, text fields and buttons
+	 */
 	private void setLayout() {
 		
 		GridLayout layout = new GridLayout(10,2);
@@ -124,7 +130,12 @@ public class DBUI extends JFrame implements ActionListener{
 		setResizable(false);
 		
 	}
-
+	/**
+	 * Adds functions to the buttons
+	 * 1st case: database connection
+	 * 2nd case: save
+	 * 3rd case: overwrite
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object eTarget = e.getSource();
@@ -148,7 +159,10 @@ public class DBUI extends JFrame implements ActionListener{
 		}
 		
 	}
-
+	/**
+	 * Indicator whether the connection works or not
+	 * Updates one of the labels
+	 */
 	public void connectDatabase() {
 		try {
 			getConnection();
@@ -162,7 +176,10 @@ public class DBUI extends JFrame implements ActionListener{
 			e.printStackTrace();
 		}
 	}
-	
+	/**
+	 * Connects to the database based on the given parameters in the GUI
+	 * @throws SQLException
+	 */
 	public Connection getConnection() throws SQLException {
 		dblogin = new DatabaseLogin();
 		dblogin.DBMS = (String) dbmanaField.getText();
@@ -190,10 +207,8 @@ public class DBUI extends JFrame implements ActionListener{
 	}
 	
 	/**
-	 * Creates a table 'toolobject_db' in the database if this table doesn't already exist
-	 * [Added in the course of the Module Integration Test]
+	 * Creates a table called "cadfeatures_db" in the database if this table doesn't exist yet
 	 * @throws SQLException
-	 * @author 
 	 */
 	public void createTable() throws SQLException {
 		Connection connection = getConnection();
@@ -206,7 +221,7 @@ public class DBUI extends JFrame implements ActionListener{
 	}
 	
 	/**
-	 * Delete Entries and truncate cadfeatures_db database 
+	 * Delete Entries and truncate "cadfeatures_db" table 
 	 * @throws SQLException
 	 */
 	public void deleteEntries() throws SQLException {

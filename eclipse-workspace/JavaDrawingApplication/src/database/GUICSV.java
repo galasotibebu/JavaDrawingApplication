@@ -13,9 +13,6 @@ public class GUICSV {
 
 	public static EditorTools itemeditor;
 
-//	JButton save;
-//	JButton open;
-
 	static EditorTools neweditor;
 
 	static String filePath;
@@ -52,6 +49,10 @@ public class GUICSV {
 	}
 
 // For selecting directory for saving csv 
+	/**
+	 * Defining the directory for the .csv
+	 * @throws Exception
+	 */
 	public static void saveFileChooserDialog() throws Exception {
 		JFileChooser jfilechooser = new JFileChooser();
 		int filechoose = jfilechooser.showSaveDialog(null);
@@ -68,7 +69,10 @@ public class GUICSV {
 			fileName = f.getName();
 		}
 	}
-
+	/**
+	 * Creation of .csv file
+	 * @throws Exception
+	 */
 	public static void saveObjectsToCSV() throws Exception {
 		CreateCSV createFile = new CreateCSV();
 		createFile.openFile();
@@ -76,7 +80,10 @@ public class GUICSV {
 		createFile.closeFile();
 
 	}
-
+	/**
+	 * Opening and displaying .csv
+	 * @throws Exception
+	 */
 	public static void displayObjectFromCSV() throws Exception {
 		DisplayCSV displayCSV = new DisplayCSV(filePath);
 		neweditor = displayCSV.displayObjects();

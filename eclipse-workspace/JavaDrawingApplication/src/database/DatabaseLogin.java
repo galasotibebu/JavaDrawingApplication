@@ -7,7 +7,11 @@ import javapackage.LineFeature;
 import javapackage.TriangleFeature;
 import javapackage.RectangleFeature;
 import java.sql.*;
-
+/**
+ * Declaration of variables
+ * @author gykr1011
+ *
+ */
 public class DatabaseLogin {
 	
 	public String DBMS;
@@ -41,7 +45,7 @@ public class DatabaseLogin {
 	 * Inserting objects in to the cadfeatures_db with information of object type and object geometry 
 	 * @param objectmanager
 	 * @throws SQLException
-	 * @author ghsa1011
+	 * @author amse1013
 	 */
 	public void insertObjects(EditorTools editor) throws SQLException {
 		Connection connection = accessorConnection();
@@ -86,7 +90,7 @@ public class DatabaseLogin {
 	 * Extract objects from cadfeatures_db based on object type and object geometry and overwite to the old objects if they exist 
 	 * @return
 	 * @throws SQLException
-	 * @author
+	 * @author amse1013
 	 */
 	public EditorTools extractObjects() throws SQLException {
 		EditorTools new_editor = new EditorTools();

@@ -14,7 +14,10 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Formatter;
-
+/**
+ * Declaration of variables
+ * @author gykr1011
+ */
 public class CreateCSV {
 
 	public GUICSV csvInterface;
@@ -33,7 +36,9 @@ public class CreateCSV {
 	public CreateCSV() {
 		CreateCSV.editor = maineditor.editor;
 	}
-
+	/**
+	 * Method for opening .csv files
+	 */
 	public void openFile() {
 		try {
 			filePath = GUICSV.getFilePath();
@@ -43,11 +48,17 @@ public class CreateCSV {
 			System.out.println("Error occured while saving");
 		}
 	}
-
+	/**
+	 * Method for closing .csv file
+	 */
 	public void closeFile() {
 		fileFormatter.close();
 	}
-
+	/**
+	 * Method for updating file with information about the different geometries
+	 * @param filePath
+	 * @return
+	 */
 	public boolean fillFile(String filePath) {
 		try {
 			csvWriter = new FileWriter(new File(filePath));

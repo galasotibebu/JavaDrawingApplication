@@ -13,7 +13,9 @@ import javapackage.LineFeature;
 import javapackage.PointFeature;
 import javapackage.RectangleFeature;
 import javapackage.TriangleFeature;
-
+/**
+ * Declaration of the variables
+ */
 public class DisplayCSV {
 
 	String filePath;
@@ -26,7 +28,12 @@ public class DisplayCSV {
 		this.filePath = filePath;
 		DisplayCSV.editor = maineditor.editor;
 	}
-
+	/**
+	 * Displaying the .csv file
+	 * @return
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
 	public EditorTools displayObjects() throws FileNotFoundException, IOException {
 		EditorTools editor = new EditorTools();
 
