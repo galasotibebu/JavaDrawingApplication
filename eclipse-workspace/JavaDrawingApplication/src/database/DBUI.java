@@ -97,7 +97,7 @@ public class DBUI extends JFrame implements ActionListener{
 		
 		tabLab = new JLabel ("Table Name: ");
 		add(tabLab);
-		tabField = new JTextField("cadproject", 20);
+		tabField = new JTextField("cadfeatures_db", 20);
 		tabField.setEditable(false);
 		add(tabField);
 		
@@ -186,7 +186,7 @@ public class DBUI extends JFrame implements ActionListener{
 		createTable();
 		deleteEntries();
 		dblogin.insertObjects(neweditor);
-		JOptionPane.showMessageDialog(null, "Saved to cadproject in " + dbName);
+		JOptionPane.showMessageDialog(null, "Saved to cadfeatures_db in " + dbName);
 	}
 	
 	/**
@@ -198,7 +198,7 @@ public class DBUI extends JFrame implements ActionListener{
 	public void createTable() throws SQLException {
 		Connection connection = getConnection();
 		PreparedStatement createTable = connection.prepareStatement("CREATE TABLE IF NOT EXISTS "+
-				"cadproject (gid int NOT NULL AUTO_INCREMENT, "
+				"cadfeatures_db (gid int NOT NULL AUTO_INCREMENT, "
 					+ "type varchar(10), "
 					+ "geom longtext, "
 					+ "PRIMARY KEY(gid))");
@@ -206,12 +206,12 @@ public class DBUI extends JFrame implements ActionListener{
 	}
 	
 	/**
-	 * Delete Entries and truncate toolobjects_db database 
+	 * Delete Entries and truncate cadfeatures_db database 
 	 * @throws SQLException
 	 */
 	public void deleteEntries() throws SQLException {
 		Connection connection = getConnection();
-		PreparedStatement truncateDatabase = connection.prepareStatement("TRUNCATE cadproject");
+		PreparedStatement truncateDatabase = connection.prepareStatement("TRUNCATE cadfeatures_db");
 		truncateDatabase.executeUpdate();
 	}
 }
