@@ -95,9 +95,7 @@ public class DrawingCanvas extends JPanel {
 	// Replaces the current contents of the ArrayLists in the DrawingCanvas with the
 	// contents of the corresponding ArrayLists in the EditorTools class
 	/**
-	 * 
-	 * 
-	 * 
+	 * Declaration of drawing and selection tools
 	 */
 	public void requestObjectLists(EditorTools editor) {
 		// Draw Objects
