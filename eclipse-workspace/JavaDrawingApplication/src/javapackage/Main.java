@@ -17,10 +17,8 @@ public class Main extends JFrame implements ActionListener {
 
 	// GraphicalUser Interface between user and software
 	public static Main maineditor;
-
-	// drawing panel for displaying geometries in the editor object
-	//public JPanel newcanvas;
 	
+	//
 	public DrawingCanvas newcanvas;
 
 	// Editor for storing and editing geometries
@@ -126,45 +124,39 @@ public class Main extends JFrame implements ActionListener {
 		datamenu = new JMenu("File");
 		objmenu = new JMenu("Objects");
 		help = new JMenu("Help");
-		// toolabout = new JMenu("About");
 
 		// MenuItems
 		obj1 = new JMenuItem("Points");
 		obj2 = new JMenuItem("Lines");
 		obj3 = new JMenuItem("Triangles");
 		obj4 = new JMenuItem("Rectangles");
-		obj5 = new JMenuItem("Polygons");
 		csvimport = new JMenuItem("Import");
 		csvexport = new JMenuItem("Export");
 		db = new JMenuItem("Database Manager");
 
-		// ToolBar & its elements
+		// New ToolBar.
 		toolbar = new JToolBar("Editor", JToolBar.HORIZONTAL);
+		//ToolBar elements
 		selectElements = new JButton("Select");
-		rotateElements = new JButton("Rotate");
 		shiftElements = new JButton("Shift");
 		deleteElements = new JButton("Delete");
-		saveElements = new JButton("Save Edits");
 
-		// Add items to main menu
+		// Adds items to main menu.
 		this.setJMenuBar(menubar);
 		datamenu.add(csvimport);
 		datamenu.add(csvexport);
 		datamenu.add(db);
-
+        
+		//Adds items to 'Objects' menu.
 		objmenu.add(obj1);
 		objmenu.add(obj2);
 		objmenu.add(obj3);
 		objmenu.add(obj4);
-		objmenu.add(obj5);
-
+		
+        //Adds three basic menus to main menu.
 		menubar.add(datamenu);
 		menubar.add(objmenu);
 		menubar.add(help);
-		// menubar.add(toolabout);
-
-		// creates object of editor
-	//ditor = new EditorTools();
 
 		toolbar.add(selectElements);
 		toolbar.add(rotateElements);

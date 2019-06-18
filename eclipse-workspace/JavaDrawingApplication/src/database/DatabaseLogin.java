@@ -15,8 +15,7 @@ public class DatabaseLogin {
 	public String dbHost;
 	public String dbPort;
 	public String dbUser;
-	public String dbPassword;
-	public String tableName;	
+	public String dbPassword;	
 	
 	int countIdentifier = 0;
 	
@@ -87,7 +86,7 @@ public class DatabaseLogin {
 	 * Extract objects from objects_db based on object type and object geometry and overwite to the old objects if they exist 
 	 * @return
 	 * @throws SQLException
-	 * @author ghsa1011
+	 * @author
 	 */
 	public EditorTools extractObjects() throws SQLException {
 		EditorTools new_editor = new EditorTools();

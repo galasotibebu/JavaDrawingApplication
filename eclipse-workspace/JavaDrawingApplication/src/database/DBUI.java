@@ -170,7 +170,7 @@ public class DBUI extends JFrame implements ActionListener{
 		dblogin.dbHost = (String) hostField.getText();
 		dblogin.dbPort = (String) portField.getText();
 		dblogin.dbUser = (String) userField.getText();
-		dblogin.dbPassword = null;//(String) passField.getText();
+		dblogin.dbPassword=String.valueOf(passField.getPassword());
 
 		
 		return dblogin.accessorConnection();
@@ -208,7 +208,6 @@ public class DBUI extends JFrame implements ActionListener{
 	/**
 	 * Delete Entries and truncate toolobjects_db database 
 	 * @throws SQLException
-	 * @author ghsa1011
 	 */
 	public void deleteEntries() throws SQLException {
 		Connection connection = getConnection();
