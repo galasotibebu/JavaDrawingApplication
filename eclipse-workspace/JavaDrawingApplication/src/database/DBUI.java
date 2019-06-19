@@ -15,10 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-/**
- * Declaration of the user interface's elements
- * @author gykr1011
- */
+
 @SuppressWarnings("serial")
 public class DBUI extends JFrame implements ActionListener{
 	
@@ -44,9 +41,6 @@ public class DBUI extends JFrame implements ActionListener{
 	JLabel dbnameLab;
 	JTextField dbnameField;
 	
-	JLabel tabLab;
-	JTextField tabField;
-	
 	JLabel empty1;
 	JButton connector;
 	
@@ -60,13 +54,10 @@ public class DBUI extends JFrame implements ActionListener{
 		this.editor = maineditor.editor;
 		setLayout();
 	}
-	/**
-	 * Constructor for the user interface
-	 * includes labels, text fields and buttons
-	 */
+
 	private void setLayout() {
 		
-		GridLayout layout = new GridLayout(10,2);
+		GridLayout layout = new GridLayout(9,2);
 		setLayout(layout);
 		//setLayout(new GridLayout(10,2));
 		setSize(400,300);
@@ -93,19 +84,13 @@ public class DBUI extends JFrame implements ActionListener{
 		
 		passLab = new JLabel("Password: ");
 		add(passLab);
-		passField = new JPasswordField("admin", 20);
+		passField = new JPasswordField("", 20);
 		add(passField);
 		
 		dbnameLab = new JLabel("Database Name: ");
 		add(dbnameLab);
-		dbnameField = new JTextField("objects", 20);
+		dbnameField = new JTextField("cadfeatures_db", 20);
 		add(dbnameField);
-		
-		tabLab = new JLabel ("Table Name: ");
-		add(tabLab);
-		tabField = new JTextField("cadfeatures_db", 20);
-		tabField.setEditable(false);
-		add(tabField);
 		
 		empty1 = new JLabel();
 		add(empty1);
@@ -130,12 +115,7 @@ public class DBUI extends JFrame implements ActionListener{
 		setResizable(false);
 		
 	}
-	/**
-	 * Adds functions to the buttons
-	 * 1st case: database connection
-	 * 2nd case: save
-	 * 3rd case: overwrite
-	 */
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object eTarget = e.getSource();
@@ -159,10 +139,7 @@ public class DBUI extends JFrame implements ActionListener{
 		}
 		
 	}
-	/**
-	 * Indicator whether the connection works or not
-	 * Updates one of the labels
-	 */
+
 	public void connectDatabase() {
 		try {
 			getConnection();
@@ -176,10 +153,7 @@ public class DBUI extends JFrame implements ActionListener{
 			e.printStackTrace();
 		}
 	}
-	/**
-	 * Connects to the database based on the given parameters in the GUI
-	 * @throws SQLException
-	 */
+	
 	public Connection getConnection() throws SQLException {
 		dblogin = new DatabaseLogin();
 		dblogin.DBMS = (String) dbmanaField.getText();
@@ -203,17 +177,19 @@ public class DBUI extends JFrame implements ActionListener{
 		createTable();
 		deleteEntries();
 		dblogin.insertObjects(neweditor);
-		JOptionPane.showMessageDialog(null, "Saved to cadfeatures_db in " + dbName);
+		JOptionPane.showMessageDialog(null, "Saved to geomfeature in " + dbName);
 	}
 	
 	/**
-	 * Creates a table called "cadfeatures_db" in the database if this table doesn't exist yet
+	 * Creates a table 'geomfeature' in the database if this table doesn't already exist
+	 * [Added in the course of the Module Integration Test]
 	 * @throws SQLException
+	 * @author 
 	 */
 	public void createTable() throws SQLException {
 		Connection connection = getConnection();
 		PreparedStatement createTable = connection.prepareStatement("CREATE TABLE IF NOT EXISTS "+
-				"cadfeatures_db (gid int NOT NULL AUTO_INCREMENT, "
+				"geomfeatures (gid int NOT NULL AUTO_INCREMENT, "
 					+ "type varchar(10), "
 					+ "geom longtext, "
 					+ "PRIMARY KEY(gid))");
@@ -221,12 +197,12 @@ public class DBUI extends JFrame implements ActionListener{
 	}
 	
 	/**
-	 * Delete Entries and truncate "cadfeatures_db" table 
+	 * Delete Entries and truncate cadfeatures_db database 
 	 * @throws SQLException
 	 */
 	public void deleteEntries() throws SQLException {
 		Connection connection = getConnection();
-		PreparedStatement truncateDatabase = connection.prepareStatement("TRUNCATE cadfeatures_db");
+		PreparedStatement truncateDatabase = connection.prepareStatement("TRUNCATE geomfeatures");
 		truncateDatabase.executeUpdate();
 	}
 }

@@ -1,3 +1,10 @@
+/**
+	 * This java class handles the database connectivity and importing and extracting of geometric features from and to the database. It uses a prepared statement to query features
+	 * @return
+	 * @throws SQLException
+	 * @author amse1013
+	 */
+
 package database;
 
 import javapackage.EditorTools;
@@ -7,11 +14,7 @@ import javapackage.LineFeature;
 import javapackage.TriangleFeature;
 import javapackage.RectangleFeature;
 import java.sql.*;
-/**
- * Declaration of variables
- * @author gykr1011
- *
- */
+
 public class DatabaseLogin {
 	
 	public String DBMS;
@@ -37,13 +40,10 @@ public class DatabaseLogin {
 		Connection dbmsConnection = DriverManager.getConnection(connection, dbUser,  dbPassword);
 		return dbmsConnection;
 	}
-	
-	
-	
-	
+
 	/**
-	 * Inserting objects in to the cadfeatures_db with information of object type and object geometry 
-	 * @param objectmanager
+	 * Inserting geometric features into the database table name: "geomfeatures" with information of feature/object type and feature/object geometry 
+	 * @param editor
 	 * @throws SQLException
 	 * @author amse1013
 	 */
@@ -56,7 +56,7 @@ public class DatabaseLogin {
 		for (PointFeature point : editor.drawingPoints) {
 			objectType = point.getObjectType();
 			objectGeometry = point.getGeometryAsText();
-			PreparedStatement insertPointFeature = connection.prepareStatement("INSERT INTO cadfeatures_db"+
+			PreparedStatement insertPointFeature = connection.prepareStatement("INSERT INTO geomfeatures"+
 					"(type, geom) VALUES('" + objectType + "','" + objectGeometry + "')");
 			insertPointFeature.executeUpdate();
 		}
@@ -64,7 +64,7 @@ public class DatabaseLogin {
 		for (LineFeature line : editor.drawingLines) {
 			objectType = line.getObjectType();
 			objectGeometry = line.getGeometryAsText();
-			PreparedStatement insertToolLine = connection.prepareStatement("INSERT INTO cadfeatures_db"+
+			PreparedStatement insertToolLine = connection.prepareStatement("INSERT INTO geomfeatures"+
 					"(type, geom) VALUES('" + objectType + "','" + objectGeometry + "')");
 			insertToolLine.executeUpdate();
 		}
@@ -72,7 +72,7 @@ public class DatabaseLogin {
 		for (TriangleFeature triangle : editor.drawingTriangles) {
 			objectType = triangle.getObjectType();
 			objectGeometry = triangle.getGeometryAsText();
-			PreparedStatement insertToolTriangle = connection.prepareStatement("INSERT INTO cadfeatures_db"+
+			PreparedStatement insertToolTriangle = connection.prepareStatement("INSERT INTO geomfeatures"+
 					"(type, geom) VALUES('" + objectType + "','" + objectGeometry + "')");
 			insertToolTriangle.executeUpdate();
 		}
@@ -80,17 +80,17 @@ public class DatabaseLogin {
 		for (RectangleFeature rectangle : editor.drawingRectangles) {
 			objectType = rectangle.getObjectType();
 			objectGeometry = rectangle.getGeometryAsText();
-			PreparedStatement insertToolRectangle = connection.prepareStatement("INSERT INTO cadfeatures_db"+
+			PreparedStatement insertToolRectangle = connection.prepareStatement("INSERT INTO geomfeatures"+
 					"(type, geom) VALUES('" + objectType + "','" + objectGeometry + "')");
 			insertToolRectangle.executeUpdate();
 		}
 	}
 	
 	/**
-	 * Extract objects from cadfeatures_db based on object type and object geometry and overwite to the old objects if they exist 
+	 * select geometric features from geomfeatures table based object type  
 	 * @return
 	 * @throws SQLException
-	 * @author amse1013
+	 * @author
 	 */
 	public EditorTools extractObjects() throws SQLException {
 		EditorTools new_editor = new EditorTools();
@@ -99,7 +99,7 @@ public class DatabaseLogin {
 		java.sql.ResultSet resultSet;
 		PreparedStatement displayObjects;
 		
-		displayObjects = connection.prepareStatement("SELECT * FROM cadfeatures_db");
+		displayObjects = connection.prepareStatement("SELECT * FROM geomfeatures");
 		resultSet = displayObjects.executeQuery();
 		
 		while (resultSet.next()) {
@@ -150,7 +150,7 @@ public class DatabaseLogin {
 			}
 			
 		}
-
+				
 		countIdentifier = 0;
 		
 		resultSet.close();
